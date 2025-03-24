@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "QuyIT Platform"
+  given-names: "NQDEV Group"
+  orcid: "https://orcid.org/0000-0000-0000-0000"
+title: "n8n Nodes for NQDev ESMSVN"
+version: 1.0.0
+doi: 10.5281/zenodo.1234
+date-released: 2025-03-24
+url: "https://github.com/nqdev-group/n8n-nodes-nqdev-esmsvn"
