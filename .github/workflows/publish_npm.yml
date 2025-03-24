@@ -1,0 +1,95 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Workflow Publish Package to npmjs for GitHub Actions
+# ---------------------------------------------------
+# https://dev.to/astagi/publish-to-npm-using-github-actions-23fn
+# https://docs.github.com/en/actions/use-cases-and-examples/publishing-packages/publishing-nodejs-packages
+# https://docs.github.com/en/actions/guides/publishing-nodejs-packages
+# https://docs.github.com/en/actions/guides/publishing-docker-images
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+name: Publish node to npmjs
+run-name: Publish to npmjs by @${{ github.actor }} on ${{ github.event_name }}
+
+on:
+  workflow_dispatch: # Cho phép chạy thủ công
+  release:
+    types: [published] # Chỉ chạy khi release được publish
+
+# Remove all permissions by default
+permissions: write-all
+
+env:
+  SERVER: production
+  PREFIX: 0.1.0
+  VERSION: 0.1.${{ github.run_number }}
+  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+jobs:
+  publish-npmjs:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Định nghĩa giá trị prefix
+      - name: Define Prefix
+        id: prefix
+        run: |
+          echo "PREFIX=0.1" >> $GITHUB_ENV # Đặt giá trị prefix phiên bản
+
+      # 2. Thiết lập số version tự động
+      - name: Set Build Version
+        id: versioning
+        run: |
+          # Kiểm tra số build hiện tại từ GitHub Run Number
+          BUILD_NUMBER=${{ github.run_number }}
+          echo "VERSION=${{ env.PREFIX }}.${BUILD_NUMBER}" >> $GITHUB_ENV
+
+      # 3. Checkout code từ repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 4. Thiết lập Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.12' # Bạn có thể thay đổi version nếu cần
+          registry-url: 'https://registry.npmjs.org/' # Registry chính thức của npm
+          # scope: '@nqdev'  # Scope của package
+
+      # 5. Cài đặt pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9.1.4
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
+            - args: [--global, gulp, eslint, typescript]
+
+      # 6. Cài đặt dependencies
+      - name: Install dependencies
+        # run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
+
+      # 7. Run Lint
+      - name: Build and Lint
+        run: pnpm run prepublishOnly
+
+      # 7. Build package
+      - name: Build
+        run: pnpm run build
+
+      # 6. Publish lên npm
+      # https://github.com/marketplace/actions/npm-publish
+      - name: Publish to npm
+        if: success()
+        run: pnpm publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # # https://github.com/marketplace/actions/npm-publish
+      # - name: NPM Publish
+      #   uses: JS-DevTools/npm-publish@v3.1.1
+      #   with:
+      #     token: ${{ secrets.NPM_TOKEN }}
+      #     # registry: "https://npm.pkg.github.com"
+      #     access: public
