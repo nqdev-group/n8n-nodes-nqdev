@@ -41,7 +41,7 @@
   ],
   // Enable your dictionary by adding it to the list of `dictionaries`
   "dictionaries": [
-    "vi-dictionary","code-dictionary"
+    "vi-dictionary", "code-dictionary"
   ],
   // Tell CSpell about your dictionary
   "dictionaryDefinitions": [
