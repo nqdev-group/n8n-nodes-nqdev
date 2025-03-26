@@ -1,0 +1,37 @@
+{
+  "node": "n8n-nodes-nqdev.esms",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Communication",
+    "Marketing"
+  ],
+  "displayName": "Nqdev EsmsVN",
+  "description": "[Nqdev] Send SMS via Esms.vn",
+  "alias": [
+    "EsmsVN",
+    "NqdevEsmsVN"
+  ],
+  "resources": {
+    "credentialDocumentation": [
+      {
+        "url": "https://developers.esms.vn/readme/lay-thong-tin-apikey-va-secretkey"
+      }
+    ],
+    "primaryDocumentation": [
+      {
+        "url": "https://docs.quyit.id.vn/n8n-io/n8n-nodes-nqdev/?ref=n8n"
+      },
+      {
+        "url": "https://developers.esms.vn/"
+      }
+    ],
+    "generic": [
+      {
+        "label": "Tin ưu đãi - eSMS.vn",
+        "icon": "🧬",
+        "url": "https://esms.vn/tin-tuc/tin-uu-dai"
+      }
+    ]
+  }
+}

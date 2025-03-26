@@ -13,14 +13,13 @@ authors:
     email: quy.nh@nhquydev.net
     affiliation: 'https://blogs.nhquydev.net'
 repository-code: 'https://github.com/nqdev-group/n8n-nodes-nqdev.git'
-url: 'https://docs.quyit.id.vn/affiliate/n8n-nodes-nqdev'
+url: 'https://docs.quyit.id.vn/n8n-io/n8n-nodes-nqdev'
 keywords:
   - n8n-community-node-package
   - n8n-community-nqdev-node-package
   - nqdev
-  - esms
+  - quyit
   - esmsvn
 license: MIT
 version: 1.0.0
 date-released: '2025-03-24'
-
