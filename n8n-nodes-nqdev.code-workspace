@@ -2,7 +2,10 @@
 	"folders": [
 		{
 			"path": ".",
-		}
+		},
+		{
+			"path": "./../n8n-local",
+		},
 	],
 	"settings": {},
 }
