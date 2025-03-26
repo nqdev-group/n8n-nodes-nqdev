@@ -7,3 +7,6 @@
     Integrations: https://docs.n8n.io/integrations/
 
 ## Integrations
+
+- [Build a node](https://docs.n8n.io/integrations/creating-nodes/build/)
+  - [Standard parameters](https://docs.n8n.io/integrations/creating-nodes/build/reference/node-base-files/standard-parameters/)

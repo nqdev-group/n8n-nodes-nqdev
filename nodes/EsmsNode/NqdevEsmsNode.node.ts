@@ -6,13 +6,16 @@ import type {
 } from 'n8n-workflow';
 import { NodeOperationError, } from 'n8n-workflow';
 
-import { nqdevEsmsProperties, nqdevEsmsOperation, } from '../../descriptions/NqdevEsmsApi.descriptions';
+import { nqdevEsmsProperties, } from '../../descriptions/NqdevEsmsApi.descriptions';
 
 export class NqdevEsmsNode implements INodeType {
   description: INodeTypeDescription = {
     displayName: '[Nqdev] EsmsVN Node',
     name: 'nqdevEsmsNode',
-    icon: 'file:esms.svg',
+    icon: {
+      light: 'file:esms.svg',
+      dark: 'file:esms.dark.svg',
+    },
     group: ['transform'],
     version: 1,
     subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
@@ -52,7 +55,7 @@ export class NqdevEsmsNode implements INodeType {
      */
     properties: [
       ...nqdevEsmsProperties,
-      ...nqdevEsmsOperation,
+      // ...nqdevEsmsOperation,
     ],
   };
 
