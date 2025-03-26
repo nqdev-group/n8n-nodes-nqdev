@@ -1,5 +1,5 @@
 {
-  "name": "n8n-nodes-nqdev-esmsvn",
+  "name": "n8n-nodes-nqdev",
   "version": "0.1.1",
   "description": "Tích hợp dịch vụ eSMS.vn vào n8n, cho phép bạn dễ dàng gửi tin nhắn SMS, Zalo hoặc Viber trực tiếp từ quy trình tự động hóa. Với node này, bạn có thể nhanh chóng kết nối API eSMS.vn, gửi tin nhắn quảng cáo, chăm sóc khách hàng hoặc OTP chỉ trong vài bước đơn giản. Tiết kiệm thời gian, tối ưu hóa chiến dịch marketing của bạn ngay hôm nay!",
   "keywords": [
@@ -10,7 +10,7 @@
     "esmsvn"
   ],
   "license": "MIT",
-  "homepage": "https://docs.quyit.id.vn/affiliate/n8n-nodes-nqdev-esmsvn/?ref=n8n-nodes-nqdev-esmsvn",
+  "homepage": "https://docs.quyit.id.vn/affiliate/n8n-nodes-nqdev/?ref=n8n-nodes-nqdev",
   "author": {
     "name": "Quý Nguyễn",
     "email": "quy.nh@nhquydev.net",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nqdev-group/n8n-nodes-nqdev-esmsvn.git"
+    "url": "https://github.com/nqdev-group/n8n-nodes-nqdev.git"
   },
   "engines": {
     "node": ">=18.10",

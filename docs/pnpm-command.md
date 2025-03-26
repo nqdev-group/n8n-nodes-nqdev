@@ -20,3 +20,4 @@
 - `cls ; npm run lint -- --fix`: Xóa màn hình và chạy lint để kiểm tra + sửa lỗi mã.
 - `pnpm run prepublishOnly`: Chuẩn bị trước khi xuất bản gói.
 - `pnpm run build`: Biên dịch/xây dựng dự án.
+- `pnpm run dev`: Chạy thử nghiệm (dev) dự án.

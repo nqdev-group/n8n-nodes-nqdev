@@ -12,8 +12,8 @@ authors:
     orcid: 'https://orcid.org/0000-0000-0000-0000'
     email: quy.nh@nhquydev.net
     affiliation: 'https://blogs.nhquydev.net'
-repository-code: 'https://github.com/nqdev-group/n8n-nodes-nqdev-esmsvn.git'
-url: 'https://docs.quyit.id.vn/affiliate/n8n-nodes-nqdev-esmsvn'
+repository-code: 'https://github.com/nqdev-group/n8n-nodes-nqdev.git'
+url: 'https://docs.quyit.id.vn/affiliate/n8n-nodes-nqdev'
 keywords:
   - n8n-community-node-package
   - n8n-community-nqdev-node-package
