@@ -19,7 +19,7 @@ export const nqdevEsmsProperties: INodeProperties[] = [
     displayName: 'Esms ApiKey',
     name: 'esmsApiKey',
     type: 'string',
-    required: true,
+    required: false,
     typeOptions: { password: true },
     default: '',
     placeholder: 'Nhập khóa API của bạn từ eSMS',
@@ -29,7 +29,7 @@ export const nqdevEsmsProperties: INodeProperties[] = [
     displayName: 'Esms SecretKey',
     name: 'esmsSecretKey',
     type: 'string',
-    required: true,
+    required: false,
     typeOptions: {
       password: true,
     },
