@@ -42,42 +42,70 @@ export const nqdevEsmsProperties: INodeProperties[] = [
 // Operations for Nqdev Esms API node properties configuration.
 const nqdevEsmsGetOperation: INodeProperties[] = [
   {
-    displayName: 'Get User Balance',
-    name: 'getUserBalance',
-    default: 'queryParameter',
-    description: 'Select type of data to send [Query Parameters]',
-    displayOptions: {
-      show: {
-        resource: ['httpVerb'],
-        operation: ['get'],
-      },
-    },
     type: 'options',
+    name: 'nqdevEsmsGetOperation',
+    displayName: '[Nqdev] Esms Get Operation',
+    description: 'Select type of data to send [Query Parameters]',
+    noDataExpression: true,
     options: [
       {
-        name: 'Query',
-        value: 'queryParameter',
+        name: 'Get Balance',
+        value: 'getBalance',
+        description: 'get user balance',
+        routing: {
+          request: {
+            method: 'POST',
+            url: '/MainService.svc/json/GetBalance_json/',
+            qs: {
+              n8n: 'nqdev',
+            }
+          }
+        }
       },
     ],
-    required: true,
+    default: 'getBalance',
   }
 ];
 
 // Operations for Nqdev Esms API node properties configuration.
 const nqdevEsmsPostOperation: INodeProperties[] = [
   {
-    displayName: 'Operation',
-    name: 'operation',
     type: 'options',
+    name: 'nqdevEsmsPostOperation',
+    displayName: '[Nqdev] Esms Post Operation',
+    description: 'Select type of data to send [Query Parameters]',
+    noDataExpression: true,
     options: [
       {
-        name: 'Send SMS',
-        value: 'sendSms',
+        name: 'Send SMS Message',
+        value: 'postSendSmsMessage',
         description: 'Gửi tin nhắn SMS thông qua dịch vụ eSMS',
+        routing: {
+          request: {
+            method: 'POST',
+            url: '/MainService.svc/json/SendMultipleMessage_V4_post_json/',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json, text/javascript, */*; q=0.01'
+            },
+            body: {
+              'ApiKey': '',
+              'SecretKey': '',
+              'SmsType': '',
+              'Brandname': '',
+              'Content': '',
+              'Phone': '',
+              'IsUnicode': '',
+              'Sandbox': '',
+              'PartnerSource': '',
+              'RequestId': '',
+              'CallbackUrl': ''
+            }
+          }
+        }
       },
     ],
-    default: 'sendSms',
-    description: 'Chọn hoạt động bạn muốn thực hiện',
+    default: 'postSendSmsMessage'
   }
 ];
 

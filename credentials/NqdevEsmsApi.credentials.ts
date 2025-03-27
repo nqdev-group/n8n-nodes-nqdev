@@ -25,7 +25,7 @@ export class NqdevEsmsApi implements ICredentialType {
       },
       qs: {
         // Send this as part of the query string
-        n8n: 'rocks',
+        n8n: 'nqdev',
       },
     },
   };
@@ -34,9 +34,15 @@ export class NqdevEsmsApi implements ICredentialType {
   test: ICredentialTestRequest = {
     request: {
       baseURL: '={{$credentials?.esmsDomain}}'.replace(/\/$/, ''),
-      url: '/MainService.svc/json/GetBalance/={{ $credentials?.esmsApiKey }}/={{ $credentials?.esmsSecretKey }}',
-      method: 'GET',
-      ignoreHttpStatusErrors: true,
+      url: '/MainService.svc/json/GetBalance_json/',
+      method: 'POST',
+      headers: {
+        'nqdev-version': '2923-04-01'
+      },
+      body: {
+        'ApiKey': '={{ $credentials.esmsApiKey }}',
+        'SecretKey': '={{ $credentials.esmsSecretKey }}'
+      }
     },
     rules: [
       {
