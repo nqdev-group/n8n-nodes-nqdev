@@ -6,7 +6,7 @@ import type {
 } from 'n8n-workflow';
 import { NodeOperationError, } from 'n8n-workflow';
 
-import { nqdevEsmsProperties, } from '../../descriptions/NqdevEsmsApi.descriptions';
+import { nqdevEsmsOperation, } from '../../descriptions/NqdevEsmsApi.descriptions';
 
 const NAME_CREDENTIAL = 'nqdevEsmsApi';
 
@@ -56,8 +56,8 @@ export class NqdevEsmsNode implements INodeType {
      *
      */
     properties: [
-      ...nqdevEsmsProperties, // it is credentials model
-      // ...nqdevEsmsOperation,
+      // ...nqdevEsmsProperties, // it is credentials model
+      ...nqdevEsmsOperation,
     ],
   };
 
@@ -84,9 +84,9 @@ export class NqdevEsmsNode implements INodeType {
         item = items[itemIndex];
 
         // Lấy giá trị esmsDomain từ tham số (có thể override credentials nếu cần)
-        esmsDomain = this.getNodeParameter('esmsDomain', itemIndex, esmsDomain) as string;
-        esmsApiKey = this.getNodeParameter('esmsApiKey', itemIndex, esmsApiKey) as string;
-        esmsSecretKey = this.getNodeParameter('esmsSecretKey', itemIndex, esmsSecretKey) as string;
+        // esmsDomain = this.getNodeParameter('esmsDomain', itemIndex, esmsDomain) as string;
+        // esmsApiKey = this.getNodeParameter('esmsApiKey', itemIndex, esmsApiKey) as string;
+        // esmsSecretKey = this.getNodeParameter('esmsSecretKey', itemIndex, esmsSecretKey) as string;
 
         esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string;
         esmsBrandname = this.getNodeParameter('esmsBrandname', itemIndex, 'n8n-nqdev') as string;
@@ -109,7 +109,7 @@ export class NqdevEsmsNode implements INodeType {
         // Gửi POST request đến API của ESMS
         let response = await this.helpers.request({
           baseURL: esmsDomain,
-          url: `${esmsDomain}/api/send`, // URL gửi request, thay đổi tùy theo API endpoint
+          url: `${esmsDomain}/MainService.svc/json/SendMultipleMessage_V4_post_json/`,
           method: 'POST',
           headers: {
             'Accept': 'application/json',
