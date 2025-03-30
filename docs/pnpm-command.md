@@ -55,6 +55,7 @@ You can test your node as you build it by running it in a local n8n instance.
    ```bash
    # In the nodes directory within your n8n installation
    # node-package-name is the name from the package.json
+   # pnpm link n8n-nodes-nqdev@^0.1.0
    pnpm link <node-package-name>
    ```
 4. Check your directory

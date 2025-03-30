@@ -1,12 +1,14 @@
 import type {
+  IDataObject,
   IExecuteFunctions,
   INodeExecutionData,
   INodeType,
   INodeTypeDescription,
 } from 'n8n-workflow';
-import { NodeOperationError, } from 'n8n-workflow';
+import { NodeConnectionType, NodeOperationError, } from 'n8n-workflow';
 
-import { nqdevEsmsOperation, } from '../../descriptions/NqdevEsmsApi.descriptions';
+import { nqdevApiRequest } from "../NqdevCommonNode/GenericFunctions";
+import { nqdevEsmsResources, nqdevEsmsAccountOperations, nqdevEsmsSmsMessageOperations, } from '../../descriptions/NqdevEsmsApi.descriptions';
 
 const NAME_CREDENTIAL = 'nqdevEsmsApi';
 
@@ -25,8 +27,8 @@ export class NqdevEsmsNode implements INodeType {
     defaults: {
       name: '[Nqdev] EsmsVN Node',
     },
-    inputs: ['main'],
-    outputs: ['main'],
+    inputs: [NodeConnectionType.Main],
+    outputs: [NodeConnectionType.Main],
     credentials: [
       {
         // The name of the credential type to use.
@@ -57,13 +59,15 @@ export class NqdevEsmsNode implements INodeType {
      */
     properties: [
       // ...nqdevEsmsProperties, // it is credentials model
-      ...nqdevEsmsOperation,
+      ...nqdevEsmsResources,
+      ...nqdevEsmsAccountOperations,
+      ...nqdevEsmsSmsMessageOperations,
     ],
   };
 
   async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
     const items = this.getInputData();
-    let item: INodeExecutionData;
+    const returnData: IDataObject[] = [];
 
     let esmsDomain: string = 'https://rest.esms.vn',
       esmsApiKey: string = '', esmsSecretKey: string = '';
@@ -81,12 +85,9 @@ export class NqdevEsmsNode implements INodeType {
 
     for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
       try {
-        item = items[itemIndex];
-
-        // Lấy giá trị esmsDomain từ tham số (có thể override credentials nếu cần)
-        // esmsDomain = this.getNodeParameter('esmsDomain', itemIndex, esmsDomain) as string;
-        // esmsApiKey = this.getNodeParameter('esmsApiKey', itemIndex, esmsApiKey) as string;
-        // esmsSecretKey = this.getNodeParameter('esmsSecretKey', itemIndex, esmsSecretKey) as string;
+        const item = items[itemIndex];
+        // const resource = this.getNodeParameter('resource', itemIndex, '') as string;
+        // const operation = this.getNodeParameter('operation', itemIndex, '') as string;
 
         esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string;
         esmsBrandname = this.getNodeParameter('esmsBrandname', itemIndex, 'n8n-nqdev') as string;
@@ -107,16 +108,13 @@ export class NqdevEsmsNode implements INodeType {
         };
 
         // Gửi POST request đến API của ESMS
-        let response = await this.helpers.request({
-          baseURL: esmsDomain,
-          url: `${esmsDomain}/MainService.svc/json/SendMultipleMessage_V4_post_json/`,
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(postData),
-        });
+        let responseData = await nqdevApiRequest.call(this, NAME_CREDENTIAL, 'POST', esmsDomain, '/MainService.svc/json/SendMultipleMessage_V4_post_json/', postData)
+
+        if (Array.isArray(responseData)) {
+          returnData.push.apply(returnData, responseData as IDataObject[]);
+        } else if (responseData !== undefined) {
+          returnData.push(responseData as IDataObject);
+        }
 
         item.json.esmsConfig = {
           esmsDomain, esmsApiKey, esmsSecretKey,
@@ -125,7 +123,7 @@ export class NqdevEsmsNode implements INodeType {
         };
 
         // Lưu kết quả trả về vào item.json (nếu muốn sử dụng sau)
-        item.json.esmsResponse = response;
+        item.json.esmsResponse = responseData;
       } catch (error) {
         if (this.continueOnFail()) {
           items.push({ json: this.getInputData(itemIndex)[0].json, error, pairedItem: itemIndex });

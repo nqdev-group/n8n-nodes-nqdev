@@ -3,6 +3,9 @@
 		{
 			"path": ".",
 		},
+		// {
+		// 	"path": "./../n8n-local/config/.n8n/nodes",
+		// },
 	],
 	"settings": {},
 }

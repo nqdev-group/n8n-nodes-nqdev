@@ -5,7 +5,7 @@ import {
 /**
  * Nqdev Esms properties configuration fields for credentials and nodes.
  */
-export const nqdevEsmsProperties: INodeProperties[] = [
+export const nqdevEsmsCredential: INodeProperties[] = [
   {
     displayName: 'Esms Domain',
     name: 'esmsDomain',
@@ -39,47 +39,92 @@ export const nqdevEsmsProperties: INodeProperties[] = [
   },
 ];
 
-// Operations for Nqdev Esms API node properties configuration.
-const nqdevEsmsGetOperation: INodeProperties[] = [
+export const nqdevEsmsResources: INodeProperties[] = [
   {
+    name: 'resource',
+    displayName: 'Resource',
     type: 'options',
-    name: 'nqdevEsmsGetOperation',
-    displayName: '[Nqdev] Esms Get Operation',
-    description: 'Select type of data to send [Query Parameters]',
     noDataExpression: true,
     options: [
       {
-        name: 'Get Balance',
+        name: 'Account',
+        value: 'account',
+      },
+      {
+        name: 'SMS Message',
+        value: 'sms_message',
+      },
+      {
+        name: 'OTT Message',
+        value: 'ott_message',
+      }
+    ],
+    default: 'account'
+  }
+]
+
+// Operations for Nqdev Esms API node properties configuration.
+export const nqdevEsmsAccountOperations: INodeProperties[] = [
+  {
+    name: 'operation',
+    displayName: 'Operation',
+    type: 'options',
+    noDataExpression: true,
+    displayOptions: {
+      show: {
+        resource: [
+          'account'
+        ]
+      }
+    },
+    options: [
+      {
+        name: 'GetBalance',
         value: 'getBalance',
-        description: 'get user balance',
+        action: 'GetBalance',
+        description: 'Lấy số dư của tài khoản',
         routing: {
           request: {
             method: 'POST',
             url: '/MainService.svc/json/GetBalance_json/',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json, text/javascript, */*; q=0.01'
+            },
             qs: {
               n8n: 'nqdev',
+            },
+            body: {
+              'ApiKey': '',
+              'SecretKey': ''
             }
           }
         }
-      },
+      }
     ],
-    default: 'getBalance',
+    default: 'getBalance'
   }
 ];
 
-// Operations for Nqdev Esms API node properties configuration.
-const nqdevEsmsPostOperation: INodeProperties[] = [
+export const nqdevEsmsSmsMessageOperations: INodeProperties[] = [
   {
+    name: 'operation',
+    displayName: 'Operation',
     type: 'options',
-    name: 'nqdevEsmsPostOperation',
-    displayName: '[Nqdev] Esms Post Operation',
-    description: 'Select type of data to send [Query Parameters]',
     noDataExpression: true,
+    displayOptions: {
+      show: {
+        resource: [
+          'sms_message'
+        ]
+      }
+    },
     options: [
       {
         name: 'Send SMS Message',
-        value: 'postSendSmsMessage',
-        description: 'Gửi tin nhắn SMS thông qua dịch vụ eSMS',
+        value: 'sendSmsMessage',
+        action: 'sendSmsMessage',
+        description: 'Gửi tin nhắn SMS',
         routing: {
           request: {
             method: 'POST',
@@ -88,37 +133,24 @@ const nqdevEsmsPostOperation: INodeProperties[] = [
               'Content-Type': 'application/json',
               'Accept': 'application/json, text/javascript, */*; q=0.01'
             },
+            qs: {
+              n8n: 'nqdev',
+            },
             body: {
               'ApiKey': '',
               'SecretKey': '',
               'SmsType': '',
               'Brandname': '',
-              'Content': '',
               'Phone': '',
+              'Content': '',
               'IsUnicode': '',
               'Sandbox': '',
-              'PartnerSource': '',
-              'RequestId': '',
-              'CallbackUrl': ''
+              'CallbackUrl': '',
             }
           }
         }
-      },
+      }
     ],
-    default: 'postSendSmsMessage'
+    default: 'sendSmsMessage'
   }
 ];
-
-// Operations for Nqdev Esms API node properties configuration.
-export const nqdevEsmsOperation: INodeProperties[] = [
-  /* -------------------------------------------------------------------------- */
-  /*                                httpVerb:get                                */
-  /* -------------------------------------------------------------------------- */
-  ...nqdevEsmsGetOperation,
-
-  /* -------------------------------------------------------------------------- */
-  /*                              httpVerb:post                                 */
-  /* -------------------------------------------------------------------------- */
-  ...nqdevEsmsPostOperation,
-];
-
