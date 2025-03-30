@@ -41,16 +41,21 @@ You can test your node as you build it by running it in a local n8n instance.
    ```
 
 2. When you are ready to test your node, publish it locally
+
    ```bash
    # In your node directory
    npm run build
-   npm link
+
+   pnpm setup
+   pnpm config set global-bin-dir "E:\env\pnpm"
+   pnpm link
    ```
+
 3. Install the node into your local n8n instance
    ```bash
    # In the nodes directory within your n8n installation
    # node-package-name is the name from the package.json
-   npm link <node-package-name>
+   pnpm link <node-package-name>
    ```
 4. Check your directory
 
