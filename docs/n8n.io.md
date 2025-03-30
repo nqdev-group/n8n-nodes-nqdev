@@ -10,3 +10,46 @@
 
 - [Build a node](https://docs.n8n.io/integrations/creating-nodes/build/)
   - [Standard parameters](https://docs.n8n.io/integrations/creating-nodes/build/reference/node-base-files/standard-parameters/)
+
+## `n8n-nodes-nqdev-*` Directory Structure
+
+```yaml
+n8n-nodes-nqdev-starter
+│
+├── .github/              # Thư mục chứa các file cấu hình GitHub (ví dụ: GitHub Actions, workflows)
+├── .vscode/              # Thư mục chứa các cấu hình VSCode (ví dụ: settings, extensions)
+│
+├── dist/                  # Thư mục chứa các tệp biên dịch đã hoàn thành
+│   └── <output_files>     # Các file đã biên dịch (code js đã được transpile)
+│
+├── credentials/                     # Thư mục chứa các tệp cấu hình chứng thực (nếu có)
+│
+├── nodes/                                  # Thư mục chứa các node của bạn
+│   ├── <node_name>/
+│   │   ├── <node_name>Node.ts              # Tệp chính mô tả node
+│   │   ├── <node_name>Node.credentials.ts  # Cấu hình credential nếu cần
+│   │   └── <node_name>Node.ui.ts           # Định nghĩa giao diện người dùng (UI)
+│   │
+│   └── ExampleNode/                    # Thư mục cho một node cụ thể
+│       ├── ExampleNode.ts              # Tệp chính định nghĩa logic của node
+│       ├── ExampleNode.credentials.ts  # Cấu hình credentials nếu có
+│       ├── ExampleNode.ui.ts           # Định nghĩa giao diện người dùng cho node này
+│       ├── ExampleNode.description.ts  # Mô tả về chức năng của node
+│       └── ExampleNode.settings.ts     # (Tuỳ chọn) Tùy chỉnh cấu hình hoặc cài đặt cho node
+│
+├── package.json              # Tệp cấu hình dự án
+├── tsconfig.json             # Cấu hình TypeScript
+├── README.md                 # Tài liệu mô tả về node này
+├── .editorconfig             # Tệp cấu hình cho các công cụ chỉnh sửa mã (editor config)
+├── .eslintrc.js              # Cấu hình cho ESLint (kiểm tra mã nguồn)
+├── .eslintrc.prepublish.js   # Cấu hình cho ESLint trước khi xuất bản
+├── .gitignore                # Cấu hình loại bỏ các file không cần thiết khi commit
+├── .npmignore                # Liệt kê các tệp/thư mục cần loại trừ khỏi npm package
+├── .prettierrc.js            # Cấu hình cho Prettier (formatter mã nguồn)
+│
+├── gulpfile.js               # Tệp cấu hình cho Gulp (build system)
+├── index.js                  # Tệp entry point (có thể trống)
+├── package.json              # Tệp cấu hình npm, chứa thông tin về dự án và các dependencies
+├── pnpm-lock.yaml            # Tệp lock của pnpm (nếu sử dụng pnpm làm package manager)
+└── tsconfig.json             # Cấu hình TypeScript
+```
