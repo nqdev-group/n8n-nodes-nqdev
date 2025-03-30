@@ -24,6 +24,10 @@
 - `pnpm run build`: Biên dịch/xây dựng dự án.
 - `pnpm run dev`: Chạy thử nghiệm (dev) dự án.
 
+## Build your node
+
+    - https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/
+
 ## Test your node
 
     - https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/
