@@ -7,8 +7,7 @@ import type {
 } from 'n8n-workflow';
 import { NodeConnectionType, NodeOperationError, } from 'n8n-workflow';
 
-import { NAME_CREDENTIAL, nqdevApiRequest } from "../../nqdev-libraries";
-import { nqdevEsmsOperationProperties, } from '../../descriptions/NqdevEsmsApi.descriptions';
+import { esmsNodeModel, NAME_CREDENTIAL, nqdevApiRequest } from "../../nqdev-libraries";
 
 export class NqdevEsmsNode implements INodeType {
   description: INodeTypeDescription = {
@@ -56,7 +55,7 @@ export class NqdevEsmsNode implements INodeType {
      *
      */
     properties: [
-      ...nqdevEsmsOperationProperties
+      ...esmsNodeModel,
     ],
   };
 

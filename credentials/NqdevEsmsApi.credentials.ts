@@ -5,7 +5,7 @@ import {
   INodeProperties,
 } from 'n8n-workflow';
 
-import { nqdevEsmsCredentialProperties } from '../descriptions/NqdevEsmsApi.descriptions';
+import { esmsCredentialModel } from '../nqdev-libraries';
 
 export class NqdevEsmsApi implements ICredentialType {
   name = 'nqdevEsmsApi';
@@ -13,7 +13,7 @@ export class NqdevEsmsApi implements ICredentialType {
   documentationUrl = 'https://docs.quyit.id.vn/n8n-io/n8n-nodes-nqdev';
 
   properties: INodeProperties[] = [
-    ...nqdevEsmsCredentialProperties
+    ...esmsCredentialModel
   ];
 
   authenticate: IAuthenticateGeneric = {
