@@ -21,7 +21,8 @@ export async function nqdevApiRequest(
   baseUrl: string,
   endpoint: string,
   body: IDataObject,
-  qs: IDataObject = {} // query parameters
+  qs: IDataObject = {}, // query parameters
+  headers: IDataObject = {}
 ): Promise<any> {
 
   const options: IRequestOptions = {
@@ -33,6 +34,7 @@ export async function nqdevApiRequest(
       'Content-Type': 'application/json',
       'nqdev-version': '2923-04-01', // Your API version
       'SentWith': 'n8n-nqdev', // Custom header for identification
+      ...headers,
     },
     qs: {
       n8n: 'nqdev', // Query parameter for identification

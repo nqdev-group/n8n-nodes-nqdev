@@ -26,6 +26,9 @@
 		"nodes/**/*",
 		"nodes/**/*.json",
 		"package.json",
-		"descriptions/**/*"
+		"nqdev-libraries/**/*",
+		"nqdev-libraries/**/*.json",
+		"descriptions/**/*",
+		"descriptions/**/*.json"
 	]
 }

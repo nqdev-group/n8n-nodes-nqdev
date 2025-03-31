@@ -7,14 +7,12 @@ import type {
 } from 'n8n-workflow';
 import { NodeConnectionType, NodeOperationError, } from 'n8n-workflow';
 
-import { nqdevApiRequest } from "../NqdevCommonNode/GenericFunctions";
-import { nqdevEsmsResources, nqdevEsmsAccountOperations, nqdevEsmsSmsMessageOperations, } from '../../descriptions/NqdevEsmsApi.descriptions';
-
-const NAME_CREDENTIAL = 'nqdevEsmsApi';
+import { NAME_CREDENTIAL, nqdevApiRequest } from "../../nqdev-libraries";
+import { nqdevEsmsOperationProperties, } from '../../descriptions/NqdevEsmsApi.descriptions';
 
 export class NqdevEsmsNode implements INodeType {
   description: INodeTypeDescription = {
-    displayName: '[Nqdev] EsmsVN Node',
+    displayName: '[Nqdev] Tích hợp EsmsVN',
     name: 'nqdevEsmsNode',
     icon: {
       light: 'file:esms.svg',
@@ -23,9 +21,9 @@ export class NqdevEsmsNode implements INodeType {
     group: ['transform'],
     version: 1,
     subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-    description: '[Nqdev] EsmsVN Node',
+    description: 'Node to send SMS using EsmsVN API',
     defaults: {
-      name: '[Nqdev] EsmsVN Node',
+      name: '[Nqdev] Tích hợp EsmsVN',
     },
     inputs: [NodeConnectionType.Main],
     outputs: [NodeConnectionType.Main],
@@ -58,10 +56,7 @@ export class NqdevEsmsNode implements INodeType {
      *
      */
     properties: [
-      // ...nqdevEsmsProperties, // it is credentials model
-      ...nqdevEsmsResources,
-      ...nqdevEsmsAccountOperations,
-      ...nqdevEsmsSmsMessageOperations,
+      ...nqdevEsmsOperationProperties
     ],
   };
 
@@ -76,8 +71,8 @@ export class NqdevEsmsNode implements INodeType {
     const credentials = await this.getCredentials(NAME_CREDENTIAL);
     if (credentials) {
       esmsDomain = (credentials.esmsDomain ?? 'https://rest.esms.vn') as string;
-      esmsApiKey = (credentials.apiKey ?? '') as string;
-      esmsSecretKey = (credentials.secretKey ?? '') as string;
+      esmsApiKey = (credentials.esmsApiKey ?? '') as string;
+      esmsSecretKey = (credentials.esmsSecretKey ?? '') as string;
     }
 
     let esmsSmsType: string = '', esmsBrandname: string = '',
@@ -86,8 +81,45 @@ export class NqdevEsmsNode implements INodeType {
     for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
       try {
         const item = items[itemIndex];
-        // const resource = this.getNodeParameter('resource', itemIndex, '') as string;
-        // const operation = this.getNodeParameter('operation', itemIndex, '') as string;
+        const resource = this.getNodeParameter('resource', itemIndex, '') as string;
+        const operation = this.getNodeParameter('operation', itemIndex, '') as string;
+
+        switch (resource) {
+          case 'account': {
+            switch (operation) {
+              case 'getBalance':
+                break;
+              default:
+                break;
+            }
+
+            break;
+          }
+          case 'sms_message': {
+            switch (operation) {
+              case 'sendSmsMessage':
+                break;
+              default:
+                break;
+            }
+
+            break;
+          }
+          case 'ott_message': {
+            switch (operation) {
+              case 'sendZnsMessage':
+                break;
+              case 'sendViberMessage':
+                break;
+              default:
+                break;
+            }
+
+            break;
+          }
+          default:
+            break;
+        }
 
         esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string;
         esmsBrandname = this.getNodeParameter('esmsBrandname', itemIndex, 'n8n-nqdev') as string;

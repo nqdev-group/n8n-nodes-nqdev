@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-nqdev",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Tích hợp dịch vụ eSMS.vn vào n8n, cho phép bạn dễ dàng gửi tin nhắn SMS, Zalo hoặc Viber trực tiếp từ quy trình tự động hóa. Với node này, bạn có thể nhanh chóng kết nối API eSMS.vn, gửi tin nhắn quảng cáo, chăm sóc khách hàng hoặc OTP chỉ trong vài bước đơn giản. Tiết kiệm thời gian, tối ưu hóa chiến dịch marketing của bạn ngay hôm nay!",
   "keywords": [
     "n8n-community-node-package",

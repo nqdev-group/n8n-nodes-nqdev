@@ -5,7 +5,7 @@ import {
 /**
  * Nqdev Esms properties configuration fields for credentials and nodes.
  */
-export const nqdevEsmsCredential: INodeProperties[] = [
+export const nqdevEsmsCredentialProperties: INodeProperties[] = [
   {
     displayName: 'Esms Domain',
     name: 'esmsDomain',
@@ -39,7 +39,7 @@ export const nqdevEsmsCredential: INodeProperties[] = [
   },
 ];
 
-export const nqdevEsmsResources: INodeProperties[] = [
+const nqdevEsmsResources: INodeProperties[] = [
   {
     name: 'resource',
     displayName: 'Resource',
@@ -64,7 +64,7 @@ export const nqdevEsmsResources: INodeProperties[] = [
 ]
 
 // Operations for Nqdev Esms API node properties configuration.
-export const nqdevEsmsAccountOperations: INodeProperties[] = [
+const nqdevEsmsAccountOperations: INodeProperties[] = [
   {
     name: 'operation',
     displayName: 'Operation',
@@ -79,9 +79,9 @@ export const nqdevEsmsAccountOperations: INodeProperties[] = [
     },
     options: [
       {
-        name: 'GetBalance',
+        name: 'Lấy số dư tài khoản ESMSVN',
+        action: 'Lấy số dư tài khoản ESMSVN',
         value: 'getBalance',
-        action: 'GetBalance',
         description: 'Lấy số dư của tài khoản',
         routing: {
           request: {
@@ -106,7 +106,7 @@ export const nqdevEsmsAccountOperations: INodeProperties[] = [
   }
 ];
 
-export const nqdevEsmsSmsMessageOperations: INodeProperties[] = [
+const nqdevEsmsSmsMessageOperations: INodeProperties[] = [
   {
     name: 'operation',
     displayName: 'Operation',
@@ -122,8 +122,8 @@ export const nqdevEsmsSmsMessageOperations: INodeProperties[] = [
     options: [
       {
         name: 'Send SMS Message',
+        action: 'Send an SMS Message',
         value: 'sendSmsMessage',
-        action: 'sendSmsMessage',
         description: 'Gửi tin nhắn SMS',
         routing: {
           request: {
@@ -152,5 +152,83 @@ export const nqdevEsmsSmsMessageOperations: INodeProperties[] = [
       }
     ],
     default: 'sendSmsMessage'
-  }
+  },
+];
+
+const nqdevEsmsSmsMessageOperationOptions: INodeProperties[] = [
+  {
+    displayName: 'Options',
+    name: 'options',
+    type: 'collection',
+    placeholder: 'Add Option',
+    default: {},
+    displayOptions: {
+      show: {
+        resource: ['sms_message'],
+        operation: ['sendSmsMessage'],
+      }
+    },
+    description: '',
+    options: [
+      {
+        displayName: 'Send Time',
+        name: 'sendTime',
+        type: 'dateTime',
+        default: '',
+        description: 'Pick a date for time delayed dispatch',
+      },
+      {
+        displayName: 'Sandbox',
+        name: 'sandbox',
+        type: 'boolean',
+        default: false,
+        // eslint-disable-next-line n8n-nodes-base/node-param-description-boolean-without-whether
+        description: "Send as flash message being displayed directly the receiver's display",
+      },
+    ],
+  },
+];
+
+export const nqdevEsmsOperationProperties: INodeProperties[] = [
+  // resource
+  ...nqdevEsmsResources,
+
+  // operations
+  ...nqdevEsmsAccountOperations,
+  ...nqdevEsmsSmsMessageOperations,
+
+  // operation properties
+  {
+    displayName: 'Sms Type',
+    name: 'smsType',
+    type: 'collection',
+    required: true,
+    default: 2,
+    displayOptions: {
+      show: {
+        resource: ['sms_message', 'ott_message'],
+        operation: ['sendSmsMessage'],
+      }
+    },
+    description: '',
+  },
+  {
+    displayName: 'Phone Number',
+    name: 'phoneNumber',
+    type: 'string',
+    default: '',
+    required: true,
+    description: 'The phone number to send SMS to',
+  },
+  {
+    displayName: 'Message',
+    name: 'message',
+    type: 'string',
+    default: '',
+    required: true,
+    description: 'The message content to send',
+  },
+
+  // operation properties options
+  ...nqdevEsmsSmsMessageOperationOptions,
 ];
