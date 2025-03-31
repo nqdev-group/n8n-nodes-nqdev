@@ -20,7 +20,7 @@ permissions: write-all
 
 env:
   SERVER: production
-  PREFIX: 0.1.0
+  PREFIX: 0.1
   VERSION: 0.1.${{ github.run_number }}
   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -46,6 +46,11 @@ jobs:
       # 3. Checkout code từ repository
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      # 3.1. Ghi đè giá trị version trong package.json
+      - name: Override package.json version
+        run: |
+          jq '.version = "${{ env.VERSION }}"' package.json > package.tmp.json && mv package.tmp.json package.json
 
       # 4. Thiết lập Node.js
       - name: Setup Node.js
