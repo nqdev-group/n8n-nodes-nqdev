@@ -58,7 +58,7 @@ jobs:
       # 3.2. Ghi đè giá trị version và name (bổ sung -beta) trong package.json
       - name: Override package.json version and name
         run: |
-          jq '.version = \"${{ env.VERSION }}\" | .name = \"${{ env.ORIGINAL_NAME }}-beta\"' package.json > package.tmp.json && mv package.tmp.json package.json
+          jq '.version = "${{ env.VERSION }}" | .name = "${{ env.ORIGINAL_NAME }}-beta"' package.json > package.tmp.json && mv package.tmp.json package.json
 
       # 4. Thiết lập Node.js
       - name: Setup Node.js
