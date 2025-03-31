@@ -4,11 +4,12 @@ import type {
   INodeExecutionData,
   INodeType,
   INodeTypeDescription,
+  JsonObject,
 } from 'n8n-workflow';
 import { NodeConnectionType, NodeOperationError, } from 'n8n-workflow';
 
 import { nqdevApiRequest } from "../../nqdev-libraries";
-import { esmsNodeModel, getUserInfo, NAME_CREDENTIAL } from '../../nqdev-libraries/esmsvn';
+import { esmsApiRequest, esmsNodeModel, getUserInfo, NAME_CREDENTIAL, sendMultipleMessage, ISendSmsParams } from '../../nqdev-libraries/esmsvn';
 
 export class NqdevEsmsNode implements INodeType {
   description: INodeTypeDescription = {
@@ -76,7 +77,9 @@ export class NqdevEsmsNode implements INodeType {
     }
 
     for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
-      let esmsRequest: IDataObject = {}, esmsResponse: IDataObject = {};
+      let esmsRequest: JsonObject | IDataObject = {
+        esmsDomain, esmsApiKey,
+      }, esmsResponse: JsonObject | IDataObject = {};
 
       try {
         const item = items[itemIndex];
@@ -91,32 +94,27 @@ export class NqdevEsmsNode implements INodeType {
                 break;
               }
 
-            default:
-              break;
+            default: {
+              throw new NodeOperationError(this.getNode(), `The operation "${operation}" is not known!`, {
+                itemIndex: itemIndex
+              });
+            }
           }
         } else if (resource === 'sms_message') {
-          let esmsSmsType: string = '', esmsBrandname: string = '',
-            esmsPhonenumber: string = '', esmsSmsContent: string = '';
-
           switch (operation) {
             case 'sendSmsMessage':
               {
-                esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string;
-                esmsBrandname = this.getNodeParameter('esmsBrandname', itemIndex, 'n8n-nqdev') as string;
-                esmsPhonenumber = this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string;
-                esmsSmsContent = this.getNodeParameter('esmsSmsContent', itemIndex, '') as string;
-
                 // Cấu hình dữ liệu để gửi POST request
-                let postData = {
+                let postData: ISendSmsParams = {
                   ApiKey: esmsApiKey ?? '',
                   SecretKey: esmsSecretKey ?? '',
-                  SmsType: esmsSmsType ?? '2',
-                  Brandname: esmsBrandname ?? '',
-                  Phone: esmsPhonenumber ?? '',
-                  Content: esmsSmsContent ?? '',
+                  SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
+                  Brandname: this.getNodeParameter('esmsBrandname', itemIndex, 'n8n-nqdev') as string ?? '',
+                  Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
+                  Content: this.getNodeParameter('esmsSmsContent', itemIndex, '') as string,
                   IsUnicode: '0',
                   Sandbox: '0',
-                  PartnerSource: 0
+                  PartnerSource: '0'
                 };
 
                 esmsRequest = {
@@ -125,13 +123,16 @@ export class NqdevEsmsNode implements INodeType {
                 };
 
                 // Gửi POST request đến API của ESMS
-                esmsResponse = await nqdevApiRequest.call(this, NAME_CREDENTIAL, 'POST', esmsDomain, '/MainService.svc/json/SendMultipleMessage_V4_post_json/', postData)
+                esmsResponse = await sendMultipleMessage.call(this, postData)
 
                 break;
               }
 
-            default:
-              break;
+            default: {
+              throw new NodeOperationError(this.getNode(), `The operation "${operation}" is not known!`, {
+                itemIndex: itemIndex
+              });
+            }
           }
         } else if (resource === 'ott_message') {
           switch (operation) {
@@ -143,9 +144,16 @@ export class NqdevEsmsNode implements INodeType {
               {
                 break;
               }
-            default:
-              break;
+            default: {
+              throw new NodeOperationError(this.getNode(), `The operation "${operation}" is not known!`, {
+                itemIndex: itemIndex
+              });
+            }
           }
+        } else {
+          throw new NodeOperationError(this.getNode(), `The resource "${resource}" is not known!`, {
+            itemIndex: itemIndex,
+          });
         }
 
         if (Array.isArray(esmsResponse)) {
@@ -160,6 +168,7 @@ export class NqdevEsmsNode implements INodeType {
       } catch (error) {
         if (this.continueOnFail()) {
           items.push({ json: this.getInputData(itemIndex)[0].json, error, pairedItem: itemIndex });
+          continue;
         } else {
           if (error.context) {
             error.context.itemIndex = itemIndex;
@@ -173,6 +182,7 @@ export class NqdevEsmsNode implements INodeType {
       }
     }
 
-    return [items];
+    // return [items];
+    return [this.helpers.returnJsonArray(returnData)];
   }
 }
