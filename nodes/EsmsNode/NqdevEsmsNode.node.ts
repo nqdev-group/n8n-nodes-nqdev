@@ -11,7 +11,7 @@ import { esmsNodeModel, NAME_CREDENTIAL, nqdevApiRequest } from "../../nqdev-lib
 
 export class NqdevEsmsNode implements INodeType {
   description: INodeTypeDescription = {
-    displayName: '[Nqdev] Tích hợp EsmsVN',
+    displayName: 'Nqdev Tích hợp EsmsVN',
     name: 'nqdevEsmsNode',
     icon: {
       light: 'file:esms.svg',
@@ -19,10 +19,10 @@ export class NqdevEsmsNode implements INodeType {
     },
     group: ['transform'],
     version: 1,
-    subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
+    subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
     description: 'Node to send SMS using EsmsVN API',
     defaults: {
-      name: '[Nqdev] Tích hợp EsmsVN',
+      name: `Nqdev Tích hợp EsmsVN ${Date.now()}`,
     },
     inputs: [NodeConnectionType.Main],
     outputs: [NodeConnectionType.Main],
