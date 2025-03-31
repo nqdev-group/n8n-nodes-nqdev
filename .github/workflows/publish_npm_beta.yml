@@ -52,7 +52,7 @@ jobs:
       - name: Get original package name
         run: |
           ORIGINAL_NAME=$(jq -r '.name' package.json)
-          echo \"ORIGINAL_NAME=$ORIGINAL_NAME\" >> $GITHUB_ENV
+          echo "ORIGINAL_NAME=$ORIGINAL_NAME" >> $GITHUB_ENV
 
       # 3.2. Ghi đè giá trị version và name (bổ sung -beta) trong package.json
       - name: Override package.json version and name
