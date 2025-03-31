@@ -7,7 +7,8 @@ import type {
 } from 'n8n-workflow';
 import { NodeConnectionType, NodeOperationError, } from 'n8n-workflow';
 
-import { esmsNodeModel, NAME_CREDENTIAL, nqdevApiRequest } from "../../nqdev-libraries";
+import { nqdevApiRequest } from "../../nqdev-libraries";
+import { esmsNodeModel, getUserInfo, NAME_CREDENTIAL } from '../../nqdev-libraries/esmsvn';
 
 export class NqdevEsmsNode implements INodeType {
   description: INodeTypeDescription = {
@@ -64,7 +65,8 @@ export class NqdevEsmsNode implements INodeType {
     const returnData: IDataObject[] = [];
 
     let esmsDomain: string = 'https://rest.esms.vn',
-      esmsApiKey: string = '', esmsSecretKey: string = '';
+      esmsApiKey: string = '', esmsSecretKey: string = '',
+      esmsRequest: IDataObject = {}, esmsResponse: IDataObject = {};
 
     // Lấy credentials từ node
     const credentials = await this.getCredentials(NAME_CREDENTIAL);
@@ -83,78 +85,77 @@ export class NqdevEsmsNode implements INodeType {
         const resource = this.getNodeParameter('resource', itemIndex, '') as string;
         const operation = this.getNodeParameter('operation', itemIndex, '') as string;
 
-        switch (resource) {
-          case 'account': {
-            switch (operation) {
-              case 'getBalance':
+        if (resource === 'account') {
+          switch (operation) {
+            case 'getBalance':
+              {
+                esmsResponse = await getUserInfo.call(this);
                 break;
-              default:
-                break;
-            }
+              }
 
-            break;
+            default:
+              break;
           }
-          case 'sms_message': {
-            switch (operation) {
-              case 'sendSmsMessage':
-                break;
-              default:
-                break;
-            }
+        } else if (resource === 'sms_message') {
+          switch (operation) {
+            case 'sendSmsMessage':
+              {
+                esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string;
+                esmsBrandname = this.getNodeParameter('esmsBrandname', itemIndex, 'n8n-nqdev') as string;
+                esmsPhonenumber = this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string;
+                esmsSmsContent = this.getNodeParameter('esmsSmsContent', itemIndex, '') as string;
 
-            break;
-          }
-          case 'ott_message': {
-            switch (operation) {
-              case 'sendZnsMessage':
-                break;
-              case 'sendViberMessage':
-                break;
-              default:
-                break;
-            }
+                // Cấu hình dữ liệu để gửi POST request
+                let postData = {
+                  ApiKey: esmsApiKey ?? '',
+                  SecretKey: esmsSecretKey ?? '',
+                  SmsType: esmsSmsType ?? '2',
+                  Brandname: esmsBrandname ?? '',
+                  Phone: esmsPhonenumber ?? '',
+                  Content: esmsSmsContent ?? '',
+                  IsUnicode: '0',
+                  Sandbox: '0',
+                  PartnerSource: 0
+                };
 
-            break;
+                esmsRequest = {
+                  ...esmsRequest,
+                  ...postData,
+                };
+
+                // Gửi POST request đến API của ESMS
+                esmsResponse = await nqdevApiRequest.call(this, NAME_CREDENTIAL, 'POST', esmsDomain, '/MainService.svc/json/SendMultipleMessage_V4_post_json/', postData)
+
+                break;
+              }
+
+            default:
+              break;
           }
-          default:
-            break;
+        } else if (resource === 'ott_message') {
+          switch (operation) {
+            case 'sendZnsMessage':
+              {
+                break;
+              }
+            case 'sendViberMessage':
+              {
+                break;
+              }
+            default:
+              break;
+          }
         }
 
-        esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string;
-        esmsBrandname = this.getNodeParameter('esmsBrandname', itemIndex, 'n8n-nqdev') as string;
-        esmsPhonenumber = this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string;
-        esmsSmsContent = this.getNodeParameter('esmsSmsContent', itemIndex, '') as string;
-
-        // Cấu hình dữ liệu để gửi POST request
-        let postData = {
-          ApiKey: esmsApiKey ?? '',
-          SecretKey: esmsSecretKey ?? '',
-          SmsType: esmsSmsType ?? '2',
-          Brandname: esmsBrandname ?? '',
-          Phone: esmsPhonenumber ?? '',
-          Content: esmsSmsContent ?? '',
-          IsUnicode: '0',
-          Sandbox: '0',
-          PartnerSource: 0
-        };
-
-        // Gửi POST request đến API của ESMS
-        let responseData = await nqdevApiRequest.call(this, NAME_CREDENTIAL, 'POST', esmsDomain, '/MainService.svc/json/SendMultipleMessage_V4_post_json/', postData)
-
-        if (Array.isArray(responseData)) {
-          returnData.push.apply(returnData, responseData as IDataObject[]);
-        } else if (responseData !== undefined) {
-          returnData.push(responseData as IDataObject);
+        if (Array.isArray(esmsResponse)) {
+          returnData.push.apply(returnData, esmsResponse as IDataObject[]);
+        } else if (esmsResponse !== undefined) {
+          returnData.push(esmsResponse as IDataObject);
         }
-
-        item.json.esmsConfig = {
-          esmsDomain, esmsApiKey, esmsSecretKey,
-          esmsSmsType, esmsBrandname,
-          esmsPhonenumber, esmsSmsContent,
-        };
 
         // Lưu kết quả trả về vào item.json (nếu muốn sử dụng sau)
-        item.json.esmsResponse = responseData;
+        item.json.esmsRequest = esmsRequest;
+        item.json.esmsResponse = esmsResponse;
       } catch (error) {
         if (this.continueOnFail()) {
           items.push({ json: this.getInputData(itemIndex)[0].json, error, pairedItem: itemIndex });
