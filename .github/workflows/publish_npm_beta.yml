@@ -50,7 +50,6 @@ jobs:
 
       # 3.1. Lấy giá trị name gốc từ package.json
       - name: Get original package name
-        id: original_name
         run: |
           ORIGINAL_NAME=$(jq -r '.name' package.json)
           echo \"ORIGINAL_NAME=$ORIGINAL_NAME\" >> $GITHUB_ENV
