@@ -1,6 +1,6 @@
 import type { INodeProperties } from "n8n-workflow";
 
-export const esmsSmsOperationModel: INodeProperties[] = [
+export const esmsOttOperationModel: INodeProperties[] = [
   {
     displayName: 'Operation',
     name: 'operation',
@@ -9,16 +9,16 @@ export const esmsSmsOperationModel: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: [
-          'sms_message'
+          'ott_message'
         ]
       }
     },
     options: [
       {
-        name: 'Gửi tin nhắn SMS',
-        action: 'Hành động Gửi tin nhắn SMS',
+        name: 'Gửi tin nhắn OTT',
+        action: 'Hành động Gửi tin nhắn OTT',
         value: 'sendMessage',
-        description: 'Send an SMS Message',
+        description: 'Send an OTT Message',
         routing: {
           request: {
             method: 'POST',

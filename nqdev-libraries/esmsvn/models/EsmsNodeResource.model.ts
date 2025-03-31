@@ -2,8 +2,8 @@ import type { INodeProperties } from "n8n-workflow";
 
 export const esmsNodeResourceModel: INodeProperties[] = [
   {
-    name: 'resource',
     displayName: 'Resource',
+    name: 'resource',
     type: 'options',
     noDataExpression: true,
     options: [
@@ -20,6 +20,6 @@ export const esmsNodeResourceModel: INodeProperties[] = [
         value: 'ott_message',
       }
     ],
-    default: 'account'
+    default: 'account',
   }
 ];

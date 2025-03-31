@@ -21,9 +21,9 @@ export class NqdevEsmsNode implements INodeType {
     group: ['transform'],
     version: 1,
     subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
-    description: 'Node to send SMS using EsmsVN API',
+    description: 'Send SMS and OTT messages using EsmsVN API.',
     defaults: {
-      name: `Nqdev Tích hợp EsmsVN ${Date.now()}`,
+      name: `EsmsVN`,
     },
     inputs: [NodeConnectionType.Main],
     outputs: [NodeConnectionType.Main],
@@ -37,7 +37,7 @@ export class NqdevEsmsNode implements INodeType {
     ],
     requestDefaults: {
       baseURL: 'https://rest.esms.vn',
-      url: '',
+      url: '/',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -65,8 +65,7 @@ export class NqdevEsmsNode implements INodeType {
     const returnData: IDataObject[] = [];
 
     let esmsDomain: string = 'https://rest.esms.vn',
-      esmsApiKey: string = '', esmsSecretKey: string = '',
-      esmsRequest: IDataObject = {}, esmsResponse: IDataObject = {};
+      esmsApiKey: string = '', esmsSecretKey: string = '';
 
     // Lấy credentials từ node
     const credentials = await this.getCredentials(NAME_CREDENTIAL);
@@ -76,10 +75,9 @@ export class NqdevEsmsNode implements INodeType {
       esmsSecretKey = (credentials.esmsSecretKey ?? '') as string;
     }
 
-    let esmsSmsType: string = '', esmsBrandname: string = '',
-      esmsPhonenumber: string = '', esmsSmsContent: string = '';
-
     for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
+      let esmsRequest: IDataObject = {}, esmsResponse: IDataObject = {};
+
       try {
         const item = items[itemIndex];
         const resource = this.getNodeParameter('resource', itemIndex, '') as string;
@@ -97,6 +95,9 @@ export class NqdevEsmsNode implements INodeType {
               break;
           }
         } else if (resource === 'sms_message') {
+          let esmsSmsType: string = '', esmsBrandname: string = '',
+            esmsPhonenumber: string = '', esmsSmsContent: string = '';
+
           switch (operation) {
             case 'sendSmsMessage':
               {
