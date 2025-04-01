@@ -47,6 +47,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 3.1. Lấy giá trị name gốc từ package.json
+      - name: Get original package name
+        run: |
+          BUILD_NUMBER=${{ github.run_number }}
+          ORIGINAL_VERSION=$(jq -r '.version' package.json)
+          echo "VERSION=$ORIGINAL_VERSION.$BUILD_NUMBER" >> $GITHUB_ENV
+
       # 3.1. Ghi đè giá trị version trong package.json
       - name: Override package.json version
         run: |
