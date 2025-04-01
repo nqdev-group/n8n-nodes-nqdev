@@ -53,6 +53,9 @@ jobs:
         run: |
           ORIGINAL_NAME=$(jq -r '.name' package.json)
           echo "ORIGINAL_NAME=$ORIGINAL_NAME" >> $GITHUB_ENV
+          BUILD_NUMBER=${{ github.run_number }}
+          ORIGINAL_VERSION=$(jq -r '.version' package.json)
+          echo "VERSION=$ORIGINAL_VERSION.$BUILD_NUMBER" >> $GITHUB_ENV
 
       # 3.2. Ghi đè giá trị version và name (bổ sung -beta) trong package.json
       - name: Override package.json version and name

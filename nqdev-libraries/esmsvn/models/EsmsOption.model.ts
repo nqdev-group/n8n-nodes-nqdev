@@ -3,7 +3,7 @@ import type { INodeProperties } from "n8n-workflow";
 export const esmsSmsModel: INodeProperties[] = [
   {
     displayName: 'Sms Type',
-    name: 'smsType',
+    name: 'esmsSmsType',
     type: 'number',
     required: true,
     default: 2,
@@ -16,8 +16,8 @@ export const esmsSmsModel: INodeProperties[] = [
     description: 'Type of SMS',
   },
   {
-    displayName: 'Sender',
-    name: 'sender',
+    displayName: 'Brandname',
+    name: 'esmsBrandname',
     type: 'string',
     required: false,
     default: '',
@@ -31,7 +31,7 @@ export const esmsSmsModel: INodeProperties[] = [
   },
   {
     displayName: 'PhoneNumber',
-    name: 'phoneNumber',
+    name: 'esmsPhonenumber',
     type: 'string',
     required: true,
     default: '',
@@ -44,8 +44,8 @@ export const esmsSmsModel: INodeProperties[] = [
     description: 'So dien thoa cua nguoi nhan.'
   },
   {
-    displayName: 'Message',
-    name: 'message',
+    displayName: 'Content',
+    name: 'esmsContent',
     type: 'string',
     required: true,
     default: '',
@@ -75,10 +75,26 @@ export const esmsOptionModel: INodeProperties[] = [
     description: '',
     options: [
       {
-        displayName: 'Sandbox',
-        name: 'sandbox',
+        displayName: 'IsUnicode',
+        name: 'esmsIsUnicode',
         type: 'boolean',
         default: false,
+        // eslint-disable-next-line n8n-nodes-base/node-param-description-boolean-without-whether
+        description: "Send as flash message being displayed directly the receiver's display",
+      },
+      {
+        displayName: 'Sandbox',
+        name: 'esmsIsSandbox',
+        type: 'boolean',
+        default: false,
+        // eslint-disable-next-line n8n-nodes-base/node-param-description-boolean-without-whether
+        description: "Send as flash message being displayed directly the receiver's display",
+      },
+      {
+        displayName: 'PartnerSource',
+        name: 'esmsPartnerSource',
+        type: 'number',
+        default: 0,
         // eslint-disable-next-line n8n-nodes-base/node-param-description-boolean-without-whether
         description: "Send as flash message being displayed directly the receiver's display",
       },

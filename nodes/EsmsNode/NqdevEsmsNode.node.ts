@@ -8,8 +8,7 @@ import type {
 } from 'n8n-workflow';
 import { NodeConnectionType, NodeOperationError, } from 'n8n-workflow';
 
-import { nqdevApiRequest } from "../../nqdev-libraries";
-import { esmsApiRequest, esmsNodeModel, getUserInfo, NAME_CREDENTIAL, sendMultipleMessage, ISendSmsParams } from '../../nqdev-libraries/esmsvn';
+import { esmsNodeModel, getUserInfo, NAME_CREDENTIAL, sendMultipleMessage, ISendSmsParams } from '../../nqdev-libraries/esmsvn';
 
 export class NqdevEsmsNode implements INodeType {
   description: INodeTypeDescription = {
@@ -77,14 +76,16 @@ export class NqdevEsmsNode implements INodeType {
     }
 
     for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
-      let esmsRequest: JsonObject | IDataObject = {
-        esmsDomain, esmsApiKey,
-      }, esmsResponse: JsonObject | IDataObject = {};
-
       try {
         const item = items[itemIndex];
         const resource = this.getNodeParameter('resource', itemIndex, '') as string;
         const operation = this.getNodeParameter('operation', itemIndex, '') as string;
+
+        let esmsRequest: JsonObject | IDataObject = {
+          esmsDomain, esmsApiKey,
+        }, esmsResponse: JsonObject | IDataObject = {
+          resource, operation,
+        };
 
         if (resource === 'account') {
           switch (operation) {
@@ -111,10 +112,10 @@ export class NqdevEsmsNode implements INodeType {
                   SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
                   Brandname: this.getNodeParameter('esmsBrandname', itemIndex, 'n8n-nqdev') as string ?? '',
                   Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
-                  Content: this.getNodeParameter('esmsSmsContent', itemIndex, '') as string,
-                  IsUnicode: '0',
-                  Sandbox: '0',
-                  PartnerSource: '0'
+                  Content: this.getNodeParameter('esmsContent', itemIndex, '') as string,
+                  IsUnicode: (this.getNodeParameter('esmsIsUnicode', itemIndex, '') as boolean) ? '1' : '0',
+                  Sandbox: (this.getNodeParameter('esmsIsSandbox', itemIndex, '') as boolean) ? '1' : '0',
+                  PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
                 };
 
                 esmsRequest = {
