@@ -41,6 +41,8 @@ export async function nqdevApiRequest(
       ...qs, // Merge any additional query parameters
     },
     json: true, // Parse response as JSON
+    followRedirect: true, // This will ensure the request follows redirects
+    followAllRedirects: true, // This will ensure the request follows redirects
   };
 
   // Attach body if it's provided
