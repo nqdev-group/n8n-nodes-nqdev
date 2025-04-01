@@ -64,16 +64,11 @@ export class NqdevEsmsNode implements INodeType {
     const items = this.getInputData();
     const returnData: IDataObject[] = [];
 
-    let esmsDomain: string = 'https://rest.esms.vn',
-      esmsApiKey: string = '', esmsSecretKey: string = '';
-
     // Lấy credentials từ node
-    const credentials = await this.getCredentials(NAME_CREDENTIAL);
-    if (credentials) {
-      esmsDomain = (credentials.esmsDomain ?? 'https://rest.esms.vn') as string;
-      esmsApiKey = (credentials.esmsApiKey ?? '') as string;
-      esmsSecretKey = (credentials.esmsSecretKey ?? '') as string;
-    }
+    const credentials = await this.getCredentials(NAME_CREDENTIAL),
+      esmsDomain = (credentials?.esmsDomain ?? 'https://rest.esms.vn') as string,
+      esmsApiKey = (credentials?.esmsApiKey ?? '') as string,
+      esmsSecretKey = (credentials?.esmsSecretKey ?? '') as string;
 
     for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
       try {

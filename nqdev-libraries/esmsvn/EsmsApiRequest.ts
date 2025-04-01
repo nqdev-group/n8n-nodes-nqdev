@@ -13,16 +13,18 @@ export async function esmsApiRequest(
   method: IHttpRequestMethods,
   endpoint: string,
   body: IDataObject = {},
+  qs: IDataObject = {},
   headers: IDataObject = {},
 ): Promise<any> {
-  const credentials = await this.getCredentials(NAME_CREDENTIAL);
-
-  let baseUrl: string = '',
-    qs: IDataObject = {} // query parameters
+  // Lấy credentials từ node
+  const credentials = await this.getCredentials(NAME_CREDENTIAL),
+    baseUrl: string = (credentials?.esmsDomain ?? 'https://rest.esms.vn') as string,
+    esmsApiKey: string = (credentials?.esmsApiKey ?? '') as string,
+    esmsSecretKey: string = (credentials?.esmsSecretKey ?? '') as string;
 
   return await nqdevApiRequest.call(this, NAME_CREDENTIAL, method, baseUrl, endpoint, {
-    ApiKey: credentials.apiKey,
-    SecretKey: credentials.secretKey,
+    ApiKey: esmsApiKey,
+    SecretKey: esmsSecretKey,
     ...body
   }, {
     ...qs
