@@ -98,31 +98,35 @@ export class NqdevEsmsNode implements INodeType {
           }
         } else if (resource === 'sms_message') {
           switch (operation) {
-            case 'sendSmsMessage':
-              {
-                // Cấu hình dữ liệu để gửi POST request
-                let postData: ISendSmsParams = {
-                  ApiKey: esmsApiKey ?? '',
-                  SecretKey: esmsSecretKey ?? '',
-                  SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
-                  Brandname: this.getNodeParameter('esmsBrandname', itemIndex, 'n8n-nqdev') as string ?? '',
-                  Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
-                  Content: this.getNodeParameter('esmsContent', itemIndex, '') as string,
-                  IsUnicode: (this.getNodeParameter('esmsIsUnicode', itemIndex, '') as boolean) ? '1' : '0',
-                  Sandbox: (this.getNodeParameter('esmsIsSandbox', itemIndex, '') as boolean) ? '1' : '0',
-                  PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
-                };
+            case 'sendSmsMessage': {
+              // Cấu hình dữ liệu để gửi POST request
+              let postData: ISendSmsParams = {
+                ApiKey: esmsApiKey ?? '',
+                SecretKey: esmsSecretKey ?? '',
+                SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
+                Brandname: this.getNodeParameter('esmsBrandname', itemIndex, 'n8n-nqdev') as string ?? '',
+                Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
+                Content: this.getNodeParameter('esmsContent', itemIndex, '') as string,
+                IsUnicode: (this.getNodeParameter('esmsIsUnicode', itemIndex, '') as boolean) ? '1' : '0',
+                Sandbox: (this.getNodeParameter('esmsIsSandbox', itemIndex, '') as boolean) ? '1' : '0',
+                PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
+              };
 
-                esmsRequest = {
-                  ...esmsRequest,
-                  ...postData,
-                };
+              // Gửi POST request đến API của ESMS
+              esmsResponse = await sendMultipleMessage.call(this, postData);
 
-                // Gửi POST request đến API của ESMS
-                esmsResponse = await sendMultipleMessage.call(this, postData)
+              Object.assign(postData, esmsRequest)
+              Object.assign({
+                Phone: postData.Phone,
+                Content: postData.Content,
+                SmsType: postData.SmsType,
+                Brandname: postData.Brandname,
+                Sandbox: postData.Sandbox,
+                IsUnicode: postData.IsUnicode,
+              }, esmsResponse)
 
-                break;
-              }
+              break;
+            }
 
             default: {
               throw new NodeOperationError(this.getNode(), `The operation "${operation}" is not known!`, {
@@ -132,14 +136,66 @@ export class NqdevEsmsNode implements INodeType {
           }
         } else if (resource === 'ott_message') {
           switch (operation) {
-            case 'sendZnsMessage':
-              {
-                break;
-              }
-            case 'sendViberMessage':
-              {
-                break;
-              }
+            case 'sendZnsMessage': {
+              // Cấu hình dữ liệu để gửi POST request
+              let postData: ISendSmsParams = {
+                ApiKey: esmsApiKey ?? '',
+                SecretKey: esmsSecretKey ?? '',
+                SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
+                Brandname: this.getNodeParameter('esmsBrandname', itemIndex, 'n8n-nqdev') as string ?? '',
+                Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
+                Content: this.getNodeParameter('esmsContent', itemIndex, '') as string,
+                IsUnicode: (this.getNodeParameter('esmsIsUnicode', itemIndex, '') as boolean) ? '1' : '0',
+                Sandbox: (this.getNodeParameter('esmsIsSandbox', itemIndex, '') as boolean) ? '1' : '0',
+                PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
+              };
+
+              // Gửi POST request đến API của ESMS
+              esmsResponse = await sendMultipleMessage.call(this, postData);
+
+              Object.assign(postData, esmsRequest)
+              Object.assign({
+                Phone: postData.Phone,
+                Content: postData.Content,
+                SmsType: postData.SmsType,
+                Brandname: postData.Brandname,
+                Sandbox: postData.Sandbox,
+                IsUnicode: postData.IsUnicode,
+              }, esmsResponse)
+
+              break;
+            }
+
+            case 'sendViberMessage': {
+              // Cấu hình dữ liệu để gửi POST request
+              let postData: ISendSmsParams = {
+                ApiKey: esmsApiKey ?? '',
+                SecretKey: esmsSecretKey ?? '',
+                SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
+                Brandname: this.getNodeParameter('esmsBrandname', itemIndex, 'n8n-nqdev') as string ?? '',
+                Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
+                Content: this.getNodeParameter('esmsContent', itemIndex, '') as string,
+                IsUnicode: (this.getNodeParameter('esmsIsUnicode', itemIndex, '') as boolean) ? '1' : '0',
+                Sandbox: (this.getNodeParameter('esmsIsSandbox', itemIndex, '') as boolean) ? '1' : '0',
+                PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
+              };
+
+              // Gửi POST request đến API của ESMS
+              esmsResponse = await sendMultipleMessage.call(this, postData);
+
+              Object.assign(postData, esmsRequest)
+              Object.assign({
+                Phone: postData.Phone,
+                Content: postData.Content,
+                SmsType: postData.SmsType,
+                Brandname: postData.Brandname,
+                Sandbox: postData.Sandbox,
+                IsUnicode: postData.IsUnicode,
+              }, esmsResponse)
+
+              break;
+            }
+
             default: {
               throw new NodeOperationError(this.getNode(), `The operation "${operation}" is not known!`, {
                 itemIndex: itemIndex
