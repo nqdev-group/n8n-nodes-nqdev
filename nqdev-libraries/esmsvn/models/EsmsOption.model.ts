@@ -15,20 +15,20 @@ const esmsSmsTypeModel: INodeProperties[] = [
     },
     options: [
       {
-        name: 'SMS Brandname QC',
-        action: 'SMS Brandname QC',
+        name: 'Brandname QC',
+        action: 'Brandname QC',
         value: 1,
         description: ''
       },
       {
-        name: 'SMS Brandname CSKH',
-        action: 'SMS Brandname CSKH',
+        name: 'Brandname CSKH',
+        action: 'Brandname CSKH',
         value: 2,
         description: ''
       },
       {
-        name: 'SMS Random Sender',
-        action: 'SMS Random Sender',
+        name: 'Cố định giá rẻ',
+        action: 'Cố định giá rẻ',
         value: 8,
         description: ''
       }
@@ -43,45 +43,53 @@ const esmsSmsTypeModel: INodeProperties[] = [
     noDataExpression: true,
     displayOptions: {
       show: {
-        operation: ['sendZnsMessage', 'sendViberMessage'],
+        operation: ['sendViberMessage'],
         resource: ['ott_message'],
       }
     },
     options: [
       {
-        name: 'SMS Brandname QC',
-        action: 'SMS Brandname QC',
+        name: 'Viber Message',
+        action: 'Viber Message',
+        value: 23,
+        description: ''
+      },
+    ],
+    default: 24,
+  },
+  {
+    displayName: 'SmsType',
+    name: 'esmsSmsType',
+    type: 'options',
+    description: 'Type of SMS',
+    noDataExpression: true,
+    displayOptions: {
+      show: {
+        operation: ['sendZnsMessage'],
+        resource: ['ott_message'],
+      }
+    },
+    options: [
+      {
+        name: 'Zalo Ưu Tiên',
+        action: 'Zalo Ưu Tiên',
         value: 24,
         description: ''
       },
       {
-        name: 'SMS Brandname CSKH',
-        action: 'SMS Brandname CSKH',
+        name: 'Zalo Bình Thường',
+        action: 'Zalo Bình Thường',
         value: 25,
         description: ''
       }
     ],
-    default: 224,
-  }
+    default: 24,
+  },
 ];
 
 export const esmsSmsModel: INodeProperties[] = [
   ...esmsSmsTypeModel,
 
-  // {
-  //   displayName: 'Sms Type',
-  //   name: 'esmsSmsType',
-  //   type: 'number',
-  //   required: true,
-  //   default: 2,
-  //   displayOptions: {
-  //     show: {
-  //       operation: ['sendSmsMessage'],
-  //       resource: ['sms_message', 'ott_message'],
-  //     }
-  //   },
-  //   description: 'Type of SMS',
-  // },
   {
     displayName: 'Brandname',
     name: 'esmsBrandname',
@@ -105,11 +113,11 @@ export const esmsSmsModel: INodeProperties[] = [
     default: '',
     displayOptions: {
       show: {
-        operation: ['sendSmsMessage'],
+        operation: ['sendSmsMessage', 'sendZnsMessage', 'sendViberMessage'],
         resource: ['sms_message', 'ott_message'],
       }
     },
-    description: 'So dien thoa cua nguoi nhan.'
+    description: 'Số điện thoại nhận tin nhắn.'
   },
   {
     displayName: 'Content',
@@ -119,11 +127,12 @@ export const esmsSmsModel: INodeProperties[] = [
     default: '',
     displayOptions: {
       show: {
-        operation: ['sendSmsMessage'],
+        operation: ['sendSmsMessage', 'sendZnsMessage', 'sendViberMessage'],
         resource: ['sms_message', 'ott_message'],
       }
     },
-    description: 'noi dung tin nhan',
+    placeholder: 'Cam on quy khach su dung dich vu cua chung toi. Chuc quy khach sinh nhat vui ve. Hotline 1900 xxxx',
+    description: 'Nội dung tin nhắn.',
   },
 ];
 
@@ -136,7 +145,7 @@ export const esmsOptionModel: INodeProperties[] = [
     default: {},
     displayOptions: {
       show: {
-        operation: ['sendSmsMessage'],
+        operation: ['sendSmsMessage', 'sendZnsMessage', 'sendViberMessage'],
         resource: ['sms_message', 'ott_message'],
       }
     },
