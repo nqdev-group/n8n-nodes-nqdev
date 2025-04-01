@@ -76,19 +76,17 @@ export class NqdevEsmsNode implements INodeType {
         const resource = this.getNodeParameter('resource', itemIndex, '') as string;
         const operation = this.getNodeParameter('operation', itemIndex, '') as string;
 
-        let esmsRequest: JsonObject | IDataObject = {
-          esmsDomain, esmsApiKey,
-        }, esmsResponse: JsonObject | IDataObject = {
+        let responseData: JsonObject | IDataObject = {
           resource, operation,
         };
 
         if (resource === 'account') {
           switch (operation) {
-            case 'getBalance':
-              {
-                esmsResponse = await getUserInfo.call(this);
-                break;
-              }
+            case 'getBalance': {
+              let esmsResponse = await getUserInfo.call(this);
+              responseData['esmsResponse'] = esmsResponse;
+              break;
+            }
 
             default: {
               throw new NodeOperationError(this.getNode(), `The operation "${operation}" is not known!`, {
@@ -112,18 +110,18 @@ export class NqdevEsmsNode implements INodeType {
                 PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
               };
 
-              // Gửi POST request đến API của ESMS
-              esmsResponse = await sendMultipleMessage.call(this, postData);
-
-              Object.assign(postData, esmsRequest)
-              Object.assign({
+              responseData['esmsRequest'] = {
                 Phone: postData.Phone,
                 Content: postData.Content,
                 SmsType: postData.SmsType,
                 Brandname: postData.Brandname,
                 Sandbox: postData.Sandbox,
                 IsUnicode: postData.IsUnicode,
-              }, esmsResponse)
+              };
+
+              // Gửi POST request đến API của ESMS
+              let esmsResponse = await sendMultipleMessage.call(this, postData);
+              responseData['esmsResponse'] = esmsResponse;
 
               break;
             }
@@ -150,18 +148,18 @@ export class NqdevEsmsNode implements INodeType {
                 PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
               };
 
-              // Gửi POST request đến API của ESMS
-              esmsResponse = await sendMultipleMessage.call(this, postData);
-
-              Object.assign(postData, esmsRequest)
-              Object.assign({
+              responseData['esmsRequest'] = {
                 Phone: postData.Phone,
                 Content: postData.Content,
                 SmsType: postData.SmsType,
                 Brandname: postData.Brandname,
                 Sandbox: postData.Sandbox,
                 IsUnicode: postData.IsUnicode,
-              }, esmsResponse)
+              };
+
+              // Gửi POST request đến API của ESMS
+              let esmsResponse = await sendMultipleMessage.call(this, postData);
+              responseData['esmsResponse'] = esmsResponse;
 
               break;
             }
@@ -180,18 +178,17 @@ export class NqdevEsmsNode implements INodeType {
                 PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
               };
 
-              // Gửi POST request đến API của ESMS
-              esmsResponse = await sendMultipleMessage.call(this, postData);
-
-              Object.assign(postData, esmsRequest)
-              Object.assign({
+              responseData['esmsRequest'] = {
                 Phone: postData.Phone,
                 Content: postData.Content,
                 SmsType: postData.SmsType,
                 Brandname: postData.Brandname,
                 Sandbox: postData.Sandbox,
                 IsUnicode: postData.IsUnicode,
-              }, esmsResponse)
+              };
+
+              // Gửi POST request đến API của ESMS
+              let esmsResponse = await sendMultipleMessage.call(this, postData); responseData['esmsResponse'] = esmsResponse;
 
               break;
             }
@@ -208,15 +205,14 @@ export class NqdevEsmsNode implements INodeType {
           });
         }
 
-        if (Array.isArray(esmsResponse)) {
-          returnData.push.apply(returnData, esmsResponse as IDataObject[]);
-        } else if (esmsResponse !== undefined) {
-          returnData.push(esmsResponse as IDataObject);
+        if (Array.isArray(responseData)) {
+          returnData.push.apply(returnData, responseData as IDataObject[]);
+        } else if (responseData !== undefined) {
+          returnData.push(responseData as IDataObject);
         }
 
         // Lưu kết quả trả về vào item.json (nếu muốn sử dụng sau)
-        item.json.esmsRequest = esmsRequest;
-        item.json.esmsResponse = esmsResponse;
+        item.json = responseData;
       } catch (error) {
         if (this.continueOnFail()) {
           items.push({ json: this.getInputData(itemIndex)[0].json, error, pairedItem: itemIndex });
