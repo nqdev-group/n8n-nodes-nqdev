@@ -96,6 +96,10 @@ export class NqdevEsmsNode implements INodeType {
         } else if (resource === 'sms_message') {
           switch (operation) {
             case 'sendSmsMessage': {
+              // ----------------------------------
+              //    sms_message:sendSmsMessage
+              // ----------------------------------
+
               // Cấu hình dữ liệu để gửi POST request
               let postData: ISendSmsParams = {
                 ApiKey: esmsApiKey ?? '',
@@ -104,9 +108,10 @@ export class NqdevEsmsNode implements INodeType {
                 Brandname: this.getNodeParameter('esmsBrandname', itemIndex, 'n8n-nqdev') as string ?? '',
                 Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
                 Content: this.getNodeParameter('esmsContent', itemIndex, '') as string,
-                IsUnicode: (this.getNodeParameter('esmsIsUnicode', itemIndex, '') as boolean) ? '1' : '0',
-                Sandbox: (this.getNodeParameter('esmsIsSandbox', itemIndex, '') as boolean) ? '1' : '0',
-                PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
+                // options
+                IsUnicode: (this.getNodeParameter('options.esmsIsUnicode', itemIndex, '') as boolean) ? '1' : '0',
+                Sandbox: (this.getNodeParameter('options.esmsIsSandbox', itemIndex, '') as boolean) ? '1' : '0',
+                PartnerSource: this.getNodeParameter('options.esmsPartnerSource', itemIndex, '0') as string,
               };
 
               responseData['esmsRequest'] = {

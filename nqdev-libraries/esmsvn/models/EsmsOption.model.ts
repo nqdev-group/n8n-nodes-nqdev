@@ -1,20 +1,87 @@
 import type { INodeProperties } from "n8n-workflow";
 
-export const esmsSmsModel: INodeProperties[] = [
+const esmsSmsTypeModel: INodeProperties[] = [
   {
-    displayName: 'Sms Type',
+    displayName: 'SmsType',
     name: 'esmsSmsType',
-    type: 'number',
-    required: true,
-    default: 2,
+    type: 'options',
+    description: 'Type of SMS',
+    noDataExpression: true,
     displayOptions: {
       show: {
         operation: ['sendSmsMessage'],
-        resource: ['sms_message', 'ott_message'],
+        resource: ['sms_message'],
       }
     },
-    description: 'Type of SMS',
+    options: [
+      {
+        name: 'SMS Brandname QC',
+        action: 'SMS Brandname QC',
+        value: 1,
+        description: ''
+      },
+      {
+        name: 'SMS Brandname CSKH',
+        action: 'SMS Brandname CSKH',
+        value: 2,
+        description: ''
+      },
+      {
+        name: 'SMS Random Sender',
+        action: 'SMS Random Sender',
+        value: 8,
+        description: ''
+      }
+    ],
+    default: 2,
   },
+  {
+    displayName: 'SmsType',
+    name: 'esmsSmsType',
+    type: 'options',
+    description: 'Type of SMS',
+    noDataExpression: true,
+    displayOptions: {
+      show: {
+        operation: ['sendZnsMessage', 'sendViberMessage'],
+        resource: ['ott_message'],
+      }
+    },
+    options: [
+      {
+        name: 'SMS Brandname QC',
+        action: 'SMS Brandname QC',
+        value: 24,
+        description: ''
+      },
+      {
+        name: 'SMS Brandname CSKH',
+        action: 'SMS Brandname CSKH',
+        value: 25,
+        description: ''
+      }
+    ],
+    default: 224,
+  }
+];
+
+export const esmsSmsModel: INodeProperties[] = [
+  ...esmsSmsTypeModel,
+
+  // {
+  //   displayName: 'Sms Type',
+  //   name: 'esmsSmsType',
+  //   type: 'number',
+  //   required: true,
+  //   default: 2,
+  //   displayOptions: {
+  //     show: {
+  //       operation: ['sendSmsMessage'],
+  //       resource: ['sms_message', 'ott_message'],
+  //     }
+  //   },
+  //   description: 'Type of SMS',
+  // },
   {
     displayName: 'Brandname',
     name: 'esmsBrandname',
@@ -25,6 +92,7 @@ export const esmsSmsModel: INodeProperties[] = [
       show: {
         operation: ['sendSmsMessage'],
         resource: ['sms_message'],
+        esmsSmsType: [1, 2],
       }
     },
     description: 'Brand of company.'
