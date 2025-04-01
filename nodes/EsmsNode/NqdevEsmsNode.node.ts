@@ -66,7 +66,6 @@ export class NqdevEsmsNode implements INodeType {
 
     // Lấy credentials từ node
     const credentials = await this.getCredentials(NAME_CREDENTIAL),
-      esmsDomain = (credentials?.esmsDomain ?? 'https://rest.esms.vn') as string,
       esmsApiKey = (credentials?.esmsApiKey ?? '') as string,
       esmsSecretKey = (credentials?.esmsSecretKey ?? '') as string;
 
