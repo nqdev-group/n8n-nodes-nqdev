@@ -4,11 +4,11 @@ import type {
   INodeExecutionData,
   INodeType,
   INodeTypeDescription,
-  JsonObject,
 } from 'n8n-workflow';
 import { NodeConnectionType, NodeOperationError, } from 'n8n-workflow';
 
-import { esmsNodeModel, getUserInfo, NAME_CREDENTIAL, sendMultipleMessage, ISendSmsParams } from '../../nqdev-libraries/esmsvn';
+import { esmsNodeModel, getUserInfo, NAME_CREDENTIAL, sendSmsMessage, ISendSmsMessageParams } from '../../nqdev-libraries/esmsvn';
+import { INqdevResponseData } from '../../nqdev-libraries';
 
 export class NqdevEsmsNode implements INodeType {
   description: INodeTypeDescription = {
@@ -62,6 +62,7 @@ export class NqdevEsmsNode implements INodeType {
 
   async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
     const items = this.getInputData();
+    const executionId = this.getExecutionId();  // Lấy Execution ID của workflow hiện tại
     const returnData: IDataObject[] = [];
 
     // Lấy credentials từ node
@@ -75,8 +76,10 @@ export class NqdevEsmsNode implements INodeType {
         const resource = this.getNodeParameter('resource', itemIndex, '') as string;
         const operation = this.getNodeParameter('operation', itemIndex, '') as string;
 
-        let responseData: JsonObject | IDataObject = {
-          resource, operation,
+        let responseData: INqdevResponseData = {
+          executionId, resource, operation,
+          status: 'backlog',
+          timestamp: new Date().toISOString(),
         };
 
         if (resource === 'account') {
@@ -101,7 +104,7 @@ export class NqdevEsmsNode implements INodeType {
               // ----------------------------------
 
               // Cấu hình dữ liệu để gửi POST request
-              let postData: ISendSmsParams = {
+              let postData: ISendSmsMessageParams = {
                 ApiKey: esmsApiKey ?? '',
                 SecretKey: esmsSecretKey ?? '',
                 SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
@@ -124,7 +127,7 @@ export class NqdevEsmsNode implements INodeType {
               };
 
               // Gửi POST request đến API của ESMS
-              let esmsResponse = await sendMultipleMessage.call(this, postData);
+              let esmsResponse = await sendSmsMessage.call(this, postData);
               responseData['esmsResponse'] = esmsResponse;
 
               break;
@@ -140,7 +143,7 @@ export class NqdevEsmsNode implements INodeType {
           switch (operation) {
             case 'sendZnsMessage': {
               // Cấu hình dữ liệu để gửi POST request
-              let postData: ISendSmsParams = {
+              let postData: ISendSmsMessageParams = {
                 ApiKey: esmsApiKey ?? '',
                 SecretKey: esmsSecretKey ?? '',
                 SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
@@ -162,7 +165,7 @@ export class NqdevEsmsNode implements INodeType {
               };
 
               // Gửi POST request đến API của ESMS
-              let esmsResponse = await sendMultipleMessage.call(this, postData);
+              let esmsResponse = await sendSmsMessage.call(this, postData);
               responseData['esmsResponse'] = esmsResponse;
 
               break;
@@ -170,7 +173,7 @@ export class NqdevEsmsNode implements INodeType {
 
             case 'sendViberMessage': {
               // Cấu hình dữ liệu để gửi POST request
-              let postData: ISendSmsParams = {
+              let postData: ISendSmsMessageParams = {
                 ApiKey: esmsApiKey ?? '',
                 SecretKey: esmsSecretKey ?? '',
                 SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
@@ -192,7 +195,7 @@ export class NqdevEsmsNode implements INodeType {
               };
 
               // Gửi POST request đến API của ESMS
-              let esmsResponse = await sendMultipleMessage.call(this, postData); responseData['esmsResponse'] = esmsResponse;
+              let esmsResponse = await sendSmsMessage.call(this, postData); responseData['esmsResponse'] = esmsResponse;
 
               break;
             }
@@ -216,6 +219,7 @@ export class NqdevEsmsNode implements INodeType {
         }
 
         // Lưu kết quả trả về vào item.json (nếu muốn sử dụng sau)
+        responseData.status = 'completed';
         item.json = responseData;
       } catch (error) {
         if (this.continueOnFail()) {
@@ -234,7 +238,7 @@ export class NqdevEsmsNode implements INodeType {
       }
     }
 
-    // return [items];
+    // Trả về kết quả execution dưới dạng JSON
     return [this.helpers.returnJsonArray(returnData)];
   }
 }

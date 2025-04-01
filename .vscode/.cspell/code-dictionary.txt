@@ -1,6 +1,8 @@
 # Custom Dictionary Words
+campaignid
 CSKH
 esmsvn
 miscased
+OAID
 orcid
 Zalo
