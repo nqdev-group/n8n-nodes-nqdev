@@ -9,7 +9,7 @@ export const esmsSmsModel: INodeProperties[] = [
     default: 2,
     displayOptions: {
       show: {
-        operation: ['sendMessage'],
+        operation: ['sendSmsMessage'],
         resource: ['sms_message', 'ott_message'],
       }
     },
@@ -23,7 +23,7 @@ export const esmsSmsModel: INodeProperties[] = [
     default: '',
     displayOptions: {
       show: {
-        operation: ['sendMessage'],
+        operation: ['sendSmsMessage'],
         resource: ['sms_message'],
       }
     },
@@ -37,7 +37,7 @@ export const esmsSmsModel: INodeProperties[] = [
     default: '',
     displayOptions: {
       show: {
-        operation: ['sendMessage'],
+        operation: ['sendSmsMessage'],
         resource: ['sms_message', 'ott_message'],
       }
     },
@@ -51,7 +51,7 @@ export const esmsSmsModel: INodeProperties[] = [
     default: '',
     displayOptions: {
       show: {
-        operation: ['sendMessage'],
+        operation: ['sendSmsMessage'],
         resource: ['sms_message', 'ott_message'],
       }
     },
@@ -68,7 +68,7 @@ export const esmsOptionModel: INodeProperties[] = [
     default: {},
     displayOptions: {
       show: {
-        operation: ['sendMessage'],
+        operation: ['sendSmsMessage'],
         resource: ['sms_message', 'ott_message'],
       }
     },

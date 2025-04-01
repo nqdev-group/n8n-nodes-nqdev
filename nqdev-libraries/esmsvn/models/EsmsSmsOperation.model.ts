@@ -17,7 +17,7 @@ export const esmsSmsOperationModel: INodeProperties[] = [
       {
         name: 'Gửi tin nhắn SMS',
         action: 'Hành động Gửi tin nhắn SMS',
-        value: 'sendMessage',
+        value: 'sendSmsMessage',
         description: 'Send an SMS Message',
         routing: {
           request: {
@@ -34,6 +34,6 @@ export const esmsSmsOperationModel: INodeProperties[] = [
         }
       }
     ],
-    default: 'sendMessage'
+    default: 'sendSmsMessage'
   },
 ];
