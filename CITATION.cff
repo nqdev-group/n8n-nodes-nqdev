@@ -3,7 +3,7 @@
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-citation-files
 
 cff-version: 1.2.0
-title: n8n Nodes for NQDev ESMSVN
+title: n8n Nodes for Nqdev Intergrate
 message: 'If you use this software, please cite it as below.'
 type: software
 authors:

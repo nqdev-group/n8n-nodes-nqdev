@@ -12,7 +12,7 @@ import { INqdevResponseData } from '../../nqdev-libraries';
 
 export class NqdevEsmsNode implements INodeType {
   description: INodeTypeDescription = {
-    displayName: 'Nqdev Tích hợp EsmsVN',
+    displayName: 'Nqdev: Tích hợp EsmsVN',
     name: 'nqdevEsmsNode',
     icon: {
       light: 'file:esms.svg',
@@ -23,7 +23,7 @@ export class NqdevEsmsNode implements INodeType {
     subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
     description: 'Send SMS and OTT messages using EsmsVN API.',
     defaults: {
-      name: `EsmsVN`,
+      name: `Nqdev: EsmsVN`,
     },
     inputs: [NodeConnectionType.Main],
     outputs: [NodeConnectionType.Main],
