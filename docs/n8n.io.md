@@ -53,3 +53,8 @@ n8n-nodes-nqdev-starter
 ├── pnpm-lock.yaml            # Tệp lock của pnpm (nếu sử dụng pnpm làm package manager)
 └── tsconfig.json             # Cấu hình TypeScript
 ```
+
+## News
+
+- [MCP Client tool & MCP Trigger nodes](https://community.n8n.io/t/we-re-adding-mcp-client-tool-mcp-trigger-nodes-try-them-now/99338)
+  - [GH: n8n-nodes-mcp](https://github.com/nerding-io/n8n-nodes-mcp)
