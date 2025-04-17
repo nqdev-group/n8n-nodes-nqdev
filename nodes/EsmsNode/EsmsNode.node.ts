@@ -14,7 +14,7 @@ import { AccountResource, OttMessageResource, SmsMessageResource } from '../../n
 export class EsmsNode implements INodeType {
   description: INodeTypeDescription = {
     displayName: 'Nqdev: Tích hợp EsmsVN',
-    name: 'nqdevEsmsNode',
+    name: 'esmsNode',
     icon: {
       light: 'file:esms.svg',
       dark: 'file:esms.dark.svg',
