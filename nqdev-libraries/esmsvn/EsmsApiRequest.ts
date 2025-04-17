@@ -8,6 +8,11 @@ import { nqdevApiRequest } from "../common";
 
 export const NAME_CREDENTIAL = 'nqdevEsmsApi';
 
+export const HTTP_HEADERS: IDataObject = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+};
+
 export async function esmsApiRequest(
   this: IHookFunctions | IExecuteFunctions,
   method: IHttpRequestMethods,

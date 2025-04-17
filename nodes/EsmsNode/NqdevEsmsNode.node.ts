@@ -85,7 +85,10 @@ export class NqdevEsmsNode implements INodeType {
         if (resource === 'account') {
           switch (operation) {
             case 'getBalance': {
-              let esmsResponse = await getUserInfo.call(this);
+              let esmsResponse = await getUserInfo.call(this, {
+                apiKey: esmsApiKey ?? '',
+                secretKey: esmsSecretKey ?? '',
+              });
               responseData['esmsResponse'] = esmsResponse;
               break;
             }

@@ -1,18 +1,25 @@
 import type { IExecuteFunctions, IHookFunctions } from 'n8n-workflow';
 
-import { esmsApiRequest } from '../EsmsApiRequest';
+import { esmsApiRequest, HTTP_HEADERS } from '../EsmsApiRequest';
 
 /**
  * Lấy thông tin tài khoản
  * @param this is HookFunctions or ExecuteFunctions
+ * @param args.apiKey API Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
+ * @param args.secretKey Secret Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @description Lấy thông tin tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @url https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-so-du-tai-khoan
  * @returns
  */
 export async function getUserInfo(
-  this: IHookFunctions | IExecuteFunctions
+  this: IHookFunctions | IExecuteFunctions,
+  args: { apiKey: string; secretKey: string; }
 ): Promise<any> {
-  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetBalance_json', {});
+  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetBalance_json', {
+    ...args,
+  }, {}, {
+    ...HTTP_HEADERS,
+  });
 }
 
 /**
@@ -28,8 +35,12 @@ export async function getListBrandname(
   this: IHookFunctions | IExecuteFunctions,
   args: { apiKey: string; secretKey: string; }
 ): Promise<any> {
-  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetListBrandname', {
-    ...args,
+  return await esmsApiRequest.call(this, 'GET', `/MainService.svc/json/GetListBrandnameV2/${args?.apiKey ?? ''}/${args?.secretKey ?? ''}`, {
+
+  }, {
+
+  }, {
+    ...HTTP_HEADERS,
   });
 }
 
@@ -48,8 +59,10 @@ export async function getTemplateList(
   this: IHookFunctions | IExecuteFunctions,
   args: { apiKey: string; secretKey: string; smsType: '2' | '24' | '25' | string; brandname: string; }
 ): Promise<any> {
-  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetTemplateList', {
+  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetTemplate/', {
     ...args,
+  }, {}, {
+    ...HTTP_HEADERS,
   });
 }
 
@@ -66,7 +79,9 @@ export async function getListOa(
   this: IHookFunctions | IExecuteFunctions,
   args: { apiKey: string; secretKey: string; }
 ): Promise<any> {
-  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetListZaloOA', {
+  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetListZaloOA/', {
     ...args,
+  }, {}, {
+    ...HTTP_HEADERS,
   });
 }
