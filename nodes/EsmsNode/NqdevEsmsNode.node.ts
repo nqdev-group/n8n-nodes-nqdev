@@ -47,9 +47,9 @@ export class NqdevEsmsNode implements INodeType {
     /**
      * In the properties array we have two mandatory options objects required
      *
-     * [Resource & Operation]
+     * [Resource & Operation](https://docs.n8n.io/integrations/creating-nodes/code/create-first-node/#resources-and-operations)
      *
-     * https://docs.n8n.io/integrations/creating-nodes/code/create-first-node/#resources-and-operations
+     * https://docs.n8n.io/integrations/creating-nodes/plan/choose-node-method/
      *
      * In our example, the operations are separated into their own file (HTTPVerbDescription.ts)
      * to keep this class easy to read.

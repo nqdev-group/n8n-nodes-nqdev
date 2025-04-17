@@ -1,6 +1,6 @@
-import type { IExecuteFunctions, IHookFunctions } from 'n8n-workflow';
+import type { IExecuteFunctions, IHookFunctions, IDataObject } from 'n8n-workflow';
 
-import { esmsApiRequest, HTTP_HEADERS } from '../EsmsApiRequest';
+import { esmsApiRequest, HTTP_HEADERS, NAME_CREDENTIAL } from '../EsmsApiRequest';
 
 /**
  * Lấy thông tin tài khoản
@@ -13,7 +13,7 @@ import { esmsApiRequest, HTTP_HEADERS } from '../EsmsApiRequest';
  */
 export async function getUserInfo(
   this: IHookFunctions | IExecuteFunctions,
-  args: { apiKey: string; secretKey: string; }
+  args: {}
 ): Promise<any> {
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetBalance_json', {
     ...args,
@@ -33,9 +33,14 @@ export async function getUserInfo(
  */
 export async function getListBrandname(
   this: IHookFunctions | IExecuteFunctions,
-  args: { apiKey: string; secretKey: string; }
+  args: {} & IDataObject
 ): Promise<any> {
-  return await esmsApiRequest.call(this, 'GET', `/MainService.svc/json/GetListBrandnameV2/${args?.apiKey ?? ''}/${args?.secretKey ?? ''}`, {
+  // Lấy credentials từ node
+  const credentials = await this.getCredentials(NAME_CREDENTIAL),
+    esmsApiKey: string = (credentials?.esmsApiKey ?? '') as string,
+    esmsSecretKey: string = (credentials?.esmsSecretKey ?? '') as string;
+
+  return await esmsApiRequest.call(this, 'GET', `/MainService.svc/json/GetListBrandnameV2/${esmsApiKey ?? ''}/${esmsSecretKey ?? ''}`, {
 
   }, {
 
@@ -57,7 +62,7 @@ export async function getListBrandname(
  */
 export async function getTemplateList(
   this: IHookFunctions | IExecuteFunctions,
-  args: { apiKey: string; secretKey: string; smsType: '2' | '24' | '25' | string; brandname: string; }
+  args: { smsType: '2' | '24' | '25' | string; brandname: string; } & IDataObject
 ): Promise<any> {
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetTemplate/', {
     ...args,
@@ -77,7 +82,7 @@ export async function getTemplateList(
  */
 export async function getListOa(
   this: IHookFunctions | IExecuteFunctions,
-  args: { apiKey: string; secretKey: string; }
+  args: {} & IDataObject
 ): Promise<any> {
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetListZaloOA/', {
     ...args,
