@@ -1,6 +1,7 @@
-import type { IExecuteFunctions, IHookFunctions, IDataObject } from 'n8n-workflow';
+import type { IExecuteFunctions, IHookFunctions } from 'n8n-workflow';
 
 import { esmsApiRequest, HTTP_HEADERS, NAME_CREDENTIAL } from '../EsmsApiRequest';
+import { IApiAuthorize } from '../interfaces';
 
 /**
  * Lấy thông tin tài khoản
@@ -13,7 +14,7 @@ import { esmsApiRequest, HTTP_HEADERS, NAME_CREDENTIAL } from '../EsmsApiRequest
  */
 export async function getUserInfo(
   this: IHookFunctions | IExecuteFunctions,
-  args: {}
+  args: IApiAuthorize
 ): Promise<any> {
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetBalance_json', {
     ...args,
@@ -33,7 +34,7 @@ export async function getUserInfo(
  */
 export async function getListBrandname(
   this: IHookFunctions | IExecuteFunctions,
-  args: {} & IDataObject
+  args: IApiAuthorize
 ): Promise<any> {
   // Lấy credentials từ node
   const credentials = await this.getCredentials(NAME_CREDENTIAL),
@@ -62,7 +63,7 @@ export async function getListBrandname(
  */
 export async function getTemplateList(
   this: IHookFunctions | IExecuteFunctions,
-  args: { smsType: '2' | '24' | '25' | string; brandname: string; } & IDataObject
+  args: { smsType: '2' | '24' | '25' | string; brandname: string; } & IApiAuthorize
 ): Promise<any> {
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetTemplate/', {
     ...args,
@@ -82,7 +83,7 @@ export async function getTemplateList(
  */
 export async function getListOa(
   this: IHookFunctions | IExecuteFunctions,
-  args: {} & IDataObject
+  args: IApiAuthorize
 ): Promise<any> {
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetListZaloOA/', {
     ...args,

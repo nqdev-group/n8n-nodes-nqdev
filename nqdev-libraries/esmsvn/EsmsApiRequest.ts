@@ -27,12 +27,12 @@ export async function esmsApiRequest(
     esmsApiKey: string = (credentials?.esmsApiKey ?? '') as string,
     esmsSecretKey: string = (credentials?.esmsSecretKey ?? '') as string;
 
-  const { ApiKey, SecretKey, ...restBody } = body;
+  const { ApiKey, SecretKey, ...safeBody } = body;
 
   return await nqdevApiRequest.call(this, NAME_CREDENTIAL, method, baseUrl, endpoint, {
     ApiKey: esmsApiKey,
     SecretKey: esmsSecretKey,
-    ...restBody,
+    ...safeBody,
   }, {
     ...qs
   }, {
