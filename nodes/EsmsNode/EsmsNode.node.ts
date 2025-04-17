@@ -11,7 +11,7 @@ import { esmsNodeModel, NAME_CREDENTIAL } from '../../nqdev-libraries/esmsvn';
 import { INqdevResponseData } from '../../nqdev-libraries';
 import { AccountResource, OttMessageResource, SmsMessageResource } from '../../nqdev-libraries/esmsvn';
 
-export class NqdevEsmsNode implements INodeType {
+export class EsmsNode implements INodeType {
   description: INodeTypeDescription = {
     displayName: 'Nqdev: Tích hợp EsmsVN',
     name: 'nqdevEsmsNode',

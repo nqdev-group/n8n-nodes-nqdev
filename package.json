@@ -44,7 +44,7 @@
       "dist/credentials/NqdevEsmsApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/EsmsNode/NqdevEsmsNode.node.js"
+      "dist/nodes/EsmsNode/EsmsNode.node.js"
     ]
   },
   "devDependencies": {
