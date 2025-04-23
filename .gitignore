@@ -1,9 +1,25 @@
-node_modules
+# Node.js dependencies
+node_modules/
+
+# Mac system files
 .DS_Store
-.tmp
-tmp
-dist
+
+# Temporary folders
+.tmp/
+tmp/
+
+# Build output
+dist/
+
+# Log files
 npm-debug.log*
-yarn.lock
+
+# Editor configs
 .vscode/launch.json
+
+# Yarn lockfile (if using npm)
+yarn.lock
+
+# Custom scripts
 run-build.bat
+open.bat
