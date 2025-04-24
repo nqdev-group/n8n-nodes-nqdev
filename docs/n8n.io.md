@@ -8,8 +8,20 @@
 
 ## Integrations
 
-- [Build a node](https://docs.n8n.io/integrations/creating-nodes/build/)
-  - [Standard parameters](https://docs.n8n.io/integrations/creating-nodes/build/reference/node-base-files/standard-parameters/)
+### Community nodes
+
+- _Installation and management_
+  - [Manual installation](https://docs.n8n.io/integrations/community-nodes/installation/manual-install/)
+
+### Creating nodes
+
+- [Build your node](https://docs.n8n.io/integrations/creating-nodes/build/)
+  - [Build a declarative-style node](https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/)
+  - _Reference_
+    - [Standard parameters](https://docs.n8n.io/integrations/creating-nodes/build/reference/node-base-files/standard-parameters/)
+- _Test your node_
+  - [Run your node locally](https://docs.n8n.io/integrations/creating-nodes/test/run-node-locally/)
+  - [Node linter](https://docs.n8n.io/integrations/creating-nodes/test/node-linter/)
 
 ## Code in n8n
 
