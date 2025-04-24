@@ -11,6 +11,19 @@
 - [Build a node](https://docs.n8n.io/integrations/creating-nodes/build/)
   - [Standard parameters](https://docs.n8n.io/integrations/creating-nodes/build/reference/node-base-files/standard-parameters/)
 
+## Code in n8n
+
+- [Code in n8n](https://docs.n8n.io/code/code-node/)
+
+## Hosting n8n
+
+- [Hosting n8n](https://docs.n8n.io/hosting/)
+  - [API reference](https://docs.n8n.io/api/api-reference/)
+
+## REST API
+
+- [n8n public REST API](https://docs.n8n.io/api/)
+
 ## `n8n-nodes-nqdev-*` Directory Structure
 
 ```yaml
