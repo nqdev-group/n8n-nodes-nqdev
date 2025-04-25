@@ -22,4 +22,4 @@ yarn.lock
 
 # Custom scripts
 run-build.bat
-open.bat
+run-open.bat
