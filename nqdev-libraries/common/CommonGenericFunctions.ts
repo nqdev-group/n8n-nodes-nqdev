@@ -1,12 +1,11 @@
-import type {
-  IDataObject,
-  IExecuteFunctions,
-  IHookFunctions,
-  IHttpRequestMethods,
-  IRequestOptions,
-  JsonObject,
+import {
+  type IDataObject,
+  type IExecuteFunctions,
+  type IHookFunctions,
+  type IHttpRequestMethods,
+  type IRequestOptions,
+  NodeApiError
 } from 'n8n-workflow';
-import { NodeApiError } from 'n8n-workflow';
 
 /**
  * Make an API request
@@ -55,11 +54,11 @@ export async function nqdevApiRequest(
     const response = await this.helpers.requestWithAuthentication.call(this, nameCredential, options);
 
     // Check if the response indicates an error (e.g., invalid credentials)
-    if (response.success === '101') {
-      throw new NodeApiError(this.getNode(), response as JsonObject, {
-        message: 'Invalid credentials or API error!',
-      });
-    }
+    // if (response.success === '101') {
+    //   throw new NodeApiError(this.getNode(), response as JsonObject, {
+    //     message: 'Invalid credentials or API error!',
+    //   });
+    // }
 
     // Return the response if successful
     return response;

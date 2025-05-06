@@ -1,8 +1,10 @@
-import type {
-  IDataObject,
-  IExecuteFunctions,
-  IHookFunctions,
-  IHttpRequestMethods,
+import {
+  type IDataObject,
+  type IExecuteFunctions,
+  type IHookFunctions,
+  type IHttpRequestMethods,
+  type JsonObject,
+  NodeApiError
 } from 'n8n-workflow';
 import { nqdevApiRequest } from "../common";
 
@@ -29,7 +31,7 @@ export async function baseApiRequest(
 
   const { ApiKey, SecretKey, ...safeBody } = body;
 
-  return await nqdevApiRequest.call(this, NAME_CREDENTIAL, method, baseUrl, endpoint, {
+  const response = await nqdevApiRequest.call(this, NAME_CREDENTIAL, method, baseUrl, endpoint, {
     ApiKey: esmsApiKey,
     SecretKey: esmsSecretKey,
     ...safeBody,
@@ -38,4 +40,15 @@ export async function baseApiRequest(
   }, {
     ...headers
   });
+
+  // Check if the response indicates an error (e.g., invalid credentials)
+  if (response.success === '101') {
+    throw new NodeApiError(this.getNode(), response as JsonObject, {
+      message: 'Invalid credentials or API error!',
+    });
+  }
+
+  // Return the response if successful
+  return response;
 }
+
