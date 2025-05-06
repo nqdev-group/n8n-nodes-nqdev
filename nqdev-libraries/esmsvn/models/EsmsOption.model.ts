@@ -87,9 +87,8 @@ const esmsSmsTypeModel: INodeProperties[] = [
   },
 ];
 
-export const esmsSmsModel: INodeProperties[] = [
-  ...esmsSmsTypeModel,
-
+const esmsSenderModel: INodeProperties[] = [
+  // sendSmsMessage
   {
     displayName: 'Brandname',
     name: 'esmsBrandname',
@@ -98,10 +97,12 @@ export const esmsSmsModel: INodeProperties[] = [
     default: { mode: 'list', value: '' },
     displayOptions: {
       show: {
-        operation: ['sendSmsMessage'],
         resource: ['sms_message'],
-        esmsSmsType: [1, 2],
-      }
+        operation: ['sendSmsMessage'],
+      },
+      hide: {
+        esmsSmsType: [8],
+      },
     },
     description: 'Tên thương hiệu của bạn.',
     placeholder: 'eSMS.vn,...',
@@ -134,19 +135,119 @@ export const esmsSmsModel: INodeProperties[] = [
       }
     ]
   },
+
+  // sendViberMessage
+  {
+    displayName: 'Brandname',
+    name: 'esmsBrandname',
+    type: 'resourceLocator',
+    required: false,
+    default: { mode: 'list', value: '' },
+    displayOptions: {
+      show: {
+        resource: ['ott_message'],
+        operation: ['sendViberMessage'],
+      }
+    },
+    description: 'Tên thương hiệu của bạn.',
+    placeholder: 'eSMS.vn,...',
+    modes: [
+      {
+        displayName: 'Brandname',
+        name: 'list',
+        type: 'list',
+        placeholder: 'Select a Brandname...',
+        typeOptions: {
+          searchListMethod: 'getListBrandname',
+          searchable: true,
+          searchFilterRequired: true,
+        },
+      },
+      {
+        displayName: 'By Name',
+        name: 'name',
+        type: 'string',
+        placeholder: 'e.g. eSMS.vn',
+        validation: [
+          {
+            type: 'regex',
+            properties: {
+              regex: '[-_a-zA-Z0-9]+',
+              errorMessage: 'Not a valid Sender',
+            },
+          },
+        ],
+      }
+    ],
+  },
+
+  {
+    displayName: 'ZaloOA',
+    name: 'esmsZaloOA',
+    type: 'resourceLocator',
+    required: false,
+    default: { mode: 'list', value: '' },
+    displayOptions: {
+      show: {
+        resource: ['ott_message'],
+        operation: ['sendZnsMessage'],
+      }
+    },
+    description: 'Tên thương hiệu của bạn.',
+    placeholder: 'eSMS.vn,...',
+    modes: [
+      {
+        displayName: 'Brandname',
+        name: 'list',
+        type: 'list',
+        placeholder: 'Select a Brandname...',
+        typeOptions: {
+          searchListMethod: 'getListBrandname',
+          searchable: true,
+          searchFilterRequired: true,
+        },
+      },
+      {
+        displayName: 'By Name',
+        name: 'name',
+        type: 'string',
+        placeholder: 'e.g. eSMS.vn',
+        validation: [
+          {
+            type: 'regex',
+            properties: {
+              regex: '[-_a-zA-Z0-9]+',
+              errorMessage: 'Not a valid Sender',
+            },
+          },
+        ],
+      }
+    ],
+  }
+];
+
+export const esmsSmsModel: INodeProperties[] = [
+  ...esmsSmsTypeModel,
+  ...esmsSenderModel,
+
   {
     displayName: 'PhoneNumber',
     name: 'esmsPhonenumber',
     type: 'string',
     required: true,
     default: '',
+    placeholder: 'e.g. +84912345678',
+    description: 'Số điện thoại nhận tin nhắn.',
     displayOptions: {
       show: {
-        operation: ['sendSmsMessage', 'sendZnsMessage', 'sendViberMessage'],
         resource: ['sms_message', 'ott_message'],
+        operation: ['sendSmsMessage', 'sendZnsMessage', 'sendViberMessage'],
       }
     },
-    description: 'Số điện thoại nhận tin nhắn.'
+    typeOptions: {
+      regex: '^(\\+84|0)(3|5|7|8|9)[0-9]{8}$',
+      regexErrorMessage: 'Số điện thoại không đúng định dạng. Ví dụ: +84912345678 hoặc 0912345678',
+    },
   },
   {
     displayName: 'Content',
@@ -154,14 +255,14 @@ export const esmsSmsModel: INodeProperties[] = [
     type: 'string',
     required: true,
     default: '',
+    placeholder: 'Cam on quy khach su dung dich vu cua chung toi. Chuc quy khach sinh nhat vui ve. Hotline 1900 xxxx',
+    description: 'Nội dung tin nhắn.',
     displayOptions: {
       show: {
         operation: ['sendSmsMessage', 'sendZnsMessage', 'sendViberMessage'],
         resource: ['sms_message', 'ott_message'],
       }
     },
-    placeholder: 'Cam on quy khach su dung dich vu cua chung toi. Chuc quy khach sinh nhat vui ve. Hotline 1900 xxxx',
-    description: 'Nội dung tin nhắn.',
   },
 ];
 
