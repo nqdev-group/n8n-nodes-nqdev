@@ -25,7 +25,7 @@ export class EsmsNode implements INodeType {
       dark: 'file:esms.dark.svg',
     },
     group: ['transform'],
-    version: 1,
+    version: [1],
     subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
     description: 'Send SMS and OTT messages using EsmsVN API.',
     defaults: {

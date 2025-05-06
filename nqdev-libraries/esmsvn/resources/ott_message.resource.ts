@@ -5,7 +5,7 @@ import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
 import { ISendSmsMessageParams } from "../interfaces";
 import { sendSmsMessage } from "../services";
-import { NAME_CREDENTIAL } from "../EsmsApiRequest";
+import { NAME_CREDENTIAL } from "../EsmsGenericFunctions";
 
 // File Created: 2023-10-05 16:00:00
 export class OttMessageResource {

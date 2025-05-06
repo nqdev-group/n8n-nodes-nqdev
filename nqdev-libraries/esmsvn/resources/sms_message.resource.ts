@@ -6,7 +6,7 @@ import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
 import { ISendSmsMessageParams } from "../interfaces";
 import { sendSmsMessage } from "../services";
-import { NAME_CREDENTIAL } from "../EsmsApiRequest";
+import { NAME_CREDENTIAL } from "../EsmsGenericFunctions";
 
 export class SmsMessageResource {
   static NAME_RESOURCE = 'sms_message';

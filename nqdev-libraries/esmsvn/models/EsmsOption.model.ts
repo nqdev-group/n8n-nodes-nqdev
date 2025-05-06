@@ -92,8 +92,8 @@ const esmsSenderModel: INodeProperties[] = [
     displayName: 'Sender',
     name: 'esmsSender',
     type: 'resourceLocator',
-    required: true,
-    default: { mode: 'list', value: '' },
+    required: false,
+    default: { mode: 'esmsBrandnameCSKH', value: '' },
     displayOptions: {
       show: {
         operation: ['sendSmsMessage'],
@@ -103,7 +103,18 @@ const esmsSenderModel: INodeProperties[] = [
     description: 'Tên thương hiệu hiển thị trên điện thoại.',
     modes: [
       {
-        displayName: 'Brandname CSKH',
+        displayName: 'Ad Brand',
+        name: 'esmsBrandnameQC',
+        type: 'list',
+        placeholder: 'Select an Brandname CSKH...',
+        typeOptions: {
+          searchListMethod: 'getBrandnameList',
+          searchable: true,
+          searchFilterRequired: true,
+        }
+      },
+      {
+        displayName: 'CS Brand',
         name: 'esmsBrandnameCSKH',
         type: 'list',
         placeholder: 'Select an Brandname CSKH...',
@@ -114,7 +125,7 @@ const esmsSenderModel: INodeProperties[] = [
         }
       },
       {
-        displayName: 'Cố định giá rẻ',
+        displayName: 'Random Number',
         name: 'esmsRandomNumber',
         type: 'string',
         placeholder: 'e.g. nqdev-n8n-io',

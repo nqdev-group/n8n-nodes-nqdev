@@ -1,6 +1,6 @@
 import type { IExecuteFunctions, IHookFunctions } from 'n8n-workflow';
 
-import { esmsApiRequest } from '../EsmsApiRequest';
+import { esmsApiRequest } from '../EsmsGenericFunctions';
 import { ISendSmsMessageParams } from '../interfaces';
 
 export async function sendSmsMessage(

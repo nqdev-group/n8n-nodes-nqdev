@@ -1,6 +1,6 @@
 import type { IExecuteFunctions, IHookFunctions } from 'n8n-workflow';
 
-import { esmsApiRequest, HTTP_HEADERS, NAME_CREDENTIAL } from '../EsmsApiRequest';
+import { esmsApiRequest, HTTP_HEADERS, NAME_CREDENTIAL } from '../EsmsGenericFunctions';
 import { IApiAuthorize } from '../interfaces';
 
 /**
