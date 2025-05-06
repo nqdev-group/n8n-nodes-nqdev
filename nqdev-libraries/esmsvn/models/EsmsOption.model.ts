@@ -108,7 +108,7 @@ const esmsSenderModel: INodeProperties[] = [
         type: 'list',
         placeholder: 'Select an Brandname CSKH...',
         typeOptions: {
-          searchListMethod: 'getBrandnameList',
+          searchListMethod: 'getListBrandnameQC',
           searchable: true,
           searchFilterRequired: true,
         }
@@ -119,7 +119,7 @@ const esmsSenderModel: INodeProperties[] = [
         type: 'list',
         placeholder: 'Select an Brandname CSKH...',
         typeOptions: {
-          searchListMethod: 'getBrandnameList',
+          searchListMethod: 'getListBrandnameCSKH',
           searchable: true,
           searchFilterRequired: true,
         }
@@ -134,7 +134,7 @@ const esmsSenderModel: INodeProperties[] = [
             type: 'regex',
             properties: {
               regex: '[-_a-zA-Z0-9]+',
-              errorMessage: 'Not a valid Github Owner Name',
+              errorMessage: 'Not a valid Sender',
             },
           }
         ]
