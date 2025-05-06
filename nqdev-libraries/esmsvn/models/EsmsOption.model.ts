@@ -7,6 +7,7 @@ const esmsSmsTypeModel: INodeProperties[] = [
     type: 'options',
     description: 'Type of SMS',
     noDataExpression: true,
+    default: 2,
     displayOptions: {
       show: {
         operation: ['sendSmsMessage'],
@@ -33,7 +34,6 @@ const esmsSmsTypeModel: INodeProperties[] = [
         description: ''
       }
     ],
-    default: 2,
   },
   {
     displayName: 'SmsType',
@@ -41,6 +41,7 @@ const esmsSmsTypeModel: INodeProperties[] = [
     type: 'options',
     description: 'Type of SMS',
     noDataExpression: true,
+    default: 23,
     displayOptions: {
       show: {
         operation: ['sendViberMessage'],
@@ -55,7 +56,6 @@ const esmsSmsTypeModel: INodeProperties[] = [
         description: ''
       },
     ],
-    default: 24,
   },
   {
     displayName: 'SmsType',
@@ -63,6 +63,7 @@ const esmsSmsTypeModel: INodeProperties[] = [
     type: 'options',
     description: 'Type of SMS',
     noDataExpression: true,
+    default: 24,
     displayOptions: {
       show: {
         operation: ['sendZnsMessage'],
@@ -83,76 +84,18 @@ const esmsSmsTypeModel: INodeProperties[] = [
         description: ''
       }
     ],
-    default: 24,
-  },
-];
-
-const esmsSenderModel: INodeProperties[] = [
-  {
-    displayName: 'Sender',
-    name: 'esmsSender',
-    type: 'resourceLocator',
-    required: false,
-    default: { mode: 'esmsBrandnameCSKH', value: '' },
-    displayOptions: {
-      show: {
-        operation: ['sendSmsMessage'],
-        resource: ['sms_message'],
-      }
-    },
-    description: 'Tên thương hiệu hiển thị trên điện thoại.',
-    modes: [
-      {
-        displayName: 'Ad Brand',
-        name: 'esmsBrandnameQC',
-        type: 'list',
-        placeholder: 'Select an Brandname CSKH...',
-        typeOptions: {
-          searchListMethod: 'getListBrandnameQC',
-          searchable: true,
-          searchFilterRequired: true,
-        }
-      },
-      {
-        displayName: 'CS Brand',
-        name: 'esmsBrandnameCSKH',
-        type: 'list',
-        placeholder: 'Select an Brandname CSKH...',
-        typeOptions: {
-          searchListMethod: 'getListBrandnameCSKH',
-          searchable: true,
-          searchFilterRequired: true,
-        }
-      },
-      {
-        displayName: 'Random Number',
-        name: 'esmsRandomNumber',
-        type: 'string',
-        placeholder: 'e.g. nqdev-n8n-io',
-        validation: [
-          {
-            type: 'regex',
-            properties: {
-              regex: '[-_a-zA-Z0-9]+',
-              errorMessage: 'Not a valid Sender',
-            },
-          }
-        ]
-      }
-    ],
   },
 ];
 
 export const esmsSmsModel: INodeProperties[] = [
-  ...esmsSenderModel,
   ...esmsSmsTypeModel,
 
   {
     displayName: 'Brandname',
     name: 'esmsBrandname',
-    type: 'string',
+    type: 'resourceLocator',
     required: false,
-    default: '',
+    default: { mode: 'list', value: '' },
     displayOptions: {
       show: {
         operation: ['sendSmsMessage'],
@@ -160,7 +103,36 @@ export const esmsSmsModel: INodeProperties[] = [
         esmsSmsType: [1, 2],
       }
     },
-    description: 'Brand of company.'
+    description: 'Tên thương hiệu của bạn.',
+    placeholder: 'eSMS.vn,...',
+    modes: [
+      {
+        displayName: 'Brandname',
+        name: 'list',
+        type: 'list',
+        placeholder: 'Select a Brandname...',
+        typeOptions: {
+          searchListMethod: 'getListBrandname',
+          searchable: true,
+          searchFilterRequired: true,
+        },
+      },
+      {
+        displayName: 'By Name',
+        name: 'name',
+        type: 'string',
+        placeholder: 'e.g. eSMS.vn',
+        validation: [
+          {
+            type: 'regex',
+            properties: {
+              regex: '[-_a-zA-Z0-9]+',
+              errorMessage: 'Not a valid Sender',
+            },
+          },
+        ],
+      }
+    ]
   },
   {
     displayName: 'PhoneNumber',

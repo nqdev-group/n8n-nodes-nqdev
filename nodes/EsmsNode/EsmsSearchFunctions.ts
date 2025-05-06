@@ -4,7 +4,7 @@ import type {
   INodeListSearchResult,
 } from 'n8n-workflow';
 
-export async function getListBrandnameQC(
+export async function getListBrandname(
   this: ILoadOptionsFunctions,
   filter?: string,
   paginationToken?: string,
@@ -28,15 +28,6 @@ export async function getListBrandnameQC(
   // const nextPaginationToken = page * per_page < responseData.total_count ? page + 1 : undefined;
   // return { results, paginationToken: nextPaginationToken };
 
-  const results: INodeListSearchItems[] = [];
-  return { results, paginationToken: undefined };
-}
-
-export async function getListBrandnameCSKH(
-  this: ILoadOptionsFunctions,
-  filter?: string,
-  paginationToken?: string,
-): Promise<INodeListSearchResult> {
   const results: INodeListSearchItems[] = [];
   return { results, paginationToken: undefined };
 }
