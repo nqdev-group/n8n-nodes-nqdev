@@ -122,7 +122,7 @@ const esmsSenderModel: INodeProperties[] = [
         displayName: 'By Name',
         name: 'name',
         type: 'string',
-        placeholder: 'e.g. eSMS.vn',
+        placeholder: 'e.g. eSMS.vn...',
         validation: [
           {
             type: 'regex',
@@ -167,7 +167,7 @@ const esmsSenderModel: INodeProperties[] = [
         displayName: 'By Name',
         name: 'name',
         type: 'string',
-        placeholder: 'e.g. eSMS.vn',
+        placeholder: 'e.g. eSMS.vn...',
         validation: [
           {
             type: 'regex',
@@ -181,6 +181,7 @@ const esmsSenderModel: INodeProperties[] = [
     ],
   },
 
+  // sendZnsMessage
   {
     displayName: 'ZaloOA',
     name: 'esmsZaloOA',
@@ -202,7 +203,7 @@ const esmsSenderModel: INodeProperties[] = [
         type: 'list',
         placeholder: 'Select a Brandname...',
         typeOptions: {
-          searchListMethod: 'getListBrandname',
+          searchListMethod: 'getListZaloOA',
           searchable: true,
           searchFilterRequired: true,
         },
@@ -211,7 +212,7 @@ const esmsSenderModel: INodeProperties[] = [
         displayName: 'By Name',
         name: 'name',
         type: 'string',
-        placeholder: 'e.g. eSMS.vn',
+        placeholder: 'e.g. eSMS.vn...',
         validation: [
           {
             type: 'regex',
@@ -259,10 +260,45 @@ export const esmsSmsModel: INodeProperties[] = [
     description: 'Nội dung tin nhắn.',
     displayOptions: {
       show: {
-        operation: ['sendSmsMessage', 'sendZnsMessage', 'sendViberMessage'],
         resource: ['sms_message', 'ott_message'],
+        operation: ['sendSmsMessage', 'sendViberMessage'],
       }
     },
+  },
+  {
+    displayName: 'ZNS Template',
+    name: 'esmsZnsTemplate',
+    type: 'resourceLocator',
+    required: false,
+    default: { mode: 'list', value: '' },
+    displayOptions: {
+      show: {
+        resource: ['ott_message'],
+        operation: ['sendZnsMessage'],
+      },
+      hide: {
+        esmsSmsType: [26],
+      },
+    },
+    modes: [
+      {
+        displayName: 'ZNS Template',
+        name: 'list',
+        type: 'list',
+        placeholder: 'Select a Template...',
+        typeOptions: {
+          searchListMethod: 'getListZnsTemplate',
+          searchable: true,
+          searchFilterRequired: true,
+        },
+      },
+      {
+        displayName: 'By Content',
+        name: 'content',
+        type: 'string',
+        placeholder: 'e.g. 12345...',
+      }
+    ],
   },
 ];
 

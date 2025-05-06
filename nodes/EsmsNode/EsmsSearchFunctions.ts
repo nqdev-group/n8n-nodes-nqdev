@@ -31,3 +31,21 @@ export async function getListBrandname(
   const results: INodeListSearchItems[] = [];
   return { results, paginationToken: undefined };
 }
+
+export async function getListZaloOA(
+  this: ILoadOptionsFunctions,
+  filter?: string,
+  paginationToken?: string,
+): Promise<INodeListSearchResult> {
+  const results: INodeListSearchItems[] = [];
+  return { results, paginationToken: undefined };
+}
+
+export async function getListZnsTemplate(
+  this: ILoadOptionsFunctions,
+  filter?: string,
+  paginationToken?: string,
+): Promise<INodeListSearchResult> {
+  const results: INodeListSearchItems[] = [];
+  return { results, paginationToken: undefined };
+}
