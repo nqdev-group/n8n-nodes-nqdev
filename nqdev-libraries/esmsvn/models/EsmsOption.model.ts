@@ -87,7 +87,53 @@ const esmsSmsTypeModel: INodeProperties[] = [
   },
 ];
 
+const esmsSenderModel: INodeProperties[] = [
+  {
+    displayName: 'Sender',
+    name: 'esmsSender',
+    type: 'resourceLocator',
+    required: true,
+    default: { mode: 'list', value: '' },
+    displayOptions: {
+      show: {
+        operation: ['sendSmsMessage'],
+        resource: ['sms_message'],
+      }
+    },
+    description: 'Tên thương hiệu hiển thị trên điện thoại.',
+    modes: [
+      {
+        displayName: 'Brandname CSKH',
+        name: 'esmsBrandnameCSKH',
+        type: 'list',
+        placeholder: 'Select an Brandname CSKH...',
+        typeOptions: {
+          searchListMethod: 'getBrandnameList',
+          searchable: true,
+          searchFilterRequired: true,
+        }
+      },
+      {
+        displayName: 'Cố định giá rẻ',
+        name: 'esmsRandomNumber',
+        type: 'string',
+        placeholder: 'e.g. nqdev-n8n-io',
+        validation: [
+          {
+            type: 'regex',
+            properties: {
+              regex: '[-_a-zA-Z0-9]+',
+              errorMessage: 'Not a valid Github Owner Name',
+            },
+          }
+        ]
+      }
+    ],
+  },
+];
+
 export const esmsSmsModel: INodeProperties[] = [
+  ...esmsSenderModel,
   ...esmsSmsTypeModel,
 
   {
