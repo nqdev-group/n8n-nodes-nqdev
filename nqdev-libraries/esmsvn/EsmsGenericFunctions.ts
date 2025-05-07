@@ -7,13 +7,30 @@ import {
   NodeApiError
 } from 'n8n-workflow';
 import { nqdevApiRequest } from "../common";
+import { IApiAuthorize } from './interfaces';
 
 export const NAME_CREDENTIAL = 'nqdevEsmsApi';
 
 export const HTTP_HEADERS: IDataObject = {
-  'Content-Type': 'application/json',
+  'Content-Type': 'application/json; charset=utf-8',
   'Accept': 'application/json',
 };
+
+export async function getEsmsCredentials(this: IHookFunctions | IExecuteFunctions): Promise<IApiAuthorize> {
+  const credentials = await this.getCredentials(NAME_CREDENTIAL);
+  if (credentials === undefined) {
+    throw new NodeApiError(this.getNode(), {}, {
+      message: 'No credentials for Esms API were found!',
+    });
+  }
+
+  const esmsCredentials: IApiAuthorize = {
+    ApiKey: `${credentials?.esmsApiKey ?? ''}`,
+    SecretKey: `${credentials?.esmsSecretKey ?? ''}`,
+  };
+
+  return esmsCredentials;
+}
 
 export async function esmsApiRequest(
   this: IHookFunctions | IExecuteFunctions,
@@ -21,7 +38,7 @@ export async function esmsApiRequest(
   endpoint: string,
   body: IDataObject = {},
   qs: IDataObject = {},
-  headers: IDataObject = {},
+  headers: IDataObject = { ...HTTP_HEADERS },
 ): Promise<any> {
   // Lấy credentials từ node
   const credentials = await this.getCredentials(NAME_CREDENTIAL),
@@ -32,8 +49,8 @@ export async function esmsApiRequest(
   const { ApiKey, SecretKey, ...safeBody } = body;
 
   const response = await nqdevApiRequest.call(this, NAME_CREDENTIAL, method, baseUrl, endpoint, {
-    ApiKey: ApiKey ?? esmsApiKey,
-    SecretKey: SecretKey ?? esmsSecretKey,
+    ApiKey: ApiKey ?? esmsApiKey ?? '',
+    SecretKey: SecretKey ?? esmsSecretKey ?? '',
     ...safeBody,
   }, {
     ...qs

@@ -1,6 +1,6 @@
 import type { IExecuteFunctions, IHookFunctions } from 'n8n-workflow';
 
-import { esmsApiRequest, HTTP_HEADERS, NAME_CREDENTIAL } from '../EsmsGenericFunctions';
+import { esmsApiRequest, getEsmsCredentials, HTTP_HEADERS } from '../EsmsGenericFunctions';
 import { IApiAuthorize } from '../interfaces';
 
 /**
@@ -16,8 +16,15 @@ export async function getUserInfo(
   this: IHookFunctions | IExecuteFunctions,
   args: IApiAuthorize
 ): Promise<any> {
+  // Lấy credentials từ node
+  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
+
+  const { ApiKey, SecretKey, ...safeArgs } = args;
+
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetBalance_json', {
-    ...args,
+    ApiKey: ApiKey ?? credentials.ApiKey ?? '',
+    SecretKey: SecretKey ?? credentials.SecretKey ?? '',
+    ...safeArgs,
   }, {}, {
     ...HTTP_HEADERS,
   });
@@ -37,15 +44,42 @@ export async function getListBrandname(
   args: IApiAuthorize
 ): Promise<any> {
   // Lấy credentials từ node
-  const credentials = await this.getCredentials(NAME_CREDENTIAL),
-    esmsApiKey: string = (credentials?.esmsApiKey ?? '') as string,
-    esmsSecretKey: string = (credentials?.esmsSecretKey ?? '') as string;
+  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
-  return await esmsApiRequest.call(this, 'GET', `/MainService.svc/json/GetListBrandnameV2/${esmsApiKey ?? ''}/${esmsSecretKey ?? ''}`, {
+  const { ApiKey, SecretKey, ...safeArgs } = args;
 
-  }, {
+  return await esmsApiRequest.call(this, 'GET',
+    `/MainService.svc/json/GetListBrandnameV2/${ApiKey ?? credentials.ApiKey ?? ''}/${SecretKey ?? credentials.SecretKey ?? ''}`, {
+    ...safeArgs,
+  }, {}, {
+    ...HTTP_HEADERS,
+  });
+}
 
-  }, {
+/**
+ * Lấy danh sách Zalo Official Account (OA)
+ * @param this is HookFunctions or ExecuteFunctions
+ * @param args.apiKey API Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
+ * @param args.secretKey Secret Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
+ * @description Lấy danh sách Zalo OA của tài khoản đã đăng nhập trên hệ thống Esms.vn
+ * @url https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-zalo-oa
+ * @returns
+ */
+export async function getListZaloOa(
+  this: IHookFunctions | IExecuteFunctions,
+  args: IApiAuthorize
+): Promise<any> {
+
+  // Lấy credentials từ node
+  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
+
+  const { ApiKey, SecretKey, ...safeArgs } = args;
+
+  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetListZaloOA/', {
+    ApiKey: ApiKey ?? credentials.ApiKey ?? '',
+    SecretKey: SecretKey ?? credentials.SecretKey ?? '',
+    ...safeArgs,
+  }, {}, {
     ...HTTP_HEADERS,
   });
 }
@@ -65,28 +99,15 @@ export async function getTemplateList(
   this: IHookFunctions | IExecuteFunctions,
   args: { smsType: '2' | '24' | '25' | string; brandname: string; } & IApiAuthorize
 ): Promise<any> {
-  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetTemplate/', {
-    ...args,
-  }, {}, {
-    ...HTTP_HEADERS,
-  });
-}
+  // Lấy credentials từ node
+  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
-/**
- * Lấy danh sách Zalo Official Account (OA)
- * @param this is HookFunctions or ExecuteFunctions
- * @param args.apiKey API Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
- * @param args.secretKey Secret Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
- * @description Lấy danh sách Zalo OA của tài khoản đã đăng nhập trên hệ thống Esms.vn
- * @url https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-zalo-oa
- * @returns
- */
-export async function getListOa(
-  this: IHookFunctions | IExecuteFunctions,
-  args: IApiAuthorize
-): Promise<any> {
-  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetListZaloOA/', {
-    ...args,
+  const { ApiKey, SecretKey, ...safeArgs } = args;
+
+  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetTemplate/', {
+    ApiKey: ApiKey ?? credentials.ApiKey ?? '',
+    SecretKey: SecretKey ?? credentials.SecretKey ?? '',
+    ...safeArgs,
   }, {}, {
     ...HTTP_HEADERS,
   });
