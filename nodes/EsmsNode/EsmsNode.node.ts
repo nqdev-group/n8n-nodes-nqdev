@@ -4,9 +4,10 @@ import type {
   INodeExecutionData,
   INodeType,
   INodeTypeDescription,
+  IWebhookFunctions,
+  IWebhookResponseData,
 } from 'n8n-workflow';
 import { NodeConnectionType, NodeOperationError, } from 'n8n-workflow';
-
 import { INqdevResponseData } from '../../nqdev-libraries';
 import {
   esmsNodeModel,
@@ -15,8 +16,10 @@ import {
   OttMessageResource,
   SmsMessageResource
 } from '../../nqdev-libraries/esmsvn';
+import { getListBrandname, getListZaloOA, getListZnsTemplate } from './EsmsSearchFunctions';
 
 export class EsmsNode implements INodeType {
+  // This property is required. It defines the name of the node.
   description: INodeTypeDescription = {
     displayName: 'Nqdev: Tích hợp EsmsVN',
     name: 'esmsNode',
@@ -66,6 +69,25 @@ export class EsmsNode implements INodeType {
     ],
   };
 
+  // This function is called when the node is used as a webhook.
+  methods = {
+    listSearch: {
+      getListBrandname,
+      getListZaloOA,
+      getListZnsTemplate,
+    },
+  };
+
+  // This function is called when the node is used as a webhook.
+  async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
+    const requestObject = this.getRequestObject();
+
+    return {
+      workflowData: [this.helpers.returnJsonArray(requestObject.body)],
+    };
+  }
+
+  // This function is called when the node is executed.
   async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
     const items = this.getInputData();
     const executionId = this.getExecutionId();  // Lấy Execution ID của workflow hiện tại
