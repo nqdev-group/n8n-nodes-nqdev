@@ -37,8 +37,8 @@ export class SmsMessageResource {
 
         // Cấu hình dữ liệu để gửi POST request
         let postData: ISendSmsMessageParams = {
-          apiKey: esmsApiKey ?? '',
-          secretKey: esmsSecretKey ?? '',
+          ApiKey: esmsApiKey ?? '',
+          SecretKey: esmsSecretKey ?? '',
           SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
           Brandname: esmsBrandnameLocator?.value ?? '',
           Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,

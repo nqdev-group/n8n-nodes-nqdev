@@ -32,8 +32,8 @@ export async function esmsApiRequest(
   const { ApiKey, SecretKey, ...safeBody } = body;
 
   const response = await nqdevApiRequest.call(this, NAME_CREDENTIAL, method, baseUrl, endpoint, {
-    ApiKey: esmsApiKey,
-    SecretKey: esmsSecretKey,
+    ApiKey: ApiKey ?? esmsApiKey,
+    SecretKey: SecretKey ?? esmsSecretKey,
     ...safeBody,
   }, {
     ...qs

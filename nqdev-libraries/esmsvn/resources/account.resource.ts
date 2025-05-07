@@ -29,8 +29,8 @@ export class AccountResource {
     switch (operation) {
       case 'getBalance': {
         let esmsResponse = await getUserInfo.call(this, {
-          apiKey: esmsApiKey ?? '',
-          secretKey: esmsSecretKey ?? '',
+          ApiKey: esmsApiKey ?? '',
+          SecretKey: esmsSecretKey ?? '',
         });
         responseData['esmsResponse'] = esmsResponse;
         break;
