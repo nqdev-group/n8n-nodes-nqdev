@@ -37,7 +37,7 @@ export class NqdevEsmsApi implements ICredentialType {
       url: '/MainService.svc/json/GetBalance_json/',
       method: 'POST',
       headers: {
-        'nqdev-version': '2923-04-01'
+        'nqdev-version': '1.0.0',
       },
       body: {
         'ApiKey': '={{ $credentials.esmsApiKey }}',

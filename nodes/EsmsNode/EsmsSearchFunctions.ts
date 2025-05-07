@@ -9,6 +9,8 @@ export async function getListBrandname(
   filter?: string,
   paginationToken?: string,
 ): Promise<INodeListSearchResult> {
+  this.logger.debug('getListBrandname', { filter, paginationToken });
+
   // const page = paginationToken ? +paginationToken : 1;
   // const per_page = 100;
   // const responseData: UserSearchResponse = await githubApiRequest.call(

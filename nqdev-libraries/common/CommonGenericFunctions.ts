@@ -3,9 +3,15 @@ import {
   type IExecuteFunctions,
   type IHookFunctions,
   type IHttpRequestMethods,
+  type ILoadOptionsFunctions,
   type IRequestOptions,
   NodeApiError
 } from 'n8n-workflow';
+
+export const HTTP_HEADERS: IDataObject = {
+  'Content-Type': 'application/json; charset=utf-8',
+  'Accept': 'application/json',
+};
 
 /**
  * Make an API request
@@ -14,7 +20,7 @@ import {
  * @param {object | undefined} data
  */
 export async function nqdevApiRequest(
-  this: IHookFunctions | IExecuteFunctions,
+  this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
   nameCredential: string,
   method: IHttpRequestMethods,
   baseUrl: string,
@@ -29,11 +35,10 @@ export async function nqdevApiRequest(
     baseURL: (baseUrl ?? '').replace(/\/$/, ''), // remove trailing slashes
     uri: `${endpoint}`,
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'nqdev-version': '2923-04-01', // Your API version
+      'nqdev-version': '1.0.0', // Your API version
       'SentWith': 'n8n-nqdev', // Custom header for identification
-      ...headers,
+      ...HTTP_HEADERS, // Default headers
+      ...headers, // Merge any additional headers
     },
     qs: {
       n8n: 'nqdev', // Query parameter for identification

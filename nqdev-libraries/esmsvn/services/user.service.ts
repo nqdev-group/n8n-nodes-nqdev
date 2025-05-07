@@ -1,4 +1,4 @@
-import type { IExecuteFunctions, IHookFunctions } from 'n8n-workflow';
+import type { IExecuteFunctions, IHookFunctions, ILoadOptionsFunctions } from 'n8n-workflow';
 
 import { esmsApiRequest, getEsmsCredentials, HTTP_HEADERS } from '../EsmsGenericFunctions';
 import { IApiAuthorize } from '../interfaces';
@@ -40,7 +40,7 @@ export async function getUserInfo(
  * @returns
  */
 export async function getListBrandname(
-  this: IHookFunctions | IExecuteFunctions,
+  this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
   args: IApiAuthorize
 ): Promise<any> {
   // Lấy credentials từ node

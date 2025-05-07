@@ -3,6 +3,7 @@ import {
   type IExecuteFunctions,
   type IHookFunctions,
   type IHttpRequestMethods,
+  type ILoadOptionsFunctions,
   type JsonObject,
   NodeApiError
 } from 'n8n-workflow';
@@ -16,7 +17,9 @@ export const HTTP_HEADERS: IDataObject = {
   'Accept': 'application/json',
 };
 
-export async function getEsmsCredentials(this: IHookFunctions | IExecuteFunctions): Promise<IApiAuthorize> {
+export async function getEsmsCredentials(
+  this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions
+): Promise<IApiAuthorize> {
   const credentials = await this.getCredentials(NAME_CREDENTIAL);
   if (credentials === undefined) {
     throw new NodeApiError(this.getNode(), {}, {
@@ -33,7 +36,7 @@ export async function getEsmsCredentials(this: IHookFunctions | IExecuteFunction
 }
 
 export async function esmsApiRequest(
-  this: IHookFunctions | IExecuteFunctions,
+  this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
   method: IHttpRequestMethods,
   endpoint: string,
   body: IDataObject = {},
