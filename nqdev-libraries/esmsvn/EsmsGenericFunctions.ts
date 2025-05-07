@@ -8,7 +8,7 @@ import {
   NodeApiError
 } from 'n8n-workflow';
 import { nqdevApiRequest } from "../common";
-import { IApiAuthorize } from './interfaces';
+import { EsmsResponse, IApiAuthorize } from './interfaces';
 
 export const NAME_CREDENTIAL = 'nqdevEsmsApi';
 
@@ -42,7 +42,7 @@ export async function esmsApiRequest(
   body: IDataObject = {},
   qs: IDataObject = {},
   headers: IDataObject = { ...HTTP_HEADERS },
-): Promise<any> {
+): Promise<EsmsResponse> {
   // Lấy credentials từ node
   const credentials = await this.getCredentials(NAME_CREDENTIAL),
     baseUrl: string = (credentials?.esmsDomain ?? 'https://rest.esms.vn') as string,
@@ -51,7 +51,7 @@ export async function esmsApiRequest(
 
   const { ApiKey, SecretKey, ...safeBody } = body;
 
-  const response = await nqdevApiRequest.call(this, NAME_CREDENTIAL, method, baseUrl, endpoint, {
+  const response: EsmsResponse = await nqdevApiRequest.call(this, NAME_CREDENTIAL, method, baseUrl, endpoint, {
     ApiKey: ApiKey ?? esmsApiKey ?? '',
     SecretKey: SecretKey ?? esmsSecretKey ?? '',
     ...safeBody,
@@ -62,7 +62,7 @@ export async function esmsApiRequest(
   });
 
   // Check if the response indicates an error (e.g., invalid credentials)
-  if (response.success === '101') {
+  if (response.CodeResult === '101') {
     throw new NodeApiError(this.getNode(), response as JsonObject, {
       message: 'Invalid credentials or API error!',
     });

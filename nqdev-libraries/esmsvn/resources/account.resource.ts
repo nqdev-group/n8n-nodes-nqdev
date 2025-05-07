@@ -4,7 +4,7 @@ import type { IExecuteFunctions, IHookFunctions } from "n8n-workflow";
 import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
 import { NAME_CREDENTIAL } from "../EsmsGenericFunctions";
-import { getListBrandname, getListZaloOa, getUserInfo } from "../services";
+import { getEsmsListBrandname, getListZaloOa, getUserInfo } from "../services";
 
 // File Created: 2023-10-05 16:00:00
 export class AccountResource {
@@ -37,7 +37,7 @@ export class AccountResource {
       }
 
       case 'getListBrandname': {
-        let esmsResponse = await getListBrandname.call(this, {
+        let esmsResponse = await getEsmsListBrandname.call(this, {
           ApiKey: esmsApiKey ?? '',
           SecretKey: esmsSecretKey ?? '',
         });

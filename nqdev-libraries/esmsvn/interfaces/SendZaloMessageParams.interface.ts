@@ -1,7 +1,14 @@
 import type { JsonObject } from "n8n-workflow";
 import { IApiAuthorize } from "./ApiAuthorize.interface";
 
-export interface ISendZnsMessageParams extends IApiAuthorize {
+interface ISendZaloMessageParams extends IApiAuthorize {
+  OAID: string;
+  RequestId?: string;
+  CallbackUrl?: string;
+  Sandbox?: string; // "0" hoặc "1"
+}
+
+export interface ISendZnsMessageParams extends ISendZaloMessageParams {
   OAID: string;
   TempID: string;
   Phone: string;
@@ -17,4 +24,11 @@ export interface ISendZnsMessageParams extends IApiAuthorize {
   Sandbox?: string; // "0" hoặc "1"
   IsUnicode?: string; // "0" hoặc "1"
   PartnerSource?: string;
+}
+
+export interface ISendUidMessageParams extends ISendZaloMessageParams {
+  OAID: string;
+  RequestId?: string;
+  CallbackUrl?: string;
+  Sandbox?: string; // "0" hoặc "1"
 }

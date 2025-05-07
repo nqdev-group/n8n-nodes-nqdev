@@ -1,7 +1,7 @@
-import type { IExecuteFunctions, IHookFunctions } from 'n8n-workflow';
+import type { IExecuteFunctions, IHookFunctions, ILoadOptionsFunctions } from 'n8n-workflow';
 
 import { esmsApiRequest, getEsmsCredentials, HTTP_HEADERS } from '../EsmsGenericFunctions';
-import { IApiAuthorize, ISendZnsMessageParams } from '../interfaces';
+import { IApiAuthorize, ISendUidMessageParams, ISendZnsMessageParams } from '../interfaces';
 
 /**
  * Send Zalo ZNS Message
@@ -10,8 +10,8 @@ import { IApiAuthorize, ISendZnsMessageParams } from '../interfaces';
  * @param args
  * @returns
  */
-export async function sendZaloMessage(
-  this: IHookFunctions | IExecuteFunctions,
+export async function sendZaloZnsMessage(
+  this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
   args: ISendZnsMessageParams
 ): Promise<any> {
   // Lấy credentials từ node
@@ -20,6 +20,24 @@ export async function sendZaloMessage(
   const { ApiKey, SecretKey, ...safeArgs } = args;
 
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/SendZaloMessage_V6/', {
+    ApiKey: ApiKey ?? credentials.ApiKey ?? '',
+    SecretKey: SecretKey ?? credentials.SecretKey ?? '',
+    ...safeArgs,
+  }, {}, {
+    ...HTTP_HEADERS,
+  });
+}
+
+export async function sendZaloUidMessage(
+  this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
+  args: ISendUidMessageParams
+): Promise<any> {
+  // Lấy credentials từ node
+  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
+
+  const { ApiKey, SecretKey, ...safeArgs } = args;
+
+  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/SendZaloFollowerMessage_V5_post_json/', {
     ApiKey: ApiKey ?? credentials.ApiKey ?? '',
     SecretKey: SecretKey ?? credentials.SecretKey ?? '',
     ...safeArgs,

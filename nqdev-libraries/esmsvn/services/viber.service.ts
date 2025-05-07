@@ -1,4 +1,4 @@
-import type { IExecuteFunctions, IHookFunctions } from 'n8n-workflow';
+import type { IExecuteFunctions, IHookFunctions, ILoadOptionsFunctions } from 'n8n-workflow';
 
 import { esmsApiRequest, HTTP_HEADERS, NAME_CREDENTIAL } from '../EsmsGenericFunctions';
 import { ISendZnsMessageParams } from '../interfaces';
@@ -11,7 +11,7 @@ import { ISendZnsMessageParams } from '../interfaces';
  * @returns
  */
 export async function sendViberMessage(
-  this: IHookFunctions | IExecuteFunctions,
+  this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
   args: ISendZnsMessageParams
 ): Promise<any> {
   // Lấy credentials từ node

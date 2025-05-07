@@ -3,6 +3,7 @@ import type {
   INodeListSearchItems,
   INodeListSearchResult,
 } from 'n8n-workflow';
+import { EsmsListBrandnameResponse, getEsmsCredentials, getEsmsListBrandname } from '../../nqdev-libraries/esmsvn';
 
 export async function getListBrandname(
   this: ILoadOptionsFunctions,
@@ -11,27 +12,24 @@ export async function getListBrandname(
 ): Promise<INodeListSearchResult> {
   this.logger.debug('getListBrandname', { filter, paginationToken });
 
-  // const page = paginationToken ? +paginationToken : 1;
-  // const per_page = 100;
-  // const responseData: UserSearchResponse = await githubApiRequest.call(
-  //   this,
-  //   'GET',
-  //   '/search/users',
-  //   {},
-  //   { q: filter, page, per_page },
-  // );
+  const page = paginationToken ? +paginationToken : 1;
+  const per_page = 100;
 
-  // const results: INodeListSearchItems[] = responseData.items.map((item: UserSearchItem) => ({
-  //   name: item.login,
-  //   value: item.login,
-  //   url: item.html_url,
-  // }));
+  const credentials = await getEsmsCredentials.call(this),
+    responseData: EsmsListBrandnameResponse = await getEsmsListBrandname.call(this, {
+      ApiKey: credentials.ApiKey ?? '',
+      SecretKey: credentials.SecretKey ?? '',
+      Brandname: filter ?? '',
+      q: filter, page, per_page,
+    });
 
-  // const nextPaginationToken = page * per_page < responseData.total_count ? page + 1 : undefined;
-  // return { results, paginationToken: nextPaginationToken };
+  const results: INodeListSearchItems[] = responseData.ListBrandName?.map((item) => ({
+    name: item.Brandname ?? '',
+    value: item.Brandname ?? '',
+  })) ?? [];
 
-  const results: INodeListSearchItems[] = [];
-  return { results, paginationToken: undefined };
+  const nextPaginationToken = page * per_page < (responseData.ListBrandName?.length ?? 0) ? page + 1 : undefined;
+  return { results, paginationToken: nextPaginationToken };
 }
 
 export async function getListZaloOA(
@@ -39,6 +37,7 @@ export async function getListZaloOA(
   filter?: string,
   paginationToken?: string,
 ): Promise<INodeListSearchResult> {
+  this.logger.debug('getListZaloOA', { filter, paginationToken });
   const results: INodeListSearchItems[] = [];
   return { results, paginationToken: undefined };
 }
@@ -48,6 +47,7 @@ export async function getListZnsTemplate(
   filter?: string,
   paginationToken?: string,
 ): Promise<INodeListSearchResult> {
+  this.logger.debug('getListZnsTemplate', { filter, paginationToken });
   const results: INodeListSearchItems[] = [];
   return { results, paginationToken: undefined };
 }

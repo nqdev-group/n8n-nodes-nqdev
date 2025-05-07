@@ -1,7 +1,7 @@
 import type { IExecuteFunctions, IHookFunctions, ILoadOptionsFunctions } from 'n8n-workflow';
 
 import { esmsApiRequest, getEsmsCredentials, HTTP_HEADERS } from '../EsmsGenericFunctions';
-import { IApiAuthorize } from '../interfaces';
+import { EsmsListBrandnameResponse, IApiAuthorize } from '../interfaces';
 
 /**
  * Lấy thông tin tài khoản
@@ -13,7 +13,7 @@ import { IApiAuthorize } from '../interfaces';
  * @returns
  */
 export async function getUserInfo(
-  this: IHookFunctions | IExecuteFunctions,
+  this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
   args: IApiAuthorize
 ): Promise<any> {
   // Lấy credentials từ node
@@ -39,10 +39,10 @@ export async function getUserInfo(
  * @url https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-brandname
  * @returns
  */
-export async function getListBrandname(
+export async function getEsmsListBrandname(
   this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
   args: IApiAuthorize
-): Promise<any> {
+): Promise<EsmsListBrandnameResponse> {
   // Lấy credentials từ node
   const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
@@ -66,7 +66,7 @@ export async function getListBrandname(
  * @returns
  */
 export async function getListZaloOa(
-  this: IHookFunctions | IExecuteFunctions,
+  this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
   args: IApiAuthorize
 ): Promise<any> {
 
@@ -96,7 +96,7 @@ export async function getListZaloOa(
  * @returns
  */
 export async function getTemplateList(
-  this: IHookFunctions | IExecuteFunctions,
+  this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
   args: { smsType: '2' | '24' | '25' | string; brandname: string; } & IApiAuthorize
 ): Promise<any> {
   // Lấy credentials từ node
