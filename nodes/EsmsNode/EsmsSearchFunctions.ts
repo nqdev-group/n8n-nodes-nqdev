@@ -13,23 +13,35 @@ export async function getListBrandname(
   this.logger.debug('getListBrandname', { filter, paginationToken });
 
   const page = paginationToken ? +paginationToken : 1;
-  const per_page = 100;
+  const pageSize = 100;
 
   const credentials = await getEsmsCredentials.call(this),
     responseData: EsmsListBrandnameResponse = await getEsmsListBrandname.call(this, {
       ApiKey: credentials.ApiKey ?? '',
       SecretKey: credentials.SecretKey ?? '',
       Brandname: filter ?? '',
-      q: filter, page, per_page,
+      q: filter, page, per_page: pageSize,
     });
 
-  const results: INodeListSearchItems[] = responseData.ListBrandName?.map((item) => ({
+  // Lọc các Brandname theo từ khóa
+  const filteredData = responseData.ListBrandName?.filter(item =>
+    item.Brandname?.toLowerCase().includes(filter?.toLowerCase() ?? '')
+  );
+
+  // Tính toán phân trang
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedData = filteredData?.slice(startIndex, endIndex) ?? [];
+
+  // Tính toán token phân trang tiếp theo
+  const nextPaginationToken = (page * pageSize < (filteredData?.length ?? 0)) ? page + 1 : undefined;
+
+  const results: INodeListSearchItems[] = paginatedData?.map((item) => ({
     name: item.Brandname ?? '',
     value: item.Brandname ?? '',
   })) ?? [];
 
-  const nextPaginationToken = page * per_page < (responseData.ListBrandName?.length ?? 0) ? page + 1 : undefined;
-  return { results, paginationToken: nextPaginationToken };
+  return { results, paginationToken: nextPaginationToken, };
 }
 
 export async function getListZaloOA(
