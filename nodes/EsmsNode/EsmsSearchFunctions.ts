@@ -10,7 +10,7 @@ export async function getListBrandname(
   filter?: string,
   paginationToken?: string,
 ): Promise<INodeListSearchResult> {
-  this.logger.debug('getListBrandname', { filter, paginationToken });
+  this.logger.info('getListBrandname', { filter, paginationToken });
 
   const page = paginationToken ? +paginationToken : 1;
   const pageSize = 100;
@@ -49,7 +49,7 @@ export async function getListZaloOA(
   filter?: string,
   paginationToken?: string,
 ): Promise<INodeListSearchResult> {
-  this.logger.debug('getListZaloOA', { filter, paginationToken });
+  this.logger.info('getListZaloOA', { filter, paginationToken });
   const results: INodeListSearchItems[] = [];
   return { results, paginationToken: undefined };
 }
@@ -59,7 +59,7 @@ export async function getListZnsTemplate(
   filter?: string,
   paginationToken?: string,
 ): Promise<INodeListSearchResult> {
-  this.logger.debug('getListZnsTemplate', { filter, paginationToken });
+  this.logger.info('getListZnsTemplate', { filter, paginationToken });
   const results: INodeListSearchItems[] = [];
   return { results, paginationToken: undefined };
 }
