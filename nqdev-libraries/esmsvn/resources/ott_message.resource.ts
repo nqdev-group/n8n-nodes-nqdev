@@ -3,8 +3,8 @@
 import type { IDataObject, IExecuteFunctions, IHookFunctions } from "n8n-workflow";
 import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
-import { ISendSmsMessageParams } from "../interfaces";
-import { sendSmsMessage } from "../services";
+import { ISendSmsMessageParams, ISendZnsMessageParams } from "../interfaces";
+import { sendSmsMessage, sendZaloZnsMessage } from "../services";
 import { NAME_CREDENTIAL } from "../EsmsGenericFunctions";
 
 // File Created: 2023-10-05 16:00:00
@@ -33,23 +33,20 @@ export class OttMessageResource {
         //    ott_message:sendZnsMessage
         // ----------------------------------
 
-        let esmsBrandnameLocator = this.getNodeParameter('esmsBrandname', itemIndex) as { mode: string; value: string } ?? { mode: 'name', value: 'n8n-nqdev' };
+        let esmsZnsTemplate = (this.getNodeParameter('esmsZnsTemplate', itemIndex, {}) as { mode: string; value: string })?.value ?? 'n8n-nqdev';
         const esmsZnsTemplateParameters = this.getNodeParameter('esmsZnsTemplateParameters', {}) as IDataObject;
 
         // Cấu hình dữ liệu để gửi POST request
-        let postData: ISendSmsMessageParams = {
+        let postData: ISendZnsMessageParams = {
           ApiKey: esmsApiKey ?? '',
           SecretKey: esmsSecretKey ?? '',
-          SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
-          Brandname: esmsBrandnameLocator?.value ?? '',
+          OAID: '',
+          TempID: esmsZnsTemplate,
           Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
-          Content: this.getNodeParameter('esmsContent', itemIndex, '') as string,
+          TempData: esmsZnsTemplateParameters,
           IsUnicode: (this.getNodeParameter('esmsIsUnicode', itemIndex, '') as boolean) ? '1' : '0',
           Sandbox: (this.getNodeParameter('esmsIsSandbox', itemIndex, '') as boolean) ? '1' : '0',
           PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
-          ZnsTemplate: {
-            ...esmsZnsTemplateParameters
-          },
         };
 
         responseData['esmsRequest'] = {
@@ -62,7 +59,7 @@ export class OttMessageResource {
         };
 
         // Gửi POST request đến API của ESMS
-        let esmsResponse = await sendSmsMessage.call(this, postData);
+        let esmsResponse = await sendZaloZnsMessage.call(this, postData);
         responseData['esmsResponse'] = esmsResponse;
 
         break;

@@ -1,4 +1,4 @@
-import type { JsonObject } from "n8n-workflow";
+import type { IDataObject, JsonObject } from "n8n-workflow";
 import { IApiAuthorize } from "./ApiAuthorize.interface";
 
 interface ISendZaloMessageParams extends IApiAuthorize {
@@ -12,7 +12,7 @@ export interface ISendZnsMessageParams extends ISendZaloMessageParams {
   OAID: string;
   TempID: string;
   Phone: string;
-  TempData: JsonObject;
+  TempData: JsonObject | IDataObject;
   /**
    * Thời gian hẹn gửi của tin. Không truyền khi tin muốn tin nhắn gửi đi liền.
    * Định dạng: yyyy-mm-dd hh:MM:ss.
