@@ -79,7 +79,10 @@ export async function getListZnsTemplate(
 
   this.logger.info(`getListZnsTemplate: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, esmsZaloOA, options, credentials })}`);
 
-  const results: INodeListSearchItems[] = [];
+  const results: INodeListSearchItems[] = [{
+    name: 'Customer Name',
+    value: 'customer_name',
+  }];
   return { results, paginationToken: undefined };
 }
 

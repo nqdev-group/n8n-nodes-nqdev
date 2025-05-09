@@ -280,10 +280,6 @@ export const esmsSmsModel: INodeProperties[] = [
         esmsSmsType: [26],
       },
     },
-    typeOptions: {
-      loadOptionsDependsOn: ['esmsZaloOA'],
-      loadOptionsMethod: 'getListZnsTemplate', // method động để lấy params dựa trên template đã chọn
-    },
     modes: [
       {
         displayName: 'ZNS Template',
