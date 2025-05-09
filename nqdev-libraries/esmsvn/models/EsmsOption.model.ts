@@ -301,12 +301,11 @@ export const esmsSmsModel: INodeProperties[] = [
     ],
   },
   {
-    displayName: 'Additional Fields',
+    displayName: 'Template Parameters',
     name: 'esmsZnsTemplateParameters',
-    type: 'collection',
+    type: 'fixedCollection',
     placeholder: 'Add parameter',
     default: {},
-    options: [], // để trống, sẽ load động
     description: 'Thêm các tham số động của template',
     displayOptions: {
       show: {
@@ -318,9 +317,32 @@ export const esmsSmsModel: INodeProperties[] = [
       },
     },
     typeOptions: {
-      loadOptionsDependsOn: ['esmsZnsTemplate.value'], // phụ thuộc vào template đã chọn
-      loadOptionsMethod: 'getLoadZnsTemplateParameters', // method động để lấy params dựa trên template đã chọn
+      multipleValues: true,
     },
+    options: [
+      {
+        displayName: 'Parameters',
+        name: 'parameters',
+        values: [
+          {
+            displayName: 'Parameter Name',
+            name: 'paramKey',
+            type: 'options',
+            default: '',
+            typeOptions: {
+              loadOptionsDependsOn: ['esmsZnsTemplate.value'],
+              loadOptionsMethod: 'getLoadZnsTemplateParameters',
+            },
+          },
+          {
+            displayName: 'Value',
+            name: 'paramValue',
+            type: 'string',
+            default: '',
+          },
+        ],
+      },
+    ],
   }
 ];
 
