@@ -16,7 +16,7 @@ import {
   OttMessageResource,
   SmsMessageResource
 } from '../../nqdev-libraries/esmsvn';
-import { getListBrandname, getListZaloOA, getListZnsTemplate } from './EsmsSearchFunctions';
+import { getListBrandname, getListZaloOA, getListZnsTemplate, getZnsTemplateParameters } from './EsmsSearchFunctions';
 
 export class EsmsNode implements INodeType {
   // This property is required. It defines the name of the node.
@@ -71,10 +71,17 @@ export class EsmsNode implements INodeType {
 
   // This function is called when the node is used as a webhook.
   methods = {
+    loadoptions: {
+      getListBrandname,
+      getListZaloOA,
+      getListZnsTemplate,
+      getZnsTemplateParameters,
+    },
     listSearch: {
       getListBrandname,
       getListZaloOA,
       getListZnsTemplate,
+      getZnsTemplateParameters,
     },
   };
 

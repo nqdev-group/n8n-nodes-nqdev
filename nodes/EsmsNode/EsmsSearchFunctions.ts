@@ -82,3 +82,23 @@ export async function getListZnsTemplate(
   const results: INodeListSearchItems[] = [];
   return { results, paginationToken: undefined };
 }
+
+export async function getZnsTemplateParameters(
+  this: ILoadOptionsFunctions,
+  filter?: string,
+  paginationToken?: string,
+): Promise<INodeListSearchResult> {
+  const page = paginationToken ? +paginationToken : 1;
+  const pageSize = 100;
+
+  const credentials = await getEsmsCredentials.call(this),
+    esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as number,
+    esmsZaloOA = (this.getNodeParameter('esmsZaloOA', { mode: 'name', value: 'n8n-nqdev' }) as { mode: string; value: string })?.value ?? 'n8n-nqdev',
+    esmsZnsTemplate = this.getNodeParameter('esmsZnsTemplate', '') as string,
+    options = this.getNodeParameter('options', {}) as { [key: string]: any };
+
+  this.logger.info(`getZnsTemplateParameters: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, esmsZaloOA, esmsZnsTemplate, options, credentials })}`);
+
+  const results: INodeListSearchItems[] = [];
+  return { results, paginationToken: undefined };
+}

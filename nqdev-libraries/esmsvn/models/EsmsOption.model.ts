@@ -224,7 +224,7 @@ const esmsSenderModel: INodeProperties[] = [
         ],
       }
     ],
-  }
+  },
 ];
 
 export const esmsSmsModel: INodeProperties[] = [
@@ -280,6 +280,10 @@ export const esmsSmsModel: INodeProperties[] = [
         esmsSmsType: [26],
       },
     },
+    typeOptions: {
+      loadOptionsDependsOn: ['esmsZaloOA'],
+      loadOptionsMethod: 'getListZnsTemplate', // method động để lấy params dựa trên template đã chọn
+    },
     modes: [
       {
         displayName: 'ZNS Template',
@@ -300,6 +304,28 @@ export const esmsSmsModel: INodeProperties[] = [
       }
     ],
   },
+  {
+    displayName: 'Additional Fields',
+    name: 'additionalFields',
+    type: 'collection',
+    placeholder: 'Add parameter',
+    default: {},
+    options: [], // để trống, sẽ load động
+    description: 'Thêm các tham số động của template',
+    displayOptions: {
+      show: {
+        resource: ['ott_message'],
+        operation: ['sendZnsMessage'],
+      },
+      hide: {
+        esmsSmsType: [26],
+      },
+    },
+    typeOptions: {
+      loadOptionsDependsOn: ['esmsZnsTemplate'],
+      loadOptionsMethod: 'getZnsTemplateParameters', // method động để lấy params dựa trên template đã chọn
+    },
+  }
 ];
 
 export const esmsOptionModel: INodeProperties[] = [
