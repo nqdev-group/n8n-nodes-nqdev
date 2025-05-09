@@ -10,18 +10,21 @@ export async function getListBrandname(
   filter?: string,
   paginationToken?: string,
 ): Promise<INodeListSearchResult> {
-  this.logger.info(`getListBrandname: ${JSON.stringify({ filter, paginationToken })}`);
-
   const page = paginationToken ? +paginationToken : 1;
   const pageSize = 100;
 
-  const credentials = await getEsmsCredentials.call(this),
-    responseData: EsmsListBrandnameResponse = await getEsmsListBrandname.call(this, {
-      ApiKey: credentials.ApiKey ?? '',
-      SecretKey: credentials.SecretKey ?? '',
-      Brandname: filter ?? '',
-      q: filter, page, per_page: pageSize,
-    });
+  const credentials = await getEsmsCredentials.call(this);
+  const esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as number,
+    options = this.getNodeParameter('options', {}) as { [key: string]: any };
+
+  this.logger.info(`getListBrandname: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, options })}`);
+
+  const responseData: EsmsListBrandnameResponse = await getEsmsListBrandname.call(this, {
+    ApiKey: credentials.ApiKey ?? '',
+    SecretKey: credentials.SecretKey ?? '',
+    Brandname: filter ?? '',
+    q: filter, page, per_page: pageSize,
+  });
 
   // Lọc các Brandname theo từ khóa
   const filteredData = responseData.ListBrandName?.filter(item =>
