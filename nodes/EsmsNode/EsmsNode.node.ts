@@ -71,7 +71,7 @@ export class EsmsNode implements INodeType {
 
   // This function is called when the node is used as a webhook.
   methods = {
-    loadoptions: {
+    loadOptions: {
       getLoadZnsTemplateParameters,
     },
     listSearch: {
