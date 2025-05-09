@@ -1,6 +1,6 @@
 // Project: nqdev-libraries
 
-import type { IExecuteFunctions, IHookFunctions } from "n8n-workflow";
+import type { IDataObject, IExecuteFunctions, IHookFunctions } from "n8n-workflow";
 import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
 import { ISendSmsMessageParams } from "../interfaces";
@@ -34,6 +34,7 @@ export class OttMessageResource {
         // ----------------------------------
 
         let esmsBrandnameLocator = this.getNodeParameter('esmsBrandname', itemIndex) as { mode: string; value: string } ?? { mode: 'name', value: 'n8n-nqdev' };
+        const esmsZnsTemplateParameters = this.getNodeParameter('esmsZnsTemplateParameters', {}) as IDataObject;
 
         // Cấu hình dữ liệu để gửi POST request
         let postData: ISendSmsMessageParams = {
@@ -46,6 +47,9 @@ export class OttMessageResource {
           IsUnicode: (this.getNodeParameter('esmsIsUnicode', itemIndex, '') as boolean) ? '1' : '0',
           Sandbox: (this.getNodeParameter('esmsIsSandbox', itemIndex, '') as boolean) ? '1' : '0',
           PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
+          ZnsTemplate: {
+            ...esmsZnsTemplateParameters
+          },
         };
 
         responseData['esmsRequest'] = {

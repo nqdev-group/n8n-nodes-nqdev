@@ -302,7 +302,7 @@ export const esmsSmsModel: INodeProperties[] = [
   },
   {
     displayName: 'Additional Fields',
-    name: 'additionalFields',
+    name: 'esmsZnsTemplateParameters',
     type: 'collection',
     placeholder: 'Add parameter',
     default: {},
@@ -318,8 +318,8 @@ export const esmsSmsModel: INodeProperties[] = [
       },
     },
     typeOptions: {
-      loadOptionsDependsOn: ['esmsZnsTemplate'],
-      loadOptionsMethod: 'getZnsTemplateParameters', // method động để lấy params dựa trên template đã chọn
+      loadOptionsDependsOn: ['esmsZnsTemplate.value'], // phụ thuộc vào template đã chọn
+      loadOptionsMethod: 'getLoadZnsTemplateParameters', // method động để lấy params dựa trên template đã chọn
     },
   }
 ];
