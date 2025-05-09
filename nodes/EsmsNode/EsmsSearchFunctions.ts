@@ -58,7 +58,7 @@ export async function getListZaloOA(
     esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as number,
     options = this.getNodeParameter('options', {}) as { [key: string]: any };
 
-  this.logger.info(`getListZaloOA: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, options })}`);
+  this.logger.info(`getListZaloOA: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, options, credentials })}`);
 
   const results: INodeListSearchItems[] = [];
   return { results, paginationToken: undefined };
@@ -77,7 +77,7 @@ export async function getListZnsTemplate(
     esmsZaloOA = (this.getNodeParameter('esmsZaloOA', { mode: 'name', value: 'n8n-nqdev' }) as { mode: string; value: string })?.value ?? 'n8n-nqdev',
     options = this.getNodeParameter('options', {}) as { [key: string]: any };
 
-  this.logger.info(`getListZnsTemplate: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, esmsZaloOA, options })}`);
+  this.logger.info(`getListZnsTemplate: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, esmsZaloOA, options, credentials })}`);
 
   const results: INodeListSearchItems[] = [];
   return { results, paginationToken: undefined };
