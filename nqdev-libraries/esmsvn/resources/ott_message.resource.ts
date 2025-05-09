@@ -33,8 +33,16 @@ export class OttMessageResource {
         //    ott_message:sendZnsMessage
         // ----------------------------------
 
-        let esmsZnsTemplate = (this.getNodeParameter('esmsZnsTemplate', itemIndex, {}) as { mode: string; value: string })?.value ?? 'n8n-nqdev';
-        const esmsZnsTemplateParameters = this.getNodeParameter('esmsZnsTemplateParameters', {}) as IDataObject;
+        const esmsZnsTemplate = (this.getNodeParameter('esmsZnsTemplate', itemIndex, {}) as { mode: string; value: string })?.value ?? 'n8n-nqdev';
+        const esmsZnsTemplateParameters = this.getNodeParameter('esmsZnsTemplateParameters', { parameters: [] }) as IDataObject;
+
+        // Kiểm tra xem parameters có phải là mảng hay không
+        const parameters = Array.isArray(esmsZnsTemplateParameters.parameters) ? esmsZnsTemplateParameters.parameters : [];
+
+        const znsTempData = parameters.reduce((acc, { paramKey, paramValue }) => {
+          acc[paramKey] = paramValue;
+          return acc;
+        }, {});
 
         // Cấu hình dữ liệu để gửi POST request
         let postData: ISendZnsMessageParams = {
@@ -43,7 +51,7 @@ export class OttMessageResource {
           OAID: '',
           TempID: esmsZnsTemplate,
           Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
-          TempData: esmsZnsTemplateParameters,
+          TempData: znsTempData,
           IsUnicode: (this.getNodeParameter('esmsIsUnicode', itemIndex, '') as boolean) ? '1' : '0',
           Sandbox: (this.getNodeParameter('esmsIsSandbox', itemIndex, '') as boolean) ? '1' : '0',
           PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
