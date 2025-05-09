@@ -30,6 +30,7 @@ export async function getEsmsCredentials(
   const esmsCredentials: IApiAuthorize = {
     ApiKey: `${credentials?.esmsApiKey ?? ''}`,
     SecretKey: `${credentials?.esmsSecretKey ?? ''}`,
+    baseUrl: (credentials?.esmsDomain ?? 'https://rest.esms.vn') as string,
   };
 
   return esmsCredentials;
