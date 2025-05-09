@@ -19,6 +19,7 @@
   - [Build a declarative-style node](https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/)
   - _Reference_
     - [Standard parameters](https://docs.n8n.io/integrations/creating-nodes/build/reference/node-base-files/standard-parameters/)
+  - [Choose your node building approach](https://docs.n8n.io/integrations/creating-nodes/plan/choose-node-method/)
 - _Test your node_
   - [Run your node locally](https://docs.n8n.io/integrations/creating-nodes/test/run-node-locally/)
   - [Node linter](https://docs.n8n.io/integrations/creating-nodes/test/node-linter/)
