@@ -99,6 +99,9 @@ export async function getZnsTemplateParameters(
 
   this.logger.info(`getZnsTemplateParameters: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, esmsZaloOA, esmsZnsTemplate, options, credentials })}`);
 
-  const results: INodeListSearchItems[] = [];
+  const results: INodeListSearchItems[] = [{
+    name: 'Customer Name',
+    value: 'customer_name',
+  }];
   return { results, paginationToken: undefined };
 }
