@@ -198,10 +198,10 @@ const esmsSenderModel: INodeProperties[] = [
     placeholder: 'eSMS.vn,...',
     modes: [
       {
-        displayName: 'Brandname',
+        displayName: 'ZaloOA',
         name: 'list',
         type: 'list',
-        placeholder: 'Select a Brandname...',
+        placeholder: 'Select a ZaloOA...',
         typeOptions: {
           searchListMethod: 'getListZaloOA',
           searchable: true,

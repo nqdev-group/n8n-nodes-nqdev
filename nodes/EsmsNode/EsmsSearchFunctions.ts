@@ -13,8 +13,8 @@ export async function getListBrandname(
   const page = paginationToken ? +paginationToken : 1;
   const pageSize = 100;
 
-  const credentials = await getEsmsCredentials.call(this);
-  const esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as number,
+  const credentials = await getEsmsCredentials.call(this),
+    esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as number,
     options = this.getNodeParameter('options', {}) as { [key: string]: any };
 
   this.logger.info(`getListBrandname: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, options })}`);
@@ -23,7 +23,6 @@ export async function getListBrandname(
     ApiKey: credentials.ApiKey ?? '',
     SecretKey: credentials.SecretKey ?? '',
     Brandname: filter ?? '',
-    q: filter, page, per_page: pageSize,
   });
 
   // Lọc các Brandname theo từ khóa
@@ -52,7 +51,15 @@ export async function getListZaloOA(
   filter?: string,
   paginationToken?: string,
 ): Promise<INodeListSearchResult> {
-  this.logger.info(`getListZaloOA: ${JSON.stringify({ filter, paginationToken })}`);
+  const page = paginationToken ? +paginationToken : 1;
+  const pageSize = 100;
+
+  const credentials = await getEsmsCredentials.call(this),
+    esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as number,
+    options = this.getNodeParameter('options', {}) as { [key: string]: any };
+
+  this.logger.info(`getListZaloOA: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, options })}`);
+
   const results: INodeListSearchItems[] = [];
   return { results, paginationToken: undefined };
 }
@@ -62,7 +69,16 @@ export async function getListZnsTemplate(
   filter?: string,
   paginationToken?: string,
 ): Promise<INodeListSearchResult> {
-  this.logger.info(`getListZnsTemplate: ${JSON.stringify({ filter, paginationToken })}`);
+  const page = paginationToken ? +paginationToken : 1;
+  const pageSize = 100;
+
+  const credentials = await getEsmsCredentials.call(this),
+    esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as number,
+    esmsZaloOA = (this.getNodeParameter('esmsZaloOA', { mode: 'name', value: 'n8n-nqdev' }) as { mode: string; value: string })?.value ?? 'n8n-nqdev',
+    options = this.getNodeParameter('options', {}) as { [key: string]: any };
+
+  this.logger.info(`getListZnsTemplate: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, esmsZaloOA, options })}`);
+
   const results: INodeListSearchItems[] = [];
   return { results, paginationToken: undefined };
 }
