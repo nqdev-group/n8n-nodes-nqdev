@@ -6,8 +6,7 @@
     "n8n-community-node-package",
     "n8n-community-nqdev-node-package",
     "nqdev",
-    "quyit",
-    "esmsvn"
+    "quyit"
   ],
   "license": "MIT",
   "homepage": "https://docs.quyit.id.vn/n8n-io/n8n-nodes-nqdev/?ref=n8n",
