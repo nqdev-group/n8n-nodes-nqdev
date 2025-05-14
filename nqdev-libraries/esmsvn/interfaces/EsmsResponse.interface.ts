@@ -14,6 +14,13 @@ export interface EsmsListBrandnameResponse extends EsmsResponse {
   }>;
 }
 
+export interface EsmsListZaloOaResponse extends EsmsResponse {
+  ZOAList?: Array<{
+    OAID?: string;
+    OAName?: string;
+  }>;
+}
+
 export interface EsmsListTemplateResponse extends EsmsResponse {
   BrandnameTemplates?: Array<{
     NetworkID?: number;

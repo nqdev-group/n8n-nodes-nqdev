@@ -4,7 +4,7 @@ import type {
   INodeListSearchResult,
   INodePropertyOptions,
 } from 'n8n-workflow';
-import { EsmsListBrandnameResponse, EsmsListTemplateResponse, getEsmsCredentials, getEsmsListBrandname, getEsmsListTemplate } from '../../nqdev-libraries/esmsvn';
+import { EsmsListBrandnameResponse, EsmsListTemplateResponse, EsmsListZaloOaResponse, getEsmsCredentials, getEsmsListBrandname, getEsmsListTemplate, getEsmsListZaloOa } from '../../nqdev-libraries/esmsvn';
 
 export async function getListBrandname(
   this: ILoadOptionsFunctions,
@@ -60,16 +60,39 @@ export async function getListZaloOA(
   const pageSize = 100;
 
   const credentials = await getEsmsCredentials.call(this),
-    esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as number,
+    esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as string,
     options = this.getNodeParameter('options', {}) as { [key: string]: any };
 
-  this.logger.info(`getListZaloOA: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, options, credentials })}`);
+  this.logger.info(`getListZaloOA: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, options })}`);
 
-  const results: INodeListSearchItems[] = [];
+  const responseData: EsmsListZaloOaResponse = await getEsmsListZaloOa.call(this, {
+    ApiKey: credentials.ApiKey ?? '',
+    SecretKey: credentials.SecretKey ?? '',
+    smsType: esmsSmsType ?? '24',
+  });
+
+  // Lọc các Brandname theo từ khóa
+  const filteredData = responseData.ZOAList?.filter(item =>
+    item.OAName?.toLowerCase().includes(filter?.toLowerCase() ?? '')
+    || `${item.OAID}`?.toLowerCase().includes(filter?.toLowerCase() ?? '')
+  ) ?? [];
+
+  // Tính toán phân trang
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedData = filteredData?.slice(startIndex, endIndex) ?? [];
+
+  // Tính toán token phân trang tiếp theo
+  const nextPaginationToken = (page * pageSize < (filteredData?.length ?? 0)) ? page + 1 : undefined;
+
+  const results: INodeListSearchItems[] = paginatedData?.map((item) => ({
+    name: `${item.OAName} (${item.OAID})`,
+    value: item.OAID ?? '',
+  })) ?? [];
 
   const nodeListSearchResult: INodeListSearchResult = {
     results: results,
-    paginationToken: undefined,
+    paginationToken: nextPaginationToken,
   };
   return nodeListSearchResult;
 }
@@ -84,17 +107,15 @@ export async function getListZnsTemplate(
 
   const credentials = await getEsmsCredentials.call(this),
     esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as string,
-    esmsBrandname = (this.getNodeParameter('esmsBrandname', {}) as { mode: string; value: string })?.value ?? 'n8n-nqdev',
     esmsZaloOA = (this.getNodeParameter('esmsZaloOA', {}) as { mode: string; value: string })?.value ?? '',
     options = this.getNodeParameter('options', {}) as { [key: string]: any };
 
-  this.logger.info(`getListBrandname: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, options })}`);
+  this.logger.info(`getListZnsTemplate: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, esmsZaloOA, options })}`);
 
   const responseData: EsmsListTemplateResponse = await getEsmsListTemplate.call(this, {
     ApiKey: credentials.ApiKey ?? '',
     SecretKey: credentials.SecretKey ?? '',
-    smsType: esmsSmsType ?? '2',
-    brandname: esmsBrandname ?? 'n8n-nqdev',
+    smsType: esmsSmsType ?? '24',
     zaloOaId: esmsZaloOA ?? '',
   });
 
@@ -102,7 +123,7 @@ export async function getListZnsTemplate(
   const filteredData = responseData.ZNSTemplates?.filter(item =>
     item.TempName?.toLowerCase().includes(filter?.toLowerCase() ?? '')
     || `${item.TempId}`?.toLowerCase().includes(filter?.toLowerCase() ?? '')
-  );
+  ) ?? [];
 
   // Tính toán phân trang
   const startIndex = (page - 1) * pageSize;

@@ -1,7 +1,7 @@
 import type { IDataObject, IExecuteFunctions, IHookFunctions, ILoadOptionsFunctions } from 'n8n-workflow';
 
 import { esmsApiRequest, getEsmsCredentials, HTTP_HEADERS } from '../EsmsGenericFunctions';
-import { EsmsListBrandnameResponse, EsmsListTemplateResponse, IApiAuthorize } from '../interfaces';
+import { EsmsListBrandnameResponse, EsmsListTemplateResponse, EsmsListZaloOaResponse, IApiAuthorize } from '../interfaces';
 
 /**
  * Lấy thông tin tài khoản
@@ -68,7 +68,7 @@ export async function getEsmsListBrandname(
 export async function getEsmsListZaloOa(
   this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
   args: {} & IApiAuthorize
-): Promise<any> {
+): Promise<EsmsListZaloOaResponse> {
 
   // Lấy credentials từ node
   const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
