@@ -72,7 +72,8 @@ export class OttMessageResource {
 
         const esmsZaloOA = (this.getNodeParameter('esmsZaloOA', itemIndex, {}) as { mode: string; value: string })?.value ?? '',
           esmsTemplateId = (this.getNodeParameter('esmsTemplateId', itemIndex, {}) as { mode: string; value: string })?.value ?? '',
-          esmsZnsTemplateParameters = this.getNodeParameter('esmsZnsTemplateParameters', { parameters: [] }) as IDataObject;
+          esmsZnsTemplateParameters = this.getNodeParameter('esmsZnsTemplateParameters', { parameters: [] }) as IDataObject,
+          options = this.getNodeParameter('options', {}) as { [key: string]: any };
 
         // Kiểm tra xem parameters có phải là mảng hay không
         const parameters = Array.isArray(esmsZnsTemplateParameters.parameters) ? esmsZnsTemplateParameters.parameters : [];
@@ -90,9 +91,9 @@ export class OttMessageResource {
           TempID: esmsTemplateId ?? '',
           Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
           TempData: znsTempData,
-          IsUnicode: (this.getNodeParameter('esmsIsUnicode', itemIndex, '') as boolean) ? '1' : '0',
-          Sandbox: (this.getNodeParameter('esmsIsSandbox', itemIndex, '') as boolean) ? '1' : '0',
-          PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
+          IsUnicode: (options['esmsIsUnicode'] as boolean) ? '1' : '0',
+          Sandbox: (options['esmsIsSandbox'] as boolean) ? '1' : '0',
+          PartnerSource: options['esmsPartnerSource'] ?? '0',
         };
 
         responseData['esmsRequest'] = {
@@ -116,19 +117,20 @@ export class OttMessageResource {
         //    ott_message:sendViberMessage
         // ----------------------------------
 
-        let esmsBrandnameLocator = this.getNodeParameter('esmsBrandname', itemIndex) as { mode: string; value: string } ?? { mode: 'name', value: 'n8n-nqdev' };
+        const esmsBrandnameLocator = (this.getNodeParameter('esmsBrandname', itemIndex, {}) as { mode: string; value: string })?.value ?? '',
+          options = this.getNodeParameter('options', {}) as { [key: string]: any };
 
         // Cấu hình dữ liệu để gửi POST request
         let postData: ISendSmsMessageParams = {
           ApiKey: esmsApiKey ?? '',
           SecretKey: esmsSecretKey ?? '',
           SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
-          Brandname: esmsBrandnameLocator?.value ?? '',
+          Brandname: esmsBrandnameLocator ?? '',
           Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
           Content: this.getNodeParameter('esmsContent', itemIndex, '') as string,
-          IsUnicode: (this.getNodeParameter('esmsIsUnicode', itemIndex, '') as boolean) ? '1' : '0',
-          Sandbox: (this.getNodeParameter('esmsIsSandbox', itemIndex, '') as boolean) ? '1' : '0',
-          PartnerSource: this.getNodeParameter('esmsPartnerSource', itemIndex, '0') as string,
+          IsUnicode: (options['esmsIsUnicode'] as boolean) ? '1' : '0',
+          Sandbox: (options['esmsIsSandbox'] as boolean) ? '1' : '0',
+          PartnerSource: options['esmsPartnerSource'] ?? '0',
         };
 
         responseData['esmsRequest'] = {
@@ -141,7 +143,8 @@ export class OttMessageResource {
         };
 
         // Gửi POST request đến API của ESMS
-        let esmsResponse = await sendSmsMessage.call(this, postData); responseData['esmsResponse'] = esmsResponse;
+        let esmsResponse = await sendSmsMessage.call(this, postData);
+        responseData['esmsResponse'] = esmsResponse;
 
         break;
       }
