@@ -1,0 +1,37 @@
+{
+  "node": "n8n-nodes-nqdev.haravan",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Communication",
+    "Marketing"
+  ],
+  "displayName": "Nqdev: Haravan",
+  "description": "Tích hợp Haravan với n8n để lắng nghe các sự kiện như đơn hàng, sản phẩm, tài khoản... và tự động kích hoạt các workflow tương ứng.",
+  "alias": [
+    "Haravan",
+    "NqdevHaravan"
+  ],
+  "resources": {
+    "credentialDocumentation": [
+      {
+        "url": "https://docs.haravan.com/docs/tutorials/authentication/authentication-and-authorization/"
+      }
+    ],
+    "primaryDocumentation": [
+      {
+        "url": "https://docs.quyit.id.vn/n8n-io/n8n-nodes-nqdev/?ref=n8n"
+      },
+      {
+        "url": "https://docs.haravan.com/"
+      }
+    ],
+    "generic": [
+      {
+        "label": "Tin tức mới từ Haravan",
+        "icon": "📰",
+        "url": "https://www.haravan.com/blogs/tin-tuc"
+      }
+    ]
+  }
+}
