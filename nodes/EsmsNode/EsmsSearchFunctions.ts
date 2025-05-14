@@ -4,7 +4,7 @@ import type {
   INodeListSearchResult,
   INodePropertyOptions,
 } from 'n8n-workflow';
-import { EsmsListBrandnameResponse, getEsmsCredentials, getEsmsListBrandname } from '../../nqdev-libraries/esmsvn';
+import { EsmsListBrandnameResponse, EsmsListTemplateResponse, getEsmsCredentials, getEsmsListBrandname, getEsmsListTemplate } from '../../nqdev-libraries/esmsvn';
 
 export async function getListBrandname(
   this: ILoadOptionsFunctions,
@@ -83,20 +83,43 @@ export async function getListZnsTemplate(
   const pageSize = 100;
 
   const credentials = await getEsmsCredentials.call(this),
-    esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as number,
-    esmsZaloOA = (this.getNodeParameter('esmsZaloOA', { mode: 'name', value: 'n8n-nqdev' }) as { mode: string; value: string })?.value ?? 'n8n-nqdev',
+    esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as string,
+    esmsBrandname = (this.getNodeParameter('esmsBrandname', {}) as { mode: string; value: string })?.value ?? 'n8n-nqdev',
+    esmsZaloOA = (this.getNodeParameter('esmsZaloOA', {}) as { mode: string; value: string })?.value ?? '',
     options = this.getNodeParameter('options', {}) as { [key: string]: any };
 
-  this.logger.info(`getListZnsTemplate: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, esmsZaloOA, options, credentials })}`);
+  this.logger.info(`getListBrandname: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, options })}`);
 
-  const results: INodeListSearchItems[] = [{
-    name: 'Customer Name',
-    value: 'customer_name',
-  }];
+  const responseData: EsmsListTemplateResponse = await getEsmsListTemplate.call(this, {
+    ApiKey: credentials.ApiKey ?? '',
+    SecretKey: credentials.SecretKey ?? '',
+    smsType: esmsSmsType ?? '2',
+    brandname: esmsBrandname ?? 'n8n-nqdev',
+    zaloOaId: esmsZaloOA ?? '',
+  });
+
+  // Lọc các Brandname theo từ khóa
+  const filteredData = responseData.ZNSTemplates?.filter(item =>
+    item.TempName?.toLowerCase().includes(filter?.toLowerCase() ?? '')
+    || `${item.TempId}`?.toLowerCase().includes(filter?.toLowerCase() ?? '')
+  );
+
+  // Tính toán phân trang
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedData = filteredData?.slice(startIndex, endIndex) ?? [];
+
+  // Tính toán token phân trang tiếp theo
+  const nextPaginationToken = (page * pageSize < (filteredData?.length ?? 0)) ? page + 1 : undefined;
+
+  const results: INodeListSearchItems[] = paginatedData?.map((item) => ({
+    name: `${item.TempId} | ${item.TempName}`,
+    value: item.TempId ?? '',
+  })) ?? [];
 
   const nodeListSearchResult: INodeListSearchResult = {
     results: results,
-    paginationToken: undefined,
+    paginationToken: nextPaginationToken,
   };
   return nodeListSearchResult;
 }

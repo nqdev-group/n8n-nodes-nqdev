@@ -1,4 +1,5 @@
 import type { INodeProperties } from "n8n-workflow";
+import { AccountResource, OttMessageResource, SmsMessageResource } from "../resources";
 
 const esmsSmsTypeModel: INodeProperties[] = [
   {
@@ -10,8 +11,8 @@ const esmsSmsTypeModel: INodeProperties[] = [
     default: 2,
     displayOptions: {
       show: {
-        operation: ['sendSmsMessage'],
-        resource: ['sms_message'],
+        resource: [SmsMessageResource.NAME_RESOURCE, AccountResource.NAME_RESOURCE],
+        operation: ['sendSmsMessage', 'getListBrandname', 'getListTemplate'],
       }
     },
     options: [
@@ -44,8 +45,8 @@ const esmsSmsTypeModel: INodeProperties[] = [
     default: 23,
     displayOptions: {
       show: {
-        operation: ['sendViberMessage'],
-        resource: ['ott_message'],
+        resource: [OttMessageResource.NAME_RESOURCE, AccountResource.NAME_RESOURCE],
+        operation: ['sendViberMessage', 'getListBrandname'],
       }
     },
     options: [
@@ -66,8 +67,8 @@ const esmsSmsTypeModel: INodeProperties[] = [
     default: 24,
     displayOptions: {
       show: {
-        operation: ['sendZnsMessage'],
-        resource: ['ott_message'],
+        resource: [OttMessageResource.NAME_RESOURCE, AccountResource.NAME_RESOURCE],
+        operation: ['sendZnsMessage', 'getListZaloOa', 'getListTemplate'],
       }
     },
     options: [
@@ -97,8 +98,9 @@ const esmsSenderModel: INodeProperties[] = [
     default: { mode: 'list', value: '' },
     displayOptions: {
       show: {
-        resource: ['sms_message'],
-        operation: ['sendSmsMessage'],
+        resource: [SmsMessageResource.NAME_RESOURCE, AccountResource.NAME_RESOURCE],
+        operation: ['sendSmsMessage', 'getListBrandname', 'getListTemplate'],
+        esmsSmsType: [1, 2, 23],
       },
       hide: {
         esmsSmsType: [8],
@@ -145,7 +147,7 @@ const esmsSenderModel: INodeProperties[] = [
     default: { mode: 'list', value: '' },
     displayOptions: {
       show: {
-        resource: ['ott_message'],
+        resource: [OttMessageResource.NAME_RESOURCE],
         operation: ['sendViberMessage'],
       }
     },
@@ -190,11 +192,11 @@ const esmsSenderModel: INodeProperties[] = [
     default: { mode: 'list', value: '' },
     displayOptions: {
       show: {
-        resource: ['ott_message'],
-        operation: ['sendZnsMessage'],
+        resource: [OttMessageResource.NAME_RESOURCE, AccountResource.NAME_RESOURCE],
+        operation: ['sendZnsMessage', 'getListZaloOa', 'getListTemplate', 'getZnsTemplateInfo'],
       }
     },
-    description: 'Tên thương hiệu của bạn.',
+    description: 'Lấy danh sách Zalo Official Account (OA)',
     placeholder: 'eSMS.vn,...',
     modes: [
       {
@@ -219,6 +221,50 @@ const esmsSenderModel: INodeProperties[] = [
             properties: {
               regex: '[-_a-zA-Z0-9]+',
               errorMessage: 'Not a valid Sender',
+            },
+          },
+        ],
+      }
+    ],
+  },
+
+  {
+    displayName: 'Template ID',
+    name: 'esmsTemplateId',
+    type: 'resourceLocator',
+    required: false,
+    default: { mode: 'list', value: '' },
+    displayOptions: {
+      show: {
+        resource: [OttMessageResource.NAME_RESOURCE, AccountResource.NAME_RESOURCE],
+        operation: ['sendZnsMessage', 'getZnsTemplateInfo'],
+      }
+    },
+    description: 'Lấy thông tin template ZaloZNS',
+    placeholder: 'e.g. 000000...',
+    modes: [
+      {
+        displayName: 'Template ID',
+        name: 'list',
+        type: 'list',
+        placeholder: 'Select a Template ID...',
+        typeOptions: {
+          searchListMethod: 'getListTemplate',
+          searchable: true,
+          searchFilterRequired: true,
+        },
+      },
+      {
+        displayName: 'By ID',
+        name: 'name',
+        type: 'string',
+        placeholder: 'e.g. 000000...',
+        validation: [
+          {
+            type: 'regex',
+            properties: {
+              regex: '[0-9]+',
+              errorMessage: 'Not a valid Template ID',
             },
           },
         ],

@@ -13,3 +13,23 @@ export interface EsmsListBrandnameResponse extends EsmsResponse {
     ServiceId?: string;
   }>;
 }
+
+export interface EsmsListTemplateResponse extends EsmsResponse {
+  BrandnameTemplates?: Array<{
+    NetworkID?: number;
+    TempId?: number;
+    TempContent?: string;
+  }>;
+
+  ZNSTemplates?: Array<{
+    TempId?: number;
+    TempName?: string;
+    TempContent?: string;
+    ZNSTempDetail?: Array<{
+      Limit?: number;
+      Param?: string;
+      ParamLevel?: number;
+      RequireType?: string;
+    }>;
+  }>;
+}
