@@ -19,20 +19,13 @@ export const esmsSmsOperationModel: INodeProperties[] = [
         action: 'Hành động Gửi tin nhắn SMS',
         value: 'sendSmsMessage',
         description: 'Send an SMS Message',
-        routing: {
-          request: {
-            method: 'POST',
-            url: '/MainService.svc/json/SendMultipleMessage_V4_post_json/',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json, text/javascript, */*; q=0.01'
-            },
-            qs: {
-              n8n: 'nqdev',
-            },
-          }
-        }
-      }
+      },
+      {
+        name: 'Danh sách Template',
+        action: 'Lấy danh sách template',
+        value: 'getListTemplate',
+        description: 'Truy xuất danh sách mẫu tin nhắn chăm sóc khách hàng (CSKH) hoặc Zalo ZNS.',
+      },
     ],
     default: 'sendSmsMessage'
   },

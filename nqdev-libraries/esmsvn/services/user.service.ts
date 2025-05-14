@@ -98,7 +98,7 @@ export async function getEsmsListZaloOa(
  */
 export async function getEsmsListTemplate(
   this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
-  args: { smsType: '2' | '24' | '25' | string; brandname: string; zaloOaId: string; } & IApiAuthorize
+  args: { smsType: '2' | '24' | '25' | string; brandname?: string; zaloOaId?: string; } & IApiAuthorize
 ): Promise<EsmsListTemplateResponse> {
   // Lấy credentials từ node
   const credentials: IApiAuthorize = await getEsmsCredentials.call(this);

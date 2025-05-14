@@ -19,38 +19,24 @@ export const esmsOttOperationModel: INodeProperties[] = [
         action: 'Hành động Gửi tin nhắn ZNS',
         value: 'sendZnsMessage',
         description: 'Send an OTT Message',
-        routing: {
-          request: {
-            method: 'POST',
-            url: '/MainService.svc/json/SendMultipleMessage_V4_post_json/',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json, text/javascript, */*; q=0.01'
-            },
-            qs: {
-              n8n: 'nqdev',
-            },
-          }
-        }
       },
       {
         name: 'Gửi tin nhắn Viber',
         action: 'Hành động Gửi tin nhắn Viber',
         value: 'sendViberMessage',
         description: 'Send an OTT Message',
-        routing: {
-          request: {
-            method: 'POST',
-            url: '/MainService.svc/json/SendMultipleMessage_V4_post_json/',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json, text/javascript, */*; q=0.01'
-            },
-            qs: {
-              n8n: 'nqdev',
-            },
-          }
-        }
+      },
+      {
+        name: 'Danh sách Template',
+        action: 'Lấy danh sách template',
+        value: 'getListTemplate',
+        description: 'Truy xuất danh sách mẫu tin nhắn chăm sóc khách hàng (CSKH) hoặc Zalo ZNS.',
+      },
+      {
+        name: 'Chi tiết ZNS Template',
+        action: 'Lấy chi tiết ZNS template',
+        value: 'getZnsTemplateInfo',
+        description: 'Xem thông tin chi tiết của một mẫu tin nhắn Zalo ZNS cụ thể.',
       }
     ],
     default: 'sendZnsMessage'

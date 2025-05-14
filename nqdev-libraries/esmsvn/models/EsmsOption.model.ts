@@ -45,8 +45,8 @@ const esmsSmsTypeModel: INodeProperties[] = [
     default: 23,
     displayOptions: {
       show: {
-        resource: [OttMessageResource.NAME_RESOURCE, AccountResource.NAME_RESOURCE],
-        operation: ['sendViberMessage', 'getListBrandname'],
+        resource: [OttMessageResource.NAME_RESOURCE],
+        operation: ['sendViberMessage'],
       }
     },
     options: [
@@ -99,7 +99,7 @@ const esmsSenderModel: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: [SmsMessageResource.NAME_RESOURCE, AccountResource.NAME_RESOURCE],
-        operation: ['sendSmsMessage', 'getListBrandname', 'getListTemplate'],
+        operation: ['sendSmsMessage', 'getListTemplate'],
         esmsSmsType: [1, 2, 23],
       },
       hide: {
@@ -193,7 +193,7 @@ const esmsSenderModel: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: [OttMessageResource.NAME_RESOURCE, AccountResource.NAME_RESOURCE],
-        operation: ['sendZnsMessage', 'getListZaloOa', 'getListTemplate', 'getZnsTemplateInfo'],
+        operation: ['sendZnsMessage', 'getListTemplate', 'getZnsTemplateInfo'],
       }
     },
     description: 'Lấy danh sách Zalo Official Account (OA)',

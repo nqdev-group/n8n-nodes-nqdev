@@ -2,7 +2,7 @@ import type { IExecuteFunctions, IHookFunctions } from "n8n-workflow";
 import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
 import { ISendSmsMessageParams } from "../interfaces";
-import { sendSmsMessage } from "../services";
+import { getEsmsListTemplate, sendSmsMessage } from "../services";
 import { NAME_CREDENTIAL } from "../EsmsGenericFunctions";
 
 export class SmsMessageResource {
@@ -18,6 +18,9 @@ export class SmsMessageResource {
       esmsApiKey = (credentials?.esmsApiKey ?? '') as string,
       esmsSecretKey = (credentials?.esmsSecretKey ?? '') as string;
 
+    const esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
+      esmsBrandname = (this.getNodeParameter('esmsBrandname', itemIndex, {}) as { mode: string; value: string })?.value ?? 'n8n-nqdev';
+
     let responseData: INqdevResponseData = {
       operation,
       status: 'backlog',
@@ -25,6 +28,17 @@ export class SmsMessageResource {
     };
 
     switch (operation) {
+      case 'getListTemplate': {
+        let esmsResponse = await getEsmsListTemplate.call(this, {
+          ApiKey: esmsApiKey ?? '',
+          SecretKey: esmsSecretKey ?? '',
+          smsType: esmsSmsType ?? '2',
+          brandname: esmsBrandname ?? 'n8n-nqdev',
+        });
+        responseData['esmsResponse'] = esmsResponse;
+        break;
+      }
+
       case 'sendSmsMessage': {
         // ----------------------------------
         //    sms_message:sendSmsMessage

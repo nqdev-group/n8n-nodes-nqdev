@@ -2,7 +2,7 @@ import type { IDataObject, IExecuteFunctions, IHookFunctions } from "n8n-workflo
 import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
 import { ISendSmsMessageParams, ISendZnsMessageParams } from "../interfaces";
-import { sendSmsMessage, sendZaloZnsMessage } from "../services";
+import { getEsmsListTemplate, getEsmsZnsTemplateInfo, sendSmsMessage, sendZaloZnsMessage } from "../services";
 import { NAME_CREDENTIAL } from "../EsmsGenericFunctions";
 
 export class OttMessageResource {
@@ -18,6 +18,10 @@ export class OttMessageResource {
       esmsApiKey = (credentials?.esmsApiKey ?? '') as string,
       esmsSecretKey = (credentials?.esmsSecretKey ?? '') as string;
 
+    const esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
+      esmsZaloOA = (this.getNodeParameter('esmsZaloOA', itemIndex, {}) as { mode: string; value: string })?.value ?? '',
+      esmsTemplateId = (this.getNodeParameter('esmsTemplateId', itemIndex, {}) as { mode: string; value: string })?.value ?? '';
+
     let responseData: INqdevResponseData = {
       operation,
       status: 'backlog',
@@ -25,6 +29,28 @@ export class OttMessageResource {
     };
 
     switch (operation) {
+      case 'getListTemplate': {
+        let esmsResponse = await getEsmsListTemplate.call(this, {
+          ApiKey: esmsApiKey ?? '',
+          SecretKey: esmsSecretKey ?? '',
+          smsType: esmsSmsType ?? '2',
+          zaloOaId: esmsZaloOA ?? '',
+        });
+        responseData['esmsResponse'] = esmsResponse;
+        break;
+      }
+
+      case 'getZnsTemplateInfo': {
+        let esmsResponse = await getEsmsZnsTemplateInfo.call(this, {
+          ApiKey: esmsApiKey ?? '',
+          SecretKey: esmsSecretKey ?? '',
+          templateId: esmsTemplateId ?? '',
+          zaloOaId: esmsZaloOA ?? '',
+        });
+        responseData['esmsResponse'] = esmsResponse;
+        break;
+      }
+
       case 'sendZnsMessage': {
         // ----------------------------------
         //    ott_message:sendZnsMessage

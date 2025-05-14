@@ -32,18 +32,6 @@ export const esmsUserOperationModel: INodeProperties[] = [
         value: 'getListZaloOa',
         description: 'Lấy danh sách các tài khoản Zalo Official Account (OA) đã tích hợp.',
       },
-      {
-        name: 'Danh sách Template',
-        action: 'Lấy danh sách template',
-        value: 'getListTemplate',
-        description: 'Truy xuất danh sách mẫu tin nhắn chăm sóc khách hàng (CSKH) hoặc Zalo ZNS.',
-      },
-      {
-        name: 'Chi tiết ZNS Template',
-        action: 'Lấy chi tiết ZNS template',
-        value: 'getZnsTemplateInfo',
-        description: 'Xem thông tin chi tiết của một mẫu tin nhắn Zalo ZNS cụ thể.',
-      }
     ],
     default: 'getBalance'
   }
