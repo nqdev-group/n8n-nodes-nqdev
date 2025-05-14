@@ -2,9 +2,16 @@ import type {
   ILoadOptionsFunctions,
   INodeListSearchItems,
   INodeListSearchResult,
-  INodePropertyOptions,
 } from 'n8n-workflow';
-import { EsmsListBrandnameResponse, EsmsListTemplateResponse, EsmsListZaloOaResponse, getEsmsCredentials, getEsmsListBrandname, getEsmsListTemplate, getEsmsListZaloOa } from '../../nqdev-libraries/esmsvn';
+import {
+  EsmsListBrandnameResponse,
+  EsmsListTemplateResponse,
+  EsmsListZaloOaResponse,
+  getEsmsCredentials,
+  getEsmsListBrandname,
+  getEsmsListTemplate,
+  getEsmsListZaloOa,
+} from '../../nqdev-libraries/esmsvn';
 
 export async function getListBrandname(
   this: ILoadOptionsFunctions,
@@ -143,41 +150,4 @@ export async function getListZnsTemplate(
     paginationToken: nextPaginationToken,
   };
   return nodeListSearchResult;
-}
-
-export async function getLoadZnsTemplateParameters(
-  this: ILoadOptionsFunctions,
-  filter?: string,
-  paginationToken?: string,
-): Promise<INodePropertyOptions[]> {
-  const page = paginationToken ? +paginationToken : 1;
-  const pageSize = 100;
-
-  const credentials = await getEsmsCredentials.call(this),
-    esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as number,
-    esmsZaloOA = (this.getNodeParameter('esmsZaloOA', { mode: 'name', value: 'n8n-nqdev' }) as { mode: string; value: string })?.value ?? 'n8n-nqdev',
-    esmsZnsTemplate = this.getNodeParameter('esmsZnsTemplate.value', '') as string,
-    options = this.getNodeParameter('options', {}) as { [key: string]: any };
-
-  this.logger.info(`getLoadZnsTemplateParameters: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, esmsZaloOA, esmsZnsTemplate, options, credentials })}`);
-
-  return [
-    {
-      name: 'Customer Name',
-      value: 'customer_name',
-      description: 'Tên khách hàng',
-    }
-  ];
-
-  // const results: INodeListSearchItems[] = [{
-  //   name: 'Customer Name',
-  //   value: 'customer_name',
-  //   description: 'Tên khách hàng',
-  // }];
-
-  // const nodeListSearchResult: INodeListSearchResult = {
-  //   results: results,
-  //   paginationToken: undefined,
-  // };
-  // return nodeListSearchResult;
 }

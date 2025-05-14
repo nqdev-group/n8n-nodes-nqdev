@@ -238,6 +238,9 @@ const esmsSenderModel: INodeProperties[] = [
       show: {
         resource: [OttMessageResource.NAME_RESOURCE, AccountResource.NAME_RESOURCE],
         operation: ['sendZnsMessage', 'getZnsTemplateInfo'],
+      },
+      hide: {
+        esmsSmsType: [26],
       }
     },
     description: 'Lấy thông tin template ZaloZNS',
@@ -311,41 +314,7 @@ export const esmsSmsModel: INodeProperties[] = [
       }
     },
   },
-  {
-    displayName: 'ZNS Template',
-    name: 'esmsZnsTemplate',
-    type: 'resourceLocator',
-    required: false,
-    default: { mode: 'list', value: '' },
-    displayOptions: {
-      show: {
-        resource: ['ott_message'],
-        operation: ['sendZnsMessage'],
-      },
-      hide: {
-        esmsSmsType: [26],
-      },
-    },
-    modes: [
-      {
-        displayName: 'ZNS Template',
-        name: 'list',
-        type: 'list',
-        placeholder: 'Select a Template...',
-        typeOptions: {
-          searchListMethod: 'getListZnsTemplate',
-          searchable: true,
-          searchFilterRequired: true,
-        },
-      },
-      {
-        displayName: 'By Content',
-        name: 'content',
-        type: 'string',
-        placeholder: 'e.g. 12345...',
-      }
-    ],
-  },
+
   {
     displayName: 'Template Parameters',
     name: 'esmsZnsTemplateParameters',

@@ -40,3 +40,29 @@ export interface EsmsListTemplateResponse extends EsmsResponse {
     }>;
   }>;
 }
+
+export interface EsmsTemplateInfoResponse extends EsmsResponse {
+  Error?: number;
+  Message?: string;
+
+  Data?: {
+    TemplateId?: string;
+    TemplateName?: string;
+    TemplateQuality?: string;
+    TemplateTag?: 'TRANSACTION' | string;
+    Timeout?: number;
+    Status?: 'ENABLE' | string;
+    Reason?: string;
+    PreviewUrl?: string;
+    ListButtons: any;
+
+    ListParams?: Array<{
+      AcceptNull?: boolean;
+      MaxLength?: number;
+      MinLength?: number;
+      Name?: string;
+      Require?: boolean;
+      Type?: 'STRING' | string;
+    }>;
+  };
+}
