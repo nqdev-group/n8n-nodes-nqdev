@@ -91,19 +91,22 @@ export class OttMessageResource {
           TempID: esmsTemplateId ?? '',
           Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
           TempData: znsTempData,
+          // options
           IsUnicode: (options['esmsIsUnicode'] as boolean) ? '1' : '0',
           Sandbox: (options['esmsIsSandbox'] as boolean) ? '1' : '0',
           PartnerSource: options['esmsPartnerSource'] ?? '0',
         };
 
-        responseData['esmsRequest'] = {
-          Phone: postData.Phone,
-          Content: postData.Content,
-          SmsType: postData.SmsType,
-          Brandname: postData.Brandname,
-          Sandbox: postData.Sandbox,
-          IsUnicode: postData.IsUnicode,
-        };
+        if ((options['esmsIsLoggingRequest'] as boolean)) {
+          responseData['esmsRequest'] = {
+            Phone: postData.Phone,
+            Content: postData.Content,
+            SmsType: postData.SmsType,
+            Brandname: postData.Brandname,
+            Sandbox: postData.Sandbox,
+            IsUnicode: postData.IsUnicode,
+          };
+        }
 
         // Gửi POST request đến API của ESMS
         let esmsResponse = await sendZaloZnsMessage.call(this, postData);
@@ -117,7 +120,7 @@ export class OttMessageResource {
         //    ott_message:sendViberMessage
         // ----------------------------------
 
-        const esmsBrandnameLocator = (this.getNodeParameter('esmsBrandname', itemIndex, {}) as { mode: string; value: string })?.value ?? '',
+        const esmsBrandname = (this.getNodeParameter('esmsBrandname', itemIndex, {}) as { mode: string; value: string })?.value ?? '',
           options = this.getNodeParameter('options', {}) as { [key: string]: any };
 
         // Cấu hình dữ liệu để gửi POST request
@@ -125,22 +128,25 @@ export class OttMessageResource {
           ApiKey: esmsApiKey ?? '',
           SecretKey: esmsSecretKey ?? '',
           SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
-          Brandname: esmsBrandnameLocator ?? '',
+          Brandname: esmsBrandname ?? '',
           Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
           Content: this.getNodeParameter('esmsContent', itemIndex, '') as string,
+          // options
           IsUnicode: (options['esmsIsUnicode'] as boolean) ? '1' : '0',
           Sandbox: (options['esmsIsSandbox'] as boolean) ? '1' : '0',
           PartnerSource: options['esmsPartnerSource'] ?? '0',
         };
 
-        responseData['esmsRequest'] = {
-          Phone: postData.Phone,
-          Content: postData.Content,
-          SmsType: postData.SmsType,
-          Brandname: postData.Brandname,
-          Sandbox: postData.Sandbox,
-          IsUnicode: postData.IsUnicode,
-        };
+        if ((options['esmsIsLoggingRequest'] as boolean)) {
+          responseData['esmsRequest'] = {
+            Phone: postData.Phone,
+            Content: postData.Content,
+            SmsType: postData.SmsType,
+            Brandname: postData.Brandname,
+            Sandbox: postData.Sandbox,
+            IsUnicode: postData.IsUnicode,
+          };
+        }
 
         // Gửi POST request đến API của ESMS
         let esmsResponse = await sendSmsMessage.call(this, postData);

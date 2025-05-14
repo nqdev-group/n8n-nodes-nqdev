@@ -381,24 +381,28 @@ export const esmsOptionModel: INodeProperties[] = [
         name: 'esmsIsUnicode',
         type: 'boolean',
         default: false,
-        // eslint-disable-next-line n8n-nodes-base/node-param-description-boolean-without-whether
-        description: "Send as flash message being displayed directly the receiver's display",
+        description: 'Gửi nội dung tin nhắn dưới dạng Unicode (hỗ trợ tiếng Việt, ký tự đặc biệt).',
       },
       {
         displayName: 'Sandbox',
         name: 'esmsIsSandbox',
         type: 'boolean',
         default: false,
-        // eslint-disable-next-line n8n-nodes-base/node-param-description-boolean-without-whether
-        description: "Send as flash message being displayed directly the receiver's display",
+        description: 'Gửi tin nhắn trong môi trường sandbox (dành cho mục đích thử nghiệm, không mất phí).',
       },
       {
-        displayName: 'PartnerSource',
+        displayName: 'Partner Source',
         name: 'esmsPartnerSource',
         type: 'number',
         default: 0,
-        // eslint-disable-next-line n8n-nodes-base/node-param-description-boolean-without-whether
-        description: "Send as flash message being displayed directly the receiver's display",
+        description: 'Mã định danh nguồn đối tác gửi tin (sử dụng khi ESMS yêu cầu phân luồng đối tác).',
+      },
+      {
+        displayName: 'Logging Request',
+        name: 'esmsIsLoggingRequest',
+        type: 'boolean',
+        default: false,
+        description: 'Bật ghi log cho từng request gửi đến API để phục vụ mục đích kiểm tra và debug.',
       },
     ],
   },
