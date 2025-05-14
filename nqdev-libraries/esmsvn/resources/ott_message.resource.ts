@@ -70,8 +70,8 @@ export class OttMessageResource {
         //    ott_message:sendZnsMessage
         // ----------------------------------
 
-        const esmsZaloOaId = (this.getNodeParameter('esmsZaloOaId', itemIndex, {}) as { mode: string; value: string })?.value ?? '',
-          esmsZnsTemplate = (this.getNodeParameter('esmsZnsTemplate', itemIndex, {}) as { mode: string; value: string })?.value ?? 'n8n-nqdev',
+        const esmsZaloOA = (this.getNodeParameter('esmsZaloOA', itemIndex, {}) as { mode: string; value: string })?.value ?? '',
+          esmsTemplateId = (this.getNodeParameter('esmsTemplateId', itemIndex, {}) as { mode: string; value: string })?.value ?? '',
           esmsZnsTemplateParameters = this.getNodeParameter('esmsZnsTemplateParameters', { parameters: [] }) as IDataObject;
 
         // Kiểm tra xem parameters có phải là mảng hay không
@@ -86,8 +86,8 @@ export class OttMessageResource {
         let postData: ISendZnsMessageParams = {
           ApiKey: esmsApiKey ?? '',
           SecretKey: esmsSecretKey ?? '',
-          OAID: esmsZaloOaId ?? '',
-          TempID: esmsZnsTemplate,
+          OAID: esmsZaloOA ?? '',
+          TempID: esmsTemplateId ?? '',
           Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
           TempData: znsTempData,
           IsUnicode: (this.getNodeParameter('esmsIsUnicode', itemIndex, '') as boolean) ? '1' : '0',
