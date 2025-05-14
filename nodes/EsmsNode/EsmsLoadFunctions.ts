@@ -18,19 +18,20 @@ export async function getLoadZnsTemplateParameters(
   const page = paginationToken ? +paginationToken : 1;
   const pageSize = 100;
 
-  const credentials = await getEsmsCredentials.call(this),
+  const esmsCredentials = await getEsmsCredentials.call(this),
+    // options = this.getNodeParameter('options', {}) as { [key: string]: any },
     esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as number,
     esmsZaloOA = (this.getNodeParameter('esmsZaloOA', {}) as { mode: string; value: string })?.value ?? '',
-    esmsTemplateId = (this.getNodeParameter('esmsTemplateId', {}) as { mode: string; value: string })?.value ?? '',
-    options = this.getNodeParameter('options', {}) as { [key: string]: any };
+    esmsTemplateId = (this.getNodeParameter('esmsTemplateId', {}) as { mode: string; value: string })?.value ?? '';
 
-  this.logger.info(`getLoadZnsTemplateParameters: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, esmsZaloOA, esmsZnsTemplate: esmsTemplateId, options, credentials })}`);
+  // this.logger.info(`getLoadZnsTemplateParameters: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, esmsZaloOA, esmsZnsTemplate: esmsTemplateId, options, credentials })}`);
 
   const responseData: EsmsTemplateInfoResponse = await getEsmsZnsTemplateInfo.call(this, {
-    ApiKey: credentials.ApiKey ?? '',
-    SecretKey: credentials.SecretKey ?? '',
+    ...esmsCredentials,
     templateId: esmsTemplateId ?? '',
     zaloOaId: esmsZaloOA ?? '',
+    smsType: esmsSmsType ?? '2',
+    page, pageSize,
   });
 
   const filteredData = responseData.Data?.ListParams ?? [];
@@ -38,7 +39,8 @@ export async function getLoadZnsTemplateParameters(
   const results: INodeListSearchItems[] = filteredData?.map((item) => ({
     name: `${item.Name}`,
     value: item.Name ?? '',
-    description: item.Name ?? '',
+    // eslint-disable-next-line n8n-nodes-base/node-param-description-excess-final-period
+    description: `${(item.Name ?? '')} (bắt buộc: ${(item.Require ? 'có' : 'không')}), kiểu ${item.Type}, độ dài từ ${item.MinLength} đến ${item.MaxLength} ký tự, ${(item.AcceptNull ? 'chấp nhận' : 'không chấp nhận')} giá trị null.`,
   })) ?? [];
 
   return results;

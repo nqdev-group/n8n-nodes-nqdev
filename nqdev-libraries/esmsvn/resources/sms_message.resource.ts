@@ -3,7 +3,7 @@ import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
 import { IApiAuthorize, ISendSmsMessageParams } from "../interfaces";
 import { getEsmsListTemplate, sendSmsMessage } from "../services";
-import { NAME_CREDENTIAL } from "../EsmsGenericFunctions";
+import { getEsmsCredentials, } from "../EsmsGenericFunctions";
 
 export class SmsMessageResource {
   static NAME_RESOURCE = 'sms_message';
@@ -14,13 +14,7 @@ export class SmsMessageResource {
   ): Promise<INqdevResponseData> {
 
     // Lấy credentials từ node
-    const credentials = await this.getCredentials(NAME_CREDENTIAL),
-      esmsApiKey = (credentials?.esmsApiKey ?? '') as string,
-      esmsSecretKey = (credentials?.esmsSecretKey ?? '') as string,
-      esmsAuthentication: IApiAuthorize = {
-        ApiKey: esmsApiKey ?? '',
-        SecretKey: esmsSecretKey ?? '',
-      };
+    const esmsCredentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
     const esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
       esmsBrandname = (this.getNodeParameter('esmsBrandname', itemIndex, {}) as { mode: string; value: string })?.value ?? 'n8n-nqdev';
@@ -39,7 +33,7 @@ export class SmsMessageResource {
         }
 
         const esmsResponse = await getEsmsListTemplate.call(this, {
-          ...esmsAuthentication,
+          ...esmsCredentials,
           ...esmsRequest,
         });
 
@@ -58,8 +52,6 @@ export class SmsMessageResource {
 
         // Cấu hình dữ liệu để gửi POST request
         let postData: ISendSmsMessageParams = {
-          ApiKey: esmsApiKey ?? '',
-          SecretKey: esmsSecretKey ?? '',
           SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
           Brandname: esmsBrandname ?? '',
           Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
@@ -71,18 +63,14 @@ export class SmsMessageResource {
         };
 
         if ((options['esmsIsLoggingRequest'] as boolean)) {
-          responseData['esmsRequest'] = {
-            Phone: postData.Phone,
-            Content: postData.Content,
-            SmsType: postData.SmsType,
-            Brandname: postData.Brandname,
-            Sandbox: postData.Sandbox,
-            IsUnicode: postData.IsUnicode,
-          };
+          responseData['esmsRequest'] = postData;
         }
 
         // Gửi POST request đến API của ESMS
-        let esmsResponse = await sendSmsMessage.call(this, postData);
+        let esmsResponse = await sendSmsMessage.call(this, {
+          ...esmsCredentials,
+          ...postData,
+        });
         responseData['esmsResponse'] = esmsResponse;
 
         break;

@@ -3,7 +3,7 @@ import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
 import { IApiAuthorize, ISendSmsMessageParams, ISendZnsMessageParams } from "../interfaces";
 import { getEsmsListTemplate, getEsmsZnsTemplateInfo, sendSmsMessage, sendZaloZnsMessage } from "../services";
-import { NAME_CREDENTIAL } from "../EsmsGenericFunctions";
+import { getEsmsCredentials, } from "../EsmsGenericFunctions";
 
 export class OttMessageResource {
   static NAME_RESOURCE = 'ott_message';
@@ -14,13 +14,7 @@ export class OttMessageResource {
   ): Promise<INqdevResponseData> {
 
     // Lấy credentials từ node
-    const credentials = await this.getCredentials(NAME_CREDENTIAL),
-      esmsApiKey = (credentials?.esmsApiKey ?? '') as string,
-      esmsSecretKey = (credentials?.esmsSecretKey ?? '') as string,
-      esmsAuthentication: IApiAuthorize = {
-        ApiKey: esmsApiKey ?? '',
-        SecretKey: esmsSecretKey ?? '',
-      };
+    const esmsCredentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
     const esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
       esmsZaloOA = (this.getNodeParameter('esmsZaloOA', itemIndex, {}) as { mode: string; value: string })?.value ?? '',
@@ -40,7 +34,7 @@ export class OttMessageResource {
         }
 
         const esmsResponse = await getEsmsListTemplate.call(this, {
-          ...esmsAuthentication,
+          ...esmsCredentials,
           ...esmsRequest,
         });
 
@@ -56,7 +50,7 @@ export class OttMessageResource {
         }
 
         const esmsResponse = await getEsmsZnsTemplateInfo.call(this, {
-          ...esmsAuthentication,
+          ...esmsCredentials,
           ...esmsRequest,
         });
 
@@ -85,8 +79,6 @@ export class OttMessageResource {
 
         // Cấu hình dữ liệu để gửi POST request
         let postData: ISendZnsMessageParams = {
-          ApiKey: esmsApiKey ?? '',
-          SecretKey: esmsSecretKey ?? '',
           OAID: esmsZaloOA ?? '',
           TempID: esmsTemplateId ?? '',
           Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
@@ -98,18 +90,14 @@ export class OttMessageResource {
         };
 
         if ((options['esmsIsLoggingRequest'] as boolean)) {
-          responseData['esmsRequest'] = {
-            Phone: postData.Phone,
-            Content: postData.Content,
-            SmsType: postData.SmsType,
-            Brandname: postData.Brandname,
-            Sandbox: postData.Sandbox,
-            IsUnicode: postData.IsUnicode,
-          };
+          responseData['esmsRequest'] = postData;
         }
 
         // Gửi POST request đến API của ESMS
-        let esmsResponse = await sendZaloZnsMessage.call(this, postData);
+        let esmsResponse = await sendZaloZnsMessage.call(this, {
+          ...esmsCredentials,
+          ...postData,
+        });
         responseData['esmsResponse'] = esmsResponse;
 
         break;
@@ -125,8 +113,6 @@ export class OttMessageResource {
 
         // Cấu hình dữ liệu để gửi POST request
         let postData: ISendSmsMessageParams = {
-          ApiKey: esmsApiKey ?? '',
-          SecretKey: esmsSecretKey ?? '',
           SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
           Brandname: esmsBrandname ?? '',
           Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
@@ -138,18 +124,14 @@ export class OttMessageResource {
         };
 
         if ((options['esmsIsLoggingRequest'] as boolean)) {
-          responseData['esmsRequest'] = {
-            Phone: postData.Phone,
-            Content: postData.Content,
-            SmsType: postData.SmsType,
-            Brandname: postData.Brandname,
-            Sandbox: postData.Sandbox,
-            IsUnicode: postData.IsUnicode,
-          };
+          responseData['esmsRequest'] = postData;
         }
 
         // Gửi POST request đến API của ESMS
-        let esmsResponse = await sendSmsMessage.call(this, postData);
+        let esmsResponse = await sendSmsMessage.call(this, {
+          ...esmsCredentials,
+          ...postData,
+        });
         responseData['esmsResponse'] = esmsResponse;
 
         break;

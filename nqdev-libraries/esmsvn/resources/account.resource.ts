@@ -1,8 +1,9 @@
 import type { IExecuteFunctions, IHookFunctions } from "n8n-workflow";
 import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
-import { NAME_CREDENTIAL } from "../EsmsGenericFunctions";
+import { IApiAuthorize } from "../interfaces";
 import { getEsmsListBrandname, getEsmsListZaloOa, getUserInfo, } from "../services";
+import { getEsmsCredentials, } from "../EsmsGenericFunctions";
 
 export class AccountResource {
   static NAME_RESOURCE = 'account';
@@ -13,9 +14,7 @@ export class AccountResource {
   ): Promise<INqdevResponseData> {
 
     // Lấy credentials từ node
-    const credentials = await this.getCredentials(NAME_CREDENTIAL),
-      esmsApiKey = (credentials?.esmsApiKey ?? '') as string,
-      esmsSecretKey = (credentials?.esmsSecretKey ?? '') as string;
+    const esmsCredentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
     const esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string;
     //   esmsBrandname = (this.getNodeParameter('esmsBrandname', itemIndex, {}) as { mode: string; value: string })?.value ?? 'n8n-nqdev',
@@ -31,8 +30,7 @@ export class AccountResource {
     switch (operation) {
       case 'getBalance': {
         let esmsResponse = await getUserInfo.call(this, {
-          ApiKey: esmsApiKey ?? '',
-          SecretKey: esmsSecretKey ?? '',
+          ...esmsCredentials,
         });
         responseData['esmsResponse'] = esmsResponse;
         break;
@@ -40,8 +38,7 @@ export class AccountResource {
 
       case 'getListBrandname': {
         let esmsResponse = await getEsmsListBrandname.call(this, {
-          ApiKey: esmsApiKey ?? '',
-          SecretKey: esmsSecretKey ?? '',
+          ...esmsCredentials,
           smsType: esmsSmsType ?? '2',
         });
 
@@ -54,8 +51,7 @@ export class AccountResource {
 
       case 'getListZaloOa': {
         let esmsResponse = await getEsmsListZaloOa.call(this, {
-          ApiKey: esmsApiKey ?? '',
-          SecretKey: esmsSecretKey ?? '',
+          ...esmsCredentials,
         });
         responseData['esmsResponse'] = esmsResponse;
         break;

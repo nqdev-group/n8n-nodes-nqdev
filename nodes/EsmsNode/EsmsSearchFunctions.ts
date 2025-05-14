@@ -3,6 +3,7 @@ import type {
   INodeListSearchItems,
   INodeListSearchResult,
 } from 'n8n-workflow';
+
 import {
   EsmsListBrandnameResponse,
   EsmsListTemplateResponse,
@@ -11,6 +12,7 @@ import {
   getEsmsListBrandname,
   getEsmsListTemplate,
   getEsmsListZaloOa,
+  IApiAuthorize,
 } from '../../nqdev-libraries/esmsvn';
 
 export async function getListBrandname(
@@ -21,15 +23,15 @@ export async function getListBrandname(
   const page = paginationToken ? +paginationToken : 1;
   const pageSize = 100;
 
-  const credentials = await getEsmsCredentials.call(this),
-    esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as number,
-    options = this.getNodeParameter('options', {}) as { [key: string]: any };
+  const esmsCredentials: IApiAuthorize = await getEsmsCredentials.call(this),
+    // options = this.getNodeParameter('options', {}) as { [key: string]: any }
+    esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as number;
 
-  this.logger.info(`getListBrandname: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, options })}`);
+  // this.logger.info(`getListBrandname: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, options })}`);
 
   const responseData: EsmsListBrandnameResponse = await getEsmsListBrandname.call(this, {
-    ApiKey: credentials.ApiKey ?? '',
-    SecretKey: credentials.SecretKey ?? '',
+    ...esmsCredentials,
+    SmsType: esmsSmsType ?? '2',
     Brandname: filter ?? '',
   });
 
@@ -66,15 +68,14 @@ export async function getListZaloOA(
   const page = paginationToken ? +paginationToken : 1;
   const pageSize = 100;
 
-  const credentials = await getEsmsCredentials.call(this),
-    esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as string,
-    options = this.getNodeParameter('options', {}) as { [key: string]: any };
+  const esmsCredentials = await getEsmsCredentials.call(this),
+    // options = this.getNodeParameter('options', {}) as { [key: string]: any },
+    esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as string;
 
-  this.logger.info(`getListZaloOA: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, options })}`);
+  // this.logger.info(`getListZaloOA: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, options })}`);
 
   const responseData: EsmsListZaloOaResponse = await getEsmsListZaloOa.call(this, {
-    ApiKey: credentials.ApiKey ?? '',
-    SecretKey: credentials.SecretKey ?? '',
+    ...esmsCredentials,
     smsType: esmsSmsType ?? '24',
   });
 
@@ -112,16 +113,15 @@ export async function getListZnsTemplate(
   const page = paginationToken ? +paginationToken : 1;
   const pageSize = 100;
 
-  const credentials = await getEsmsCredentials.call(this),
+  const esmsCredentials = await getEsmsCredentials.call(this),
+    // options = this.getNodeParameter('options', {}) as { [key: string]: any },
     esmsSmsType = this.getNodeParameter('esmsSmsType', 8) as string,
-    esmsZaloOA = (this.getNodeParameter('esmsZaloOA', {}) as { mode: string; value: string })?.value ?? '',
-    options = this.getNodeParameter('options', {}) as { [key: string]: any };
+    esmsZaloOA = (this.getNodeParameter('esmsZaloOA', {}) as { mode: string; value: string })?.value ?? '';
 
-  this.logger.info(`getListZnsTemplate: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, esmsZaloOA, options })}`);
+  // this.logger.info(`getListZnsTemplate: ${JSON.stringify({ filter, paginationToken, page, pageSize, esmsSmsType, esmsZaloOA, options })}`);
 
   const responseData: EsmsListTemplateResponse = await getEsmsListTemplate.call(this, {
-    ApiKey: credentials.ApiKey ?? '',
-    SecretKey: credentials.SecretKey ?? '',
+    ...esmsCredentials,
     smsType: esmsSmsType ?? '24',
     zaloOaId: esmsZaloOA ?? '',
   });
