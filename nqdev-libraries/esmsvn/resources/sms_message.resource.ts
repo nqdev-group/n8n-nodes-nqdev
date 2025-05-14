@@ -30,14 +30,14 @@ export class SmsMessageResource {
         //    sms_message:sendSmsMessage
         // ----------------------------------
 
-        let esmsBrandnameLocator = this.getNodeParameter('esmsBrandname', itemIndex) as { mode: string; value: string } ?? { mode: 'name', value: 'n8n-nqdev' };
+        const esmsBrandname = (this.getNodeParameter('esmsBrandname', itemIndex, {}) as { mode: string; value: string })?.value ?? 'n8n-nqdev';
 
         // Cấu hình dữ liệu để gửi POST request
         let postData: ISendSmsMessageParams = {
           ApiKey: esmsApiKey ?? '',
           SecretKey: esmsSecretKey ?? '',
           SmsType: this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
-          Brandname: esmsBrandnameLocator?.value ?? '',
+          Brandname: esmsBrandname ?? '',
           Phone: this.getNodeParameter('esmsPhonenumber', itemIndex, '') as string,
           Content: this.getNodeParameter('esmsContent', itemIndex, '') as string,
           // options
