@@ -249,7 +249,7 @@ const esmsSenderModel: INodeProperties[] = [
         type: 'list',
         placeholder: 'Select a Template ID...',
         typeOptions: {
-          searchListMethod: 'getListTemplate',
+          searchListMethod: 'getListZnsTemplate',
           searchable: true,
           searchFilterRequired: true,
         },
