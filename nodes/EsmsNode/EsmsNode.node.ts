@@ -1,16 +1,14 @@
-import type {
-  IDataObject,
-  IExecuteFunctions,
-  INodeExecutionData,
-  INodeType,
-  INodeTypeDescription,
-  IWebhookFunctions,
-  IWebhookResponseData,
-} from 'n8n-workflow';
 import {
+  type IDataObject,
+  type IExecuteFunctions,
+  type INodeExecutionData,
+  type IWebhookFunctions,
+  type IWebhookResponseData,
   NodeConnectionType,
   NodeOperationError,
-} from 'n8n-workflow';
+  type INodeType,
+  type INodeTypeDescription
+} from "n8n-workflow";
 import { INqdevResponseData } from '../../nqdev-libraries';
 import {
   esmsNodeModel,
@@ -22,8 +20,9 @@ import {
 import { getLoadZnsTemplateParameters } from './EsmsLoadFunctions';
 import { getListBrandname, getListZaloOA, getListZnsTemplate, } from './EsmsSearchFunctions';
 
+// Define the Haravan node class implementing INodeType
 export class EsmsNode implements INodeType {
-  // This property is required. It defines the name of the node.
+  // Node metadata and configuration
   description: INodeTypeDescription = {
     displayName: 'Nqdev: Tích hợp EsmsVN',
     name: 'esmsNode',
@@ -40,6 +39,8 @@ export class EsmsNode implements INodeType {
     },
     inputs: [NodeConnectionType.Main],
     outputs: [NodeConnectionType.Main],
+
+    // Credential configuration
     credentials: [
       {
         // The name of the credential type to use.
@@ -48,6 +49,8 @@ export class EsmsNode implements INodeType {
         required: true,
       },
     ],
+
+    // Default request configuration for HTTP calls
     requestDefaults: {
       baseURL: 'https://rest.esms.vn',
       url: '/',
@@ -55,8 +58,9 @@ export class EsmsNode implements INodeType {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      // The default query string parameters which will be sent with every request
+      timeout: 10000, // 10 seconds timeout
     },
+
     /**
      * In the properties array we have two mandatory options objects required
      *
@@ -73,31 +77,33 @@ export class EsmsNode implements INodeType {
     ],
   };
 
-  // This function is called when the node is used as a webhook.
+  // Placeholder for dynamically loaded options and search filters
   methods = {
     loadOptions: {
+      // Future dynamic dropdown options can be loaded here
       getLoadZnsTemplateParameters,
     },
     listSearch: {
+      // Optional list-based search methods
       getListBrandname,
       getListZaloOA,
       getListZnsTemplate,
     },
   };
 
-  // This function is called when the node is used as a webhook.
+  // Handle webhook requests (if node is used as a webhook trigger)
   async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
-    const requestObject = this.getRequestObject();
+    const requestObject = this.getRequestObject(); // Get incoming request
 
     return {
       workflowData: [this.helpers.returnJsonArray(requestObject.body)],
     };
   }
 
-  // This function is called when the node is executed.
+  // Main logic for executing the node
   async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-    const items = this.getInputData();
-    const executionId = this.getExecutionId();  // Lấy Execution ID của workflow hiện tại
+    const items = this.getInputData(); // Input data for execution
+    const executionId = this.getExecutionId();  // Get workflow execution ID
     const returnData: IDataObject[] = [];
 
     for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
@@ -128,17 +134,22 @@ export class EsmsNode implements INodeType {
         responseData['executionId'] = executionId;
         responseData['resource'] = resource;
         responseData['operation'] = operation;
+
+        // Simulate task success - update status
         responseData['status'] = 'completed';
 
+        // Append response data to return list
         if (Array.isArray(responseData)) {
           returnData.push.apply(returnData, responseData as (INqdevResponseData & IDataObject)[]);
         } else if (responseData !== undefined) {
           returnData.push(responseData as (INqdevResponseData & IDataObject));
         }
 
+        // Attach response to output item
         item.json = responseData;
       } catch (error) {
         if (this.continueOnFail()) {
+          // Continue processing next items on failure
           items.push({ json: this.getInputData(itemIndex)[0].json, error, pairedItem: itemIndex });
           continue;
         } else {
@@ -148,13 +159,14 @@ export class EsmsNode implements INodeType {
           }
         }
 
+        // Throw operation error if not continuing on fail
         throw new NodeOperationError(this.getNode(), error, {
           itemIndex,
         });
       }
     }
 
-    // Trả về kết quả execution dưới dạng JSON
+    // Return processed results
     return [this.helpers.returnJsonArray(returnData)];
   }
 }
