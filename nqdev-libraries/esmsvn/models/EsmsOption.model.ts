@@ -68,7 +68,7 @@ const esmsSmsTypeModel: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: [OttMessageResource.NAME_RESOURCE, AccountResource.NAME_RESOURCE],
-        operation: ['sendZnsMessage', 'getListZaloOa', 'getListTemplate'],
+        operation: ['sendZnsMessage', 'getListZaloOa', 'getListTemplate', 'getZnsTemplateInfo'],
       }
     },
     options: [
