@@ -1,7 +1,7 @@
 import type { IExecuteFunctions, IHookFunctions } from "n8n-workflow";
 import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
-import { ISendSmsMessageParams } from "../interfaces";
+import { IApiAuthorize, ISendSmsMessageParams } from "../interfaces";
 import { getEsmsListTemplate, sendSmsMessage } from "../services";
 import { NAME_CREDENTIAL } from "../EsmsGenericFunctions";
 
@@ -16,12 +16,16 @@ export class SmsMessageResource {
     // Lấy credentials từ node
     const credentials = await this.getCredentials(NAME_CREDENTIAL),
       esmsApiKey = (credentials?.esmsApiKey ?? '') as string,
-      esmsSecretKey = (credentials?.esmsSecretKey ?? '') as string;
+      esmsSecretKey = (credentials?.esmsSecretKey ?? '') as string,
+      esmsAuthentication: IApiAuthorize = {
+        ApiKey: esmsApiKey ?? '',
+        SecretKey: esmsSecretKey ?? '',
+      };
 
     const esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
       esmsBrandname = (this.getNodeParameter('esmsBrandname', itemIndex, {}) as { mode: string; value: string })?.value ?? 'n8n-nqdev';
 
-    let responseData: INqdevResponseData = {
+    const responseData: INqdevResponseData = {
       operation,
       status: 'backlog',
       timestamp: new Date().toISOString(),
@@ -29,12 +33,17 @@ export class SmsMessageResource {
 
     switch (operation) {
       case 'getListTemplate': {
-        let esmsResponse = await getEsmsListTemplate.call(this, {
-          ApiKey: esmsApiKey ?? '',
-          SecretKey: esmsSecretKey ?? '',
+        const esmsRequest = {
           smsType: esmsSmsType ?? '2',
           brandname: esmsBrandname ?? 'n8n-nqdev',
+        }
+
+        const esmsResponse = await getEsmsListTemplate.call(this, {
+          ...esmsAuthentication,
+          ...esmsRequest,
         });
+
+        responseData['esmsRequest'] = esmsRequest;
         responseData['esmsResponse'] = esmsResponse;
         break;
       }
