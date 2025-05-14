@@ -110,7 +110,7 @@ export async function getEsmsListTemplate(
     SmsType: args.smsType,
   };
 
-  switch (args.smsType) {
+  switch (args.smsType.toString()) {
     case '1':
     case '2':
       Object.assign(rawBody, {
