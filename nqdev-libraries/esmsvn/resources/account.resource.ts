@@ -17,7 +17,7 @@ export class AccountResource {
       esmsApiKey = (credentials?.esmsApiKey ?? '') as string,
       esmsSecretKey = (credentials?.esmsSecretKey ?? '') as string;
 
-    // const esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
+    const esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string;
     //   esmsBrandname = (this.getNodeParameter('esmsBrandname', itemIndex, {}) as { mode: string; value: string })?.value ?? 'n8n-nqdev',
     //   esmsZaloOA = (this.getNodeParameter('esmsZaloOA', itemIndex, {}) as { mode: string; value: string })?.value ?? '',
     //   esmsTemplateId = (this.getNodeParameter('esmsTemplateId', itemIndex, {}) as { mode: string; value: string })?.value ?? '';
@@ -42,8 +42,13 @@ export class AccountResource {
         let esmsResponse = await getEsmsListBrandname.call(this, {
           ApiKey: esmsApiKey ?? '',
           SecretKey: esmsSecretKey ?? '',
+          smsType: esmsSmsType ?? '2',
         });
-        responseData['esmsResponse'] = esmsResponse;
+
+        responseData['esmsResponse'] = {
+          CodeResponse: esmsResponse.CodeResponse,
+          ListBrandName: esmsResponse.ListBrandName?.filter((item) => item.Type?.toString() == (esmsSmsType ?? '2')),
+        };
         break;
       }
 
