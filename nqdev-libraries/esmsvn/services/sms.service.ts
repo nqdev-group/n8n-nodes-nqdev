@@ -30,13 +30,13 @@ export async function sendSmsMessage(
   args: ISendSmsMessageParams
 ): Promise<any> {
   // Lấy credentials từ node
-  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
+  const esmsCredentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
   const { ApiKey, SecretKey, ...safeArgs } = args;
 
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/SendMultipleMessage_V4_post_json', {
-    ApiKey: ApiKey ?? credentials.ApiKey ?? '',
-    SecretKey: SecretKey ?? credentials.SecretKey ?? '',
+    ApiKey: ApiKey ?? esmsCredentials?.ApiKey ?? '',
+    SecretKey: SecretKey ?? esmsCredentials?.SecretKey ?? '',
     ...safeArgs,
   }, {}, {
     ...HTTP_HEADERS,

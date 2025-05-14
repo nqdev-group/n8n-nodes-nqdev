@@ -30,13 +30,13 @@ export async function sendZaloZnsMessage(
   args: ISendZnsMessageParams
 ): Promise<any> {
   // Lấy credentials từ node
-  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
+  const esmsCredentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
   const { ApiKey, SecretKey, ...safeArgs } = args;
 
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/SendZaloMessage_V6/', {
-    ApiKey: ApiKey ?? credentials.ApiKey ?? '',
-    SecretKey: SecretKey ?? credentials.SecretKey ?? '',
+    ApiKey: ApiKey ?? esmsCredentials.ApiKey ?? '',
+    SecretKey: SecretKey ?? esmsCredentials.SecretKey ?? '',
     ...safeArgs,
   }, {}, {
     ...HTTP_HEADERS,
@@ -70,13 +70,13 @@ export async function sendZaloUidMessage(
   args: ISendUidMessageParams
 ): Promise<any> {
   // Lấy credentials từ node
-  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
+  const esmsCredentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
   const { ApiKey, SecretKey, ...safeArgs } = args;
 
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/SendZaloFollowerMessage_V5_post_json/', {
-    ApiKey: ApiKey ?? credentials.ApiKey ?? '',
-    SecretKey: SecretKey ?? credentials.SecretKey ?? '',
+    ApiKey: ApiKey ?? esmsCredentials.ApiKey ?? '',
+    SecretKey: SecretKey ?? esmsCredentials.SecretKey ?? '',
     ...safeArgs,
   }, {}, {
     ...HTTP_HEADERS,

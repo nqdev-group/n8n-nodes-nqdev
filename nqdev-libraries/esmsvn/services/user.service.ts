@@ -17,13 +17,13 @@ export async function getUserInfo(
   args: {} & IApiAuthorize
 ): Promise<any> {
   // Lấy credentials từ node
-  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
+  const esmsCredentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
   const { ApiKey, SecretKey, ...safeArgs } = args;
 
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetBalance_json', {
-    ApiKey: ApiKey ?? credentials.ApiKey ?? '',
-    SecretKey: SecretKey ?? credentials.SecretKey ?? '',
+    ApiKey: ApiKey ?? esmsCredentials.ApiKey ?? '',
+    SecretKey: SecretKey ?? esmsCredentials.SecretKey ?? '',
     ...safeArgs,
   }, {}, {
     ...HTTP_HEADERS,
@@ -44,12 +44,12 @@ export async function getEsmsListBrandname(
   args: {} & IApiAuthorize
 ): Promise<EsmsListBrandnameResponse> {
   // Lấy credentials từ node
-  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
+  const esmsCredentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
   const { ApiKey, SecretKey, ...safeArgs } = args;
 
   return await esmsApiRequest.call(this, 'GET',
-    `/MainService.svc/json/GetListBrandnameV2/${ApiKey ?? credentials.ApiKey ?? ''}/${SecretKey ?? credentials.SecretKey ?? ''}`, {
+    `/MainService.svc/json/GetListBrandnameV2/${ApiKey ?? esmsCredentials.ApiKey ?? ''}/${SecretKey ?? esmsCredentials.SecretKey ?? ''}`, {
     ...safeArgs,
   }, {}, {
     ...HTTP_HEADERS,
@@ -71,13 +71,13 @@ export async function getEsmsListZaloOa(
 ): Promise<EsmsListZaloOaResponse> {
 
   // Lấy credentials từ node
-  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
+  const esmsCredentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
   const { ApiKey, SecretKey, ...safeArgs } = args;
 
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/ZNS/GetListZOA/', {
-    ApiKey: ApiKey ?? credentials.ApiKey ?? '',
-    SecretKey: SecretKey ?? credentials.SecretKey ?? '',
+    ApiKey: ApiKey ?? esmsCredentials.ApiKey ?? '',
+    SecretKey: SecretKey ?? esmsCredentials.SecretKey ?? '',
     ...safeArgs,
   }, {}, {
     ...HTTP_HEADERS,
@@ -101,12 +101,12 @@ export async function getEsmsListTemplate(
   args: { smsType: '2' | '24' | '25' | string; brandname?: string; zaloOaId?: string; } & IApiAuthorize
 ): Promise<EsmsListTemplateResponse> {
   // Lấy credentials từ node
-  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
+  const esmsCredentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
   const { ApiKey, SecretKey, } = args;
   const rawBody: IDataObject & IApiAuthorize = {
-    ApiKey: ApiKey ?? credentials.ApiKey ?? '',
-    SecretKey: SecretKey ?? credentials.SecretKey ?? '',
+    ApiKey: ApiKey ?? esmsCredentials.ApiKey ?? '',
+    SecretKey: SecretKey ?? esmsCredentials.SecretKey ?? '',
     SmsType: args.smsType,
   };
 
@@ -150,14 +150,14 @@ export async function getEsmsZnsTemplateInfo(
   args: { templateId: string; zaloOaId: string; } & IApiAuthorize
 ): Promise<EsmsTemplateInfoResponse> {
   // Lấy credentials từ node
-  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
+  const esmsCredentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
   const { ApiKey, SecretKey, } = args;
 
   const rawBody: IDataObject & IApiAuthorize = {},
     qsData: IDataObject & IApiAuthorize = {
-      ApiKey: ApiKey ?? credentials.ApiKey ?? '',
-      SecretKey: SecretKey ?? credentials.SecretKey ?? '',
+      ApiKey: ApiKey ?? esmsCredentials.ApiKey ?? '',
+      SecretKey: SecretKey ?? esmsCredentials.SecretKey ?? '',
       TemplateId: args.templateId ?? '',
       OAId: args.zaloOaId ?? '',
     };

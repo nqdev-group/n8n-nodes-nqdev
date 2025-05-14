@@ -1,7 +1,7 @@
 import type { IExecuteFunctions, IHookFunctions, ILoadOptionsFunctions } from 'n8n-workflow';
 
-import { esmsApiRequest, HTTP_HEADERS, NAME_CREDENTIAL } from '../EsmsGenericFunctions';
-import { ISendZnsMessageParams } from '../interfaces';
+import { esmsApiRequest, getEsmsCredentials, HTTP_HEADERS, } from '../EsmsGenericFunctions';
+import { IApiAuthorize, ISendZnsMessageParams } from '../interfaces';
 
 /**
  * Gửi tin nhắn Viber thông qua API của ESMS
@@ -29,15 +29,13 @@ export async function sendViberMessage(
   args: ISendZnsMessageParams
 ): Promise<any> {
   // Lấy credentials từ node
-  const credentials = await this.getCredentials(NAME_CREDENTIAL),
-    esmsApiKey: string = (credentials?.esmsApiKey ?? '') as string,
-    esmsSecretKey: string = (credentials?.esmsSecretKey ?? '') as string;
+  const esmsCredentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
   const { ApiKey, SecretKey, ...safeArgs } = args;
 
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/SendZaloMessage_V6/', {
-    ApiKey: ApiKey ?? esmsApiKey ?? '',
-    SecretKey: SecretKey ?? esmsSecretKey ?? '',
+    ApiKey: ApiKey ?? esmsCredentials?.ApiKey ?? '',
+    SecretKey: SecretKey ?? esmsCredentials?.SecretKey ?? '',
     ...safeArgs,
   }, {}, {
     ...HTTP_HEADERS,
