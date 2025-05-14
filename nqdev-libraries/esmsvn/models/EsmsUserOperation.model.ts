@@ -19,23 +19,12 @@ export const esmsUserOperationModel: INodeProperties[] = [
         action: 'Lấy số dư tài khoản ESMSVN',
         value: 'getBalance',
         description: 'Lấy số dư của tài khoản',
-        routing: {
-          request: {
-            method: 'POST',
-            url: '/MainService.svc/json/GetBalance_json/',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json, text/javascript, */*; q=0.01'
-            },
-            qs: {
-              n8n: 'nqdev',
-            },
-            body: {
-              'ApiKey': '',
-              'SecretKey': ''
-            }
-          }
-        }
+      },
+      {
+        name: 'Lấy danh sách Brandname',
+        action: 'Lấy danh sách Brandname',
+        value: 'getListBrandname',
+        description: 'Lấy danh sách Brandname',
       }
     ],
     default: 'getBalance'

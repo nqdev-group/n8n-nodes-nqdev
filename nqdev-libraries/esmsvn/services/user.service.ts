@@ -1,4 +1,4 @@
-import type { IExecuteFunctions, IHookFunctions, ILoadOptionsFunctions } from 'n8n-workflow';
+import type { IDataObject, IExecuteFunctions, IHookFunctions, ILoadOptionsFunctions } from 'n8n-workflow';
 
 import { esmsApiRequest, getEsmsCredentials, HTTP_HEADERS } from '../EsmsGenericFunctions';
 import { EsmsListBrandnameResponse, IApiAuthorize } from '../interfaces';
@@ -14,7 +14,7 @@ import { EsmsListBrandnameResponse, IApiAuthorize } from '../interfaces';
  */
 export async function getUserInfo(
   this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
-  args: IApiAuthorize
+  args: {} & IApiAuthorize
 ): Promise<any> {
   // Lấy credentials từ node
   const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
@@ -41,7 +41,7 @@ export async function getUserInfo(
  */
 export async function getEsmsListBrandname(
   this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
-  args: IApiAuthorize
+  args: {} & IApiAuthorize
 ): Promise<EsmsListBrandnameResponse> {
   // Lấy credentials từ node
   const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
@@ -67,7 +67,7 @@ export async function getEsmsListBrandname(
  */
 export async function getListZaloOa(
   this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
-  args: IApiAuthorize
+  args: {} & IApiAuthorize
 ): Promise<any> {
 
   // Lấy credentials từ node
@@ -75,7 +75,7 @@ export async function getListZaloOa(
 
   const { ApiKey, SecretKey, ...safeArgs } = args;
 
-  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetListZaloOA/', {
+  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/ZNS/GetListZOA/', {
     ApiKey: ApiKey ?? credentials.ApiKey ?? '',
     SecretKey: SecretKey ?? credentials.SecretKey ?? '',
     ...safeArgs,
@@ -91,24 +91,45 @@ export async function getListZaloOa(
  * @param args.secretKey Secret Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @param args.smsType Loại tin nhắn (2: SMS thường, 24: SMS Brandname, 25: SMS CSKH)
  * @param args.brandname Tên thương hiệu (Brandname) của tài khoản đã đăng nhập trên hệ thống Esms.vn
+ * @param args.zaloOaId ID của Zalo Official Account (OA) của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @description Lấy danh sách template của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @url https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-template-tin-cham-soc-khach-hang
  * @returns
  */
 export async function getTemplateList(
   this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
-  args: { smsType: '2' | '24' | '25' | string; brandname: string; } & IApiAuthorize
+  args: { smsType: '2' | '24' | '25' | string; brandname: string; zaloOaId: string; } & IApiAuthorize
 ): Promise<any> {
   // Lấy credentials từ node
   const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
 
-  const { ApiKey, SecretKey, ...safeArgs } = args;
-
-  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetTemplate/', {
+  const { ApiKey, SecretKey, } = args;
+  const rawBody: IDataObject & IApiAuthorize = {
     ApiKey: ApiKey ?? credentials.ApiKey ?? '',
     SecretKey: SecretKey ?? credentials.SecretKey ?? '',
-    ...safeArgs,
-  }, {}, {
+    SmsType: args.smsType,
+  };
+
+  switch (args.smsType) {
+    case '1':
+    case '2':
+      Object.assign(rawBody, {
+        Brandname: args.brandname ?? '',
+      });
+      break;
+
+    case '24':
+    case '25':
+      Object.assign(rawBody, {
+        OAId: args.zaloOaId ?? '',
+      });
+      break;
+
+    default:
+      break;
+  }
+
+  return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetTemplate/', rawBody, {}, {
     ...HTTP_HEADERS,
   });
 }
