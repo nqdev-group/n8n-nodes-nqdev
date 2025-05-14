@@ -9,8 +9,7 @@ import {
 } from 'n8n-workflow';
 import { nqdevApiRequest } from "../common";
 import { EsmsResponse, IApiAuthorize } from './interfaces';
-
-export const NAME_CREDENTIAL = 'nqdevEsmsApi';
+import { NAME_CREDENTIAL } from './models';
 
 export const HTTP_HEADERS: IDataObject = {
   'Content-Type': 'application/json; charset=utf-8',

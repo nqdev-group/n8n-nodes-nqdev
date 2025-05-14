@@ -1,5 +1,7 @@
 import type { INodeProperties } from "n8n-workflow";
 
+export const NAME_CREDENTIAL = 'nqdevEsmsApi';
+
 export const esmsCredentialModel: INodeProperties[] = [
   {
     displayName: 'Esms Domain',

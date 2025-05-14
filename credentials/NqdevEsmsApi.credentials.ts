@@ -5,10 +5,10 @@ import {
   INodeProperties,
 } from 'n8n-workflow';
 
-import { esmsCredentialModel } from '../nqdev-libraries/esmsvn';
+import { esmsCredentialModel, NAME_CREDENTIAL } from '../nqdev-libraries/esmsvn';
 
 export class NqdevEsmsApi implements ICredentialType {
-  name = 'nqdevEsmsApi';
+  name = NAME_CREDENTIAL;
   displayName = 'Nqdev: Esms Credential API';
   documentationUrl = 'https://docs.quyit.id.vn/n8n-io/n8n-nodes-nqdev';
 
