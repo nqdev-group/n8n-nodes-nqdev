@@ -95,6 +95,14 @@ export class EsmsNode implements INodeType {
   async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
     const requestObject = this.getRequestObject(); // Get incoming request
 
+    // Log the incoming request for debugging
+    // this.logger.info(`Webhook request received: ${JSON.stringify({
+    //   headers: requestObject.headers,
+    //   body: requestObject.body,
+    //   query: requestObject.query,
+    //   params: requestObject.params,
+    // })}`);
+
     return {
       workflowData: [this.helpers.returnJsonArray(requestObject.body)],
     };
