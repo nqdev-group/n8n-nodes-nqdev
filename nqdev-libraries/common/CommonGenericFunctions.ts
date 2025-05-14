@@ -25,7 +25,7 @@ export async function nqdevApiRequest(
   method: IHttpRequestMethods,
   baseUrl: string,
   endpoint: string,
-  body: IDataObject,
+  body: IDataObject = {},
   qs: IDataObject = {}, // query parameters
   headers: IDataObject = {}
 ): Promise<any> {
