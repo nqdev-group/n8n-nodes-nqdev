@@ -5,11 +5,11 @@ import { EsmsListBrandnameResponse, IApiAuthorize } from '../interfaces';
 
 /**
  * Lấy thông tin tài khoản
- * @param this is HookFunctions or ExecuteFunctions
+ * @param this Context của workflow function trong n8n (HookFunctions, ExecuteFunctions hoặc LoadOptionsFunctions).
  * @param args.apiKey API Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @param args.secretKey Secret Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @description Lấy thông tin tài khoản đã đăng nhập trên hệ thống Esms.vn
- * @url https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-so-du-tai-khoan
+ * @see https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-so-du-tai-khoan
  * @returns
  */
 export async function getUserInfo(
@@ -32,11 +32,11 @@ export async function getUserInfo(
 
 /**
  * Lấy danh sách brandname
- * @param this is HookFunctions or ExecuteFunctions
+ * @param this Context của workflow function trong n8n (HookFunctions, ExecuteFunctions hoặc LoadOptionsFunctions).
  * @param args.apiKey API Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @param args.secretKey Secret Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @description Lấy danh sách Brandname của tài khoản đã đăng nhập trên hệ thống Esms.vn
- * @url https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-brandname
+ * @see https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-brandname
  * @returns
  */
 export async function getEsmsListBrandname(
@@ -58,11 +58,11 @@ export async function getEsmsListBrandname(
 
 /**
  * Lấy danh sách Zalo Official Account (OA)
- * @param this is HookFunctions or ExecuteFunctions
+ * @param this Context của workflow function trong n8n (HookFunctions, ExecuteFunctions hoặc LoadOptionsFunctions).
  * @param args.apiKey API Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @param args.secretKey Secret Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @description Lấy danh sách Zalo OA của tài khoản đã đăng nhập trên hệ thống Esms.vn
- * @url https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-zalo-oa
+ * @see https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-zalo-oa
  * @returns
  */
 export async function getListZaloOa(
@@ -85,18 +85,18 @@ export async function getListZaloOa(
 }
 
 /**
- * Lấy danh sách template CSKH
- * @param this is HookFunctions or ExecuteFunctions
+ * Lấy danh sách template (template CSKH & template ZaloZNS)
+ * @param this Context của workflow function trong n8n (HookFunctions, ExecuteFunctions hoặc LoadOptionsFunctions).
  * @param args.apiKey API Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @param args.secretKey Secret Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @param args.smsType Loại tin nhắn (2: SMS thường, 24: SMS Brandname, 25: SMS CSKH)
  * @param args.brandname Tên thương hiệu (Brandname) của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @param args.zaloOaId ID của Zalo Official Account (OA) của tài khoản đã đăng nhập trên hệ thống Esms.vn
  * @description Lấy danh sách template của tài khoản đã đăng nhập trên hệ thống Esms.vn
- * @url https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-template-tin-cham-soc-khach-hang
+ * @see https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-template-tin-cham-soc-khach-hang
  * @returns
  */
-export async function getTemplateList(
+export async function getListTemplate(
   this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
   args: { smsType: '2' | '24' | '25' | string; brandname: string; zaloOaId: string; } & IApiAuthorize
 ): Promise<any> {
@@ -130,6 +130,39 @@ export async function getTemplateList(
   }
 
   return await esmsApiRequest.call(this, 'POST', '/MainService.svc/json/GetTemplate/', rawBody, {}, {
+    ...HTTP_HEADERS,
+  });
+}
+
+/**
+ * Lấy thông tin template ZaloZNS
+ * @param this Context của workflow function trong n8n (HookFunctions, ExecuteFunctions hoặc LoadOptionsFunctions).
+ * @param args.apiKey API Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
+ * @param args.secretKey Secret Key của tài khoản đã đăng nhập trên hệ thống Esms.vn
+ * @param args.templateId ID của template ZaloZNS
+ * @param args.zaloOaId ID của Zalo Official Account (OA) của tài khoản đã đăng nhập trên hệ thống Esms.vn
+ * @description Lấy thông tin template ZaloZNS của tài khoản đã đăng nhập trên hệ thống Esms.vn
+ * @url https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-thong-tin-template-zalo-zns
+ * @returns
+ */
+export async function getZnsTemplateInfo(
+  this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
+  args: { templateId: string; zaloOaId: string; } & IApiAuthorize
+): Promise<any> {
+  // Lấy credentials từ node
+  const credentials: IApiAuthorize = await getEsmsCredentials.call(this);
+
+  const { ApiKey, SecretKey, } = args;
+
+  const rawBody: IDataObject & IApiAuthorize = {},
+    qsData: IDataObject & IApiAuthorize = {
+      ApiKey: ApiKey ?? credentials.ApiKey ?? '',
+      SecretKey: SecretKey ?? credentials.SecretKey ?? '',
+      TemplateId: args.templateId ?? '',
+      OAId: args.zaloOaId ?? '',
+    };
+
+  return await esmsApiRequest.call(this, 'GET', '/MainService.svc/json/GetZnsTemplateInfo', rawBody, qsData, {
     ...HTTP_HEADERS,
   });
 }

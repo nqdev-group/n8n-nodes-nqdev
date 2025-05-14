@@ -2,7 +2,7 @@ import type { IExecuteFunctions, IHookFunctions } from "n8n-workflow";
 import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
 import { NAME_CREDENTIAL } from "../EsmsGenericFunctions";
-import { getEsmsListBrandname, getListZaloOa, getUserInfo } from "../services";
+import { getEsmsListBrandname, getListTemplate, getListZaloOa, getUserInfo, getZnsTemplateInfo } from "../services";
 
 export class AccountResource {
   static NAME_RESOURCE = 'account';
@@ -16,6 +16,11 @@ export class AccountResource {
     const credentials = await this.getCredentials(NAME_CREDENTIAL),
       esmsApiKey = (credentials?.esmsApiKey ?? '') as string,
       esmsSecretKey = (credentials?.esmsSecretKey ?? '') as string;
+
+    const esmsSmsType = this.getNodeParameter('esmsSmsType', itemIndex, '2') as string,
+      esmsBrandname = (this.getNodeParameter('esmsBrandname', itemIndex, {}) as { mode: string; value: string })?.value ?? 'n8n-nqdev',
+      esmsZaloOaId = (this.getNodeParameter('esmsZaloOaId', itemIndex, {}) as { mode: string; value: string })?.value ?? '',
+      esmsTemplateId = (this.getNodeParameter('esmsTemplateId', itemIndex, {}) as { mode: string; value: string })?.value ?? '';
 
     let responseData: INqdevResponseData = {
       operation,
@@ -46,6 +51,29 @@ export class AccountResource {
         let esmsResponse = await getListZaloOa.call(this, {
           ApiKey: esmsApiKey ?? '',
           SecretKey: esmsSecretKey ?? '',
+        });
+        responseData['esmsResponse'] = esmsResponse;
+        break;
+      }
+
+      case 'getListTemplate': {
+        let esmsResponse = await getListTemplate.call(this, {
+          ApiKey: esmsApiKey ?? '',
+          SecretKey: esmsSecretKey ?? '',
+          smsType: esmsSmsType ?? '2',
+          brandname: esmsBrandname ?? 'n8n-nqdev',
+          zaloOaId: esmsZaloOaId ?? '',
+        });
+        responseData['esmsResponse'] = esmsResponse;
+        break;
+      }
+
+      case 'getZnsTemplateInfo': {
+        let esmsResponse = await getZnsTemplateInfo.call(this, {
+          ApiKey: esmsApiKey ?? '',
+          SecretKey: esmsSecretKey ?? '',
+          templateId: esmsTemplateId ?? '',
+          zaloOaId: esmsZaloOaId ?? '',
         });
         responseData['esmsResponse'] = esmsResponse;
         break;
