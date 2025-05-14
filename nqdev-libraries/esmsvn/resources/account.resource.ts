@@ -1,12 +1,9 @@
-// Project: nqdev-libraries
-
 import type { IExecuteFunctions, IHookFunctions } from "n8n-workflow";
 import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
 import { NAME_CREDENTIAL } from "../EsmsGenericFunctions";
 import { getEsmsListBrandname, getListZaloOa, getUserInfo } from "../services";
 
-// File Created: 2023-10-05 16:00:00
 export class AccountResource {
   static NAME_RESOURCE = 'account';
 

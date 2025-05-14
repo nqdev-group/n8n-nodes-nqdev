@@ -1,6 +1,3 @@
-// Project: nqdev-libraries
-// File Created: 2023-10-05 16:00:00
-
 import type { IExecuteFunctions, IHookFunctions } from "n8n-workflow";
 import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";

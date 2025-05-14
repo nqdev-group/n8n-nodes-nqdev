@@ -1,5 +1,3 @@
-// Project: nqdev-libraries
-
 import type { IDataObject, IExecuteFunctions, IHookFunctions } from "n8n-workflow";
 import { NodeOperationError } from "n8n-workflow";
 import { INqdevResponseData } from "../../common";
@@ -7,7 +5,6 @@ import { ISendSmsMessageParams, ISendZnsMessageParams } from "../interfaces";
 import { sendSmsMessage, sendZaloZnsMessage } from "../services";
 import { NAME_CREDENTIAL } from "../EsmsGenericFunctions";
 
-// File Created: 2023-10-05 16:00:00
 export class OttMessageResource {
   static NAME_RESOURCE = 'ott_message';
 
