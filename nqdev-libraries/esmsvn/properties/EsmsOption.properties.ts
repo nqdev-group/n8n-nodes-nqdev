@@ -134,6 +134,7 @@ const esmsSenderModel: INodeProperties[] = [
             },
           },
         ],
+        url: '=https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-brandname?utm_media={{$value}}',
       }
     ]
   },
@@ -179,6 +180,7 @@ const esmsSenderModel: INodeProperties[] = [
             },
           },
         ],
+        url: '=https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-brandname?utm_media={{$value}}',
       }
     ],
   },
@@ -224,6 +226,7 @@ const esmsSenderModel: INodeProperties[] = [
             },
           },
         ],
+        url: '=https://zalo.me/{{$value}}',
       }
     ],
   },
@@ -271,6 +274,7 @@ const esmsSenderModel: INodeProperties[] = [
             },
           },
         ],
+        url: '=https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-template-zalo?utm_media={{$value}}',
       }
     ],
   },

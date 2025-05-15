@@ -51,6 +51,7 @@ export async function getListBrandname(
   const results: INodeListSearchItems[] = paginatedData?.map((item) => ({
     name: item.Brandname ?? '',
     value: item.Brandname ?? '',
+    url: `https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-brandname?utm_media=${item.Brandname}`,
   })) ?? [];
 
   const nodeListSearchResult: INodeListSearchResult = {
@@ -96,6 +97,7 @@ export async function getListZaloOA(
   const results: INodeListSearchItems[] = paginatedData?.map((item) => ({
     name: `${item.OAName} (${item.OAID})`,
     value: item.OAID ?? '',
+    url: `https://zalo.me/${item.OAID}`,
   })) ?? [];
 
   const nodeListSearchResult: INodeListSearchResult = {
@@ -143,6 +145,7 @@ export async function getListZnsTemplate(
   const results: INodeListSearchItems[] = paginatedData?.map((item) => ({
     name: `${item.TempId} | ${item.TempName}`,
     value: item.TempId ?? '',
+    url: `https://developers.esms.vn/esms-api/ham-truy-xuat-va-dang-ky/ham-lay-danh-sach-template-zalo?utm_media=${item.TempId}`,
   })) ?? [];
 
   const nodeListSearchResult: INodeListSearchResult = {
