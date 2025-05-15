@@ -4,7 +4,7 @@ import { haravanCredentialModel, NAME_CREDENTIAL } from "../nqdev-libraries/hara
 export class NqdevHaravanApi implements ICredentialType {
   name = NAME_CREDENTIAL;
   displayName = 'Nqdev: Haravan API';
-  documentationUrl = 'https://developers.haravan.com/';
+  documentationUrl = 'https://docs.haravan.com/docs/tutorials/authentication/authentication-and-authorization/?utm_media=n8n';
 
   properties: INodeProperties[] = [
     ...haravanCredentialModel
