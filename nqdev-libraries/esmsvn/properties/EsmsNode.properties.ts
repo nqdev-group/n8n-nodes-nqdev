@@ -1,8 +1,8 @@
 import type { INodeProperties } from "n8n-workflow";
 
-import { esmsNodeResourceModel } from "./EsmsNodeResource.model";
-import { esmsNodeOperationModel } from "./EsmsNodeOperation.model";
-import { esmsOptionModel, esmsSmsModel } from "./EsmsOption.model";
+import { esmsNodeResourceModel } from "./EsmsNodeResource.properties";
+import { esmsNodeOperationModel } from "./EsmsNodeOperation.properties";
+import { esmsOptionModel, esmsSmsModel } from "./EsmsOption.properties";
 
 export const esmsNodeModel: INodeProperties[] = [
   // resource
