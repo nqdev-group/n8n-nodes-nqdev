@@ -45,6 +45,7 @@
     ],
     "nodes": [
       "dist/nodes/EsmsNode/EsmsNode.node.js",
+      "dist/nodes/EsmsTrigger/EsmsTrigger.node.js",
       "dist/nodes/HaravanNode/HaravanNode.node.js"
     ]
   },

@@ -23,7 +23,6 @@ import type { IWebhookDescription } from "n8n-workflow";
 export const esmsReceiveStatusWebhookModel: IWebhookDescription = {
   name: 'default',
   displayName: 'eSMS Receive Status Webhook',
-  isWebhook: true,
   description: 'Webhook to receive status updates from eSMS',
   httpMethod: '={{$parameter["httpMethod"] || "GET"}}',
   path: '={{$parameter["path"]}}',
