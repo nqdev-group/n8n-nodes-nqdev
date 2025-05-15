@@ -2,8 +2,6 @@ import {
   type IDataObject,
   type IExecuteFunctions,
   type INodeExecutionData,
-  type IWebhookFunctions,
-  type IWebhookResponseData,
   NodeConnectionType,
   NodeOperationError,
   type INodeType,
@@ -13,7 +11,6 @@ import { INqdevResponseData } from '../../nqdev-libraries';
 import {
   NAME_CREDENTIAL,
   EsmsNodeModel,
-  EsmsWebhookNodeModel,
   AccountResource,
   OttMessageResource,
   SmsMessageResource,
@@ -61,14 +58,6 @@ export class EsmsNode implements INodeType {
     inputs: [NodeConnectionType.Main],
     outputs: [NodeConnectionType.Main],
 
-    /**
-     * @see https://docs.n8n.io/integrations/creating-nodes/build/webhooks/ for n8n webhook implementation details
-     * @see https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/ is Webhook node
-     */
-    webhooks: [
-      ...EsmsWebhookNodeModel,
-    ],
-
     // Credential configuration
     credentials: [
       {
@@ -109,23 +98,6 @@ export class EsmsNode implements INodeType {
       getListZnsTemplate,
     },
   };
-
-  // Handle webhook requests (if node is used as a webhook trigger)
-  async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
-    const requestObject = this.getRequestObject(); // Get incoming request
-
-    // Log the incoming request for debugging
-    // this.logger.info(`Webhook request received: ${JSON.stringify({
-    //   headers: requestObject.headers,
-    //   body: requestObject.body,
-    //   query: requestObject.query,
-    //   params: requestObject.params,
-    // })}`);
-
-    return {
-      workflowData: [this.helpers.returnJsonArray(requestObject.body)],
-    };
-  }
 
   // Main logic for executing the node
   async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
