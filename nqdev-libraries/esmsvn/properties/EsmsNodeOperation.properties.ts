@@ -1,8 +1,8 @@
 import type { INodeProperties } from "n8n-workflow";
 
-import { esmsUserOperationModel } from "./EsmsUserOperation.properties";
-import { esmsSmsOperationModel } from "./EsmsSmsOperation.properties";
-import { esmsOttOperationModel } from "./EsmsOttOperation.properties";
+import { esmsUserOperationModel } from "./operations/EsmsUser.operation.properties";
+import { esmsSmsOperationModel } from "./operations/EsmsSms.operation.properties";
+import { esmsOttOperationModel } from "./operations/EsmsOtt.operation.properties";
 
 export const esmsNodeOperationModel: INodeProperties[] = [
   // user

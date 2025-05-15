@@ -10,7 +10,7 @@ import { esmsCredentialModel, NAME_CREDENTIAL } from '../nqdev-libraries/esmsvn'
 export class NqdevEsmsApi implements ICredentialType {
   name = NAME_CREDENTIAL;
   displayName = 'Nqdev: Esms Credential API';
-  documentationUrl = 'https://docs.quyit.id.vn/n8n-io/n8n-nodes-nqdev';
+  documentationUrl = 'https://developers.esms.vn/readme/lay-thong-tin-apikey-va-secretkey/?utm_media=n8n';
 
   properties: INodeProperties[] = [
     ...esmsCredentialModel
