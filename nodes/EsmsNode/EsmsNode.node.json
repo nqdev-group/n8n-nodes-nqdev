@@ -4,7 +4,8 @@
   "codexVersion": "1.0",
   "categories": [
     "Communication",
-    "Marketing"
+    "Marketing & Content",
+    "Utility"
   ],
   "displayName": "Nqdev: EsmsVN",
   "description": "Nqdev It lets you use eSMS.vn in your n8n workflows.",
@@ -20,7 +21,7 @@
     ],
     "primaryDocumentation": [
       {
-        "url": "https://docs.quyit.id.vn/n8n-io/n8n-nodes-nqdev/?ref=n8n"
+        "url": "https://docs.quyit.id.vn/n8n-io/n8n-nodes-nqdev.esms/?ref=n8n"
       },
       {
         "url": "https://developers.esms.vn/"

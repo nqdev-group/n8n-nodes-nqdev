@@ -12,7 +12,29 @@ import {
 import { haravanNodeModel, NAME_CREDENTIAL } from "../../nqdev-libraries/haravan";
 import { INqdevResponseData } from "../../nqdev-libraries";
 
-// Define the Haravan node class implementing INodeType
+/**
+ * Implementation of the Haravan integration node for n8n.
+ *
+ * This node provides functionality to interact with the Haravan e-commerce platform API,
+ * enabling automation of various e-commerce operations and event handling.
+ *
+ * Features:
+ * - Order management and processing
+ * - Product catalog operations
+ * - Customer data management
+ * - Inventory tracking and updates
+ * - Location and shipping fulfillment handling
+ * - Webhook support for real-time event notifications
+ *
+ * The node processes incoming webhook events from Haravan (orders, products, accounts)
+ * and can trigger automated workflows based on these events. It also supports
+ * direct API operations for managing Haravan store data.
+ *
+ * @implements {INodeType} n8n node type interface
+ * @see https://docs.n8n.io/integrations/creating-nodes/build/
+ * @see https://docs.n8n.io/integrations/creating-nodes/build/reference/node-codex-files/
+ * @see https://apis.haravan.com/ for Haravan API documentation
+ */
 export class HaravanNode implements INodeType {
   // Node metadata and configuration
   description: INodeTypeDescription = {
@@ -41,16 +63,6 @@ export class HaravanNode implements INodeType {
         required: true,
       },
     ],
-
-    // Default request configuration for HTTP calls
-    requestDefaults: {
-      baseURL: 'https://apis.haravan.com/',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      timeout: 10000, // 10 seconds timeout
-    },
 
     /**
      * In the properties array we have two mandatory options objects required

@@ -11,16 +11,37 @@ import {
 } from "n8n-workflow";
 import { INqdevResponseData } from '../../nqdev-libraries';
 import {
-  esmsNodeModel,
   NAME_CREDENTIAL,
+  EsmsNodeModel,
+  EsmsWebhookNodeModel,
   AccountResource,
   OttMessageResource,
-  SmsMessageResource
+  SmsMessageResource,
 } from '../../nqdev-libraries/esmsvn';
 import { getLoadZnsTemplateParameters } from './EsmsLoadFunctions';
 import { getListBrandname, getListZaloOA, getListZnsTemplate, } from './EsmsSearchFunctions';
 
-// Define the Haravan node class implementing INodeType
+/**
+ * Implementation of the EsmsVN integration node for n8n.
+ *
+ * This node provides functionality to interact with the EsmsVN API for sending SMS and OTT messages.
+ * It supports multiple resources (Account, SMS Message, OTT Message) and various operations for each.
+ *
+ * Features:
+ * - Account management and verification
+ * - SMS message sending with various options (brandname, unicode, etc.)
+ * - OTT message delivery through Zalo and other platforms
+ * - Webhook support for receiving delivery status updates
+ * - Dynamic loading of templates and parameters
+ *
+ * The node handles both regular execution flow and webhook triggers, processing
+ * incoming data and returning standardized response objects.
+ *
+ * @implements {INodeType} n8n node type interface
+ * @see https://docs.n8n.io/integrations/creating-nodes/build/
+ * @see https://docs.n8n.io/integrations/creating-nodes/build/reference/node-codex-files/
+ * @see https://developers.esms.vn/ for ESMS API documentation
+ */
 export class EsmsNode implements INodeType {
   // Node metadata and configuration
   description: INodeTypeDescription = {
@@ -40,6 +61,14 @@ export class EsmsNode implements INodeType {
     inputs: [NodeConnectionType.Main],
     outputs: [NodeConnectionType.Main],
 
+    /**
+     * @see https://docs.n8n.io/integrations/creating-nodes/build/webhooks/ for n8n webhook implementation details
+     * @see https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/ is Webhook node
+     */
+    webhooks: [
+      ...EsmsWebhookNodeModel,
+    ],
+
     // Credential configuration
     credentials: [
       {
@@ -50,31 +79,21 @@ export class EsmsNode implements INodeType {
       },
     ],
 
-    // Default request configuration for HTTP calls
-    requestDefaults: {
-      baseURL: 'https://rest.esms.vn',
-      url: '/',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      timeout: 10000, // 10 seconds timeout
-    },
-
     /**
      * In the properties array we have two mandatory options objects required
      *
      * [Resource & Operation](https://docs.n8n.io/integrations/creating-nodes/code/create-first-node/#resources-and-operations)
      *
-     * https://docs.n8n.io/integrations/creating-nodes/plan/choose-node-method/
+     * @see https://docs.n8n.io/integrations/creating-nodes/plan/choose-node-method/
      *
      * In our example, the operations are separated into their own file (HTTPVerbDescription.ts)
      * to keep this class easy to read.
      *
      */
     properties: [
-      ...esmsNodeModel,
+      ...EsmsNodeModel,
     ],
+
   };
 
   // Placeholder for dynamically loaded options and search filters
