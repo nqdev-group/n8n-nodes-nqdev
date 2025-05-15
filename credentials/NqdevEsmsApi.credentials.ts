@@ -7,6 +7,16 @@ import {
 
 import { esmsCredentialModel, NAME_CREDENTIAL } from '../nqdev-libraries/esmsvn';
 
+/**
+ * Represents the Nqdev Esms API credentials for n8n.
+ *
+ * This class implements the ICredentialType interface and provides the necessary
+ * properties and methods to authenticate and test credentials for the Esms API.
+ * It includes the API key and secret key for authentication, and a test method
+ * to verify the credentials.
+ *
+ * @see https://docs.n8n.io/integrations/creating-nodes/build/reference/credentials-files/
+ */
 export class NqdevEsmsApi implements ICredentialType {
   name = NAME_CREDENTIAL;
   displayName = 'Nqdev: Esms Credential API';
