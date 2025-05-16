@@ -34,12 +34,6 @@ export class EsmsTrigger implements INodeType {
      */
     webhooks: [
       ...EsmsWebhookNodeModel,
-      {
-        name: 'setup',
-        httpMethod: 'GET',
-        responseMode: 'onReceived',
-        path: 'webhook',
-      },
     ],
 
     /**

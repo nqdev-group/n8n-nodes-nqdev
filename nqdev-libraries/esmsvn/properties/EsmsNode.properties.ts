@@ -50,5 +50,19 @@ export const EsmsNodeModel: INodeProperties[] = [
 export const EsmsWebhookNodeModel: IWebhookDescription[] = [
   {
     ...esmsReceiveStatusWebhookModel,
-  }
+    name: 'setup', // Dùng để eSMS xác minh URL (như kiểu "ping")
+    httpMethod: 'GET',
+    responseMode: 'onReceived',
+    isFullPath: true,
+    ndvHideUrl: true,
+  },
+  {
+    ...esmsReceiveStatusWebhookModel,
+    name: 'default', // Dùng để eSMS gửi real-time data (như message, delivery report)
+    httpMethod: 'GET',
+    responseMode: '={{$parameter["responseMode"]}}',
+    responseData: '={{$parameter["responseMode"] === "lastNode" ? "noData" : undefined}}',
+    isFullPath: true,
+    ndvHideMethod: true,
+  },
 ];
