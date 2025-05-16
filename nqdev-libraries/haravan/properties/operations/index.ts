@@ -1,6 +1,0 @@
-export * from './HaravanCustomer.operation.properties'
-export * from './HaravanInventory.operation.properties'
-export * from './HaravanLocation.operation.properties'
-export * from './HaravanOrder.operation.properties'
-export * from './HaravanProducts.operation.properties'
-export * from './HaravanShippingFulfillment.operation.properties'

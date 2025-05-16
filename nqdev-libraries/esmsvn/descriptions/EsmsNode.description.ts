@@ -1,8 +1,8 @@
 import type { INodeProperties, IWebhookDescription } from "n8n-workflow";
 
-import { esmsNodeResourceModel } from "./EsmsNodeResource.properties";
-import { esmsNodeOperationModel } from "./EsmsNodeOperation.properties";
-import { esmsOptionModel, esmsSmsModel } from "./EsmsOption.properties";
+import { esmsNodeResourceModel } from "./EsmsNodeResource.description";
+import { esmsNodeOperationModel } from "./EsmsNodeOperation.description";
+import { esmsOptionModel, esmsSmsModel } from "./EsmsOption.description";
 import { esmsReceiveStatusWebhookModel } from "./webhooks";
 
 /**

@@ -15,7 +15,7 @@ export class EsmsTrigger implements INodeType {
     defaults: {
       name: 'Nqdev: EsmsVN Trigger',
     },
-    inputs: [NodeConnectionType.Main],
+    inputs: [],
     outputs: [NodeConnectionType.Main],
 
     // Credential configuration

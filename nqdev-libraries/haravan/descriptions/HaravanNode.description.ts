@@ -1,7 +1,7 @@
 import type { INodeProperties } from "n8n-workflow";
-import { haravanNodeResourceModel } from "./HaravanNodeResource.properties";
-import { haravanNodeOperationModel } from "./HaravanNodeOperation.properties";
-import { haravanOptionModel } from "./HaravanOption.properties";
+import { haravanNodeResourceModel } from "./HaravanNodeResource.description";
+import { haravanNodeOperationModel } from "./HaravanNodeOperation.description";
+import { haravanOptionModel } from "./HaravanOption.description";
 
 export const haravanNodeModel: INodeProperties[] = [
   // resource
