@@ -22,5 +22,6 @@ npm-debug.log*
 yarn.lock
 
 # Custom scripts
+SUBVERSION
 run-build.bat
 run-open.bat

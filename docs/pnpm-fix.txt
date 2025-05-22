@@ -1,0 +1,60 @@
+Tổng hợp lỗi và cách fix khi dùng `pnpm link` với `n8n-nodes-nqdev`
+
+---
+
+1. ❌ Lỗi `Invalid version: "0.2"`
+
+Nguyên nhân:
+Trường "version" trong package.json không tuân theo chuẩn SemVer.
+
+Cách fix:
+Sửa lại như sau:
+"version": "0.2.0"
+
+---
+
+2. ❌ Lỗi `Symlink path is the same as the target path`
+
+Nguyên nhân:
+Chạy lệnh `pnpm link --global n8n-nodes-nqdev` ngay trong thư mục gốc của package, khiến source và target trùng nhau.
+
+Cách fix:
+
+- Chạy `pnpm link --global` trong thư mục `n8n-nodes-nqdev` để đăng ký global.
+- Sau đó, từ thư mục project đích (ví dụ `.n8n/extensions`), chạy:
+  pnpm link --global n8n-nodes-nqdev
+
+---
+
+3. ⚠️ Cảnh báo `peerDependencies` không được resolve
+
+Thông báo:
+The linked in dependency will not resolve the peer dependencies from the target node_modules.
+
+Nguyên nhân:
+Package `n8n-nodes-nqdev` có `peerDependencies` như `n8n-workflow@*`, nhưng `pnpm link` không resolve tự động.
+
+Cách fix (chọn 1 trong 2):
+
+🔹 Cách 1: Cài thêm `n8n-workflow` trong project đích
+pnpm add n8n-workflow
+
+🔹 Cách 2: Dùng `file:` thay vì `link`
+Trong package.json của project đích:
+"dependencies": {
+"n8n-nodes-nqdev": "file:../../packages/n8n-nodes-nqdev"
+}
+Rồi chạy:
+pnpm install
+
+---
+
+✅ Tổng kết quy trình dùng `pnpm link`:
+
+1. Trong thư mục `n8n-nodes-nqdev`:
+   pnpm link --global
+
+2. Trong thư mục project đích:
+   pnpm link --global n8n-nodes-nqdev
+
+Hoặc dùng file: nếu không cần symlink.
