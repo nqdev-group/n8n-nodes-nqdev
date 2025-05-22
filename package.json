@@ -27,7 +27,6 @@
   "main": "dist-obf/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist",
     "dist-obf",
     "dist/index.d.ts"
   ],
