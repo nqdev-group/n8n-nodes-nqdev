@@ -10,6 +10,7 @@ tmp/
 
 # Build output
 dist/
+dist-obf/
 
 # Log files
 npm-debug.log*
