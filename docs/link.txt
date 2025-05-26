@@ -1,0 +1,8 @@
+https://github.com/dinhtrung1308/zalo-node
+https://github.com/dinhtrung1308/multizlogin
+
+https://github.com/ChickenAI/zalo-node
+https://github.com/ChickenAI/multizlogin
+
+node: https://github.com/dinhtrung1308/zalo-node n8n-nodes-zalo-tools 0.5.0
+n8n version: 1.88.0

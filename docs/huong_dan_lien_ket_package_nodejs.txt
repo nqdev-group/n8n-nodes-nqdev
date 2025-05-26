@@ -1,0 +1,80 @@
+HƯỚNG DẪN LIÊN KẾT PACKAGE NODE.JS VÀO PROJECT KHÁC
+
+==============================
+1. Sử dụng npm link (liên kết package local tạm thời)
+==============================
+
+Cấu trúc thư mục:
+    /my-shared-lib   (package bạn muốn dùng)
+    /my-app          (project chính)
+
+Bước 1: Tạo package Node.js trong thư mục /my-shared-lib
+    cd my-shared-lib
+    npm init -y
+    // Tạo file index.js với nội dung:
+    module.exports = {
+        sayHello: () => console.log("Hello from shared lib!")
+    };
+
+Bước 2: Tạo liên kết toàn cục
+    cd my-shared-lib
+    npm link
+
+Bước 3: Liên kết trong project sử dụng
+    cd ../my-app
+    npm link my-shared-lib
+
+Trong code bạn có thể import:
+    const shared = require('my-shared-lib');
+    shared.sayHello();
+
+Ghi chú: Thay đổi trong my-shared-lib sẽ tự động áp dụng sang my-app.
+
+==============================
+2. Cài package từ thư mục local (file:)
+==============================
+
+Trong my-app, thêm vào package.json:
+    "dependencies": {
+        "my-shared-lib": "file:../my-shared-lib"
+    }
+
+Hoặc cài trực tiếp:
+    npm install ../my-shared-lib
+
+Lưu ý: Thay đổi trong thư viện không tự đồng bộ, phải cài lại.
+
+==============================
+3. Dùng npm workspaces (monorepo)
+==============================
+
+Cấu trúc thư mục:
+    /monorepo/
+      ├── packages/
+      │     ├── my-shared-lib/
+      │     └── my-app/
+      └── package.json
+
+package.json (root):
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
+
+Cài đặt:
+    cd monorepo
+    npm install
+
+Ghi chú: Các package sẽ tự liên kết nội bộ.
+
+==============================
+TỔNG KẾT
+==============================
+
+| Mục đích                     | Cách làm                             | Ghi chú                          |
+|-----------------------------|--------------------------------------|----------------------------------|
+| Phát triển song song        | npm link                             | Dễ dùng, thay đổi đồng bộ        |
+| Dùng package local tĩnh     | npm install ../my-lib                | Không tự cập nhật khi code thay đổi |
+| Quản lý chuyên nghiệp       | npm workspaces                       | Tốt cho monorepo, dễ mở rộng     |
