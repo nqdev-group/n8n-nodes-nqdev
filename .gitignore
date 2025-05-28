@@ -1,3 +1,6 @@
+# Extension files
+*.bat
+
 # Node.js dependencies
 node_modules/
 
@@ -25,3 +28,4 @@ yarn.lock
 SUBVERSION
 run-build.bat
 run-open.bat
+git-push-tags.bat
