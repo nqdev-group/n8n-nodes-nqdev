@@ -1,5 +1,5 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Workflow Publish Package to npmjs for GitHub Actions
+# Workflow Publish Package to npmjs
 # ---------------------------------------------------
 # https://dev.to/astagi/publish-to-npm-using-github-actions-23fn
 # https://docs.github.com/en/actions/use-cases-and-examples/publishing-packages/publishing-nodejs-packages
@@ -26,7 +26,7 @@ env:
   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 jobs:
-  publish-npmjs:
+  publish-npm-github:
     runs-on: ubuntu-latest
 
     steps:
@@ -105,7 +105,7 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      # 6. Publish lên npm
+      # 8. Publish lên npm
       # https://github.com/marketplace/actions/npm-publish
       - name: Publish to npm
         if: success()
@@ -113,15 +113,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # # https://github.com/marketplace/actions/npm-publish
-      # - name: NPM Publish
-      #   uses: JS-DevTools/npm-publish@v3.1.1
-      #   with:
-      #     token: ${{ secrets.NPM_TOKEN }}
-      #     # registry: "https://npm.pkg.github.com"
-      #     access: public
-
-      # 8. Tạo Git tag với version mới
+      # 9. Tạo Git tag với version mới
       - name: Create and push tag
         if: success()
         run: |
