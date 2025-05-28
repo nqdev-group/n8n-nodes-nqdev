@@ -48,6 +48,8 @@ jobs:
       # 7. Tạo CHANGELOG.md từ commit history
       - name: Generate CHANGELOG.md
         run: |
+          echo "🎉 Tự động tạo release cho tag ${{ github.ref_name }}" > changelog.md
+          echo "" >> changelog.md
           echo "## ${GITHUB_REF_NAME}" > changelog.md
           echo "" >> changelog.md
           git log $(git describe --tags --abbrev=0 HEAD^)..HEAD --pretty=format:"- %s" >> changelog.md
