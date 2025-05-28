@@ -117,11 +117,11 @@ jobs:
       - name: Publish to GitHub Packages
         if: success()
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GHCR_TOKEN }}" >> ~/.npmrc
           echo "@nqdev:registry=https://npm.pkg.github.com" >> ~/.npmrc
           pnpm publish --registry=https://npm.pkg.github.com --no-git-checks
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GHCR_TOKEN }}
 
       # # 10. Tạo Git tag với version mới
       # - name: Create and push tag
