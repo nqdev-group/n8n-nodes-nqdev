@@ -1,21 +1,25 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Workflow Publish Package to npmjs
+# ==========================================================
+# 📦 Workflow: Publish Beta Package to npmjs
+# ==========================================================
+# - Chạy khi có release mới được publish hoặc chạy thủ công
+# - Đóng gói, đặt tên -beta, cập nhật version, và publish
+# - Sử dụng pnpm để build và xuất bản
 # ---------------------------------------------------
 # https://dev.to/astagi/publish-to-npm-using-github-actions-23fn
 # https://docs.github.com/en/actions/use-cases-and-examples/publishing-packages/publishing-nodejs-packages
 # https://docs.github.com/en/actions/guides/publishing-nodejs-packages
 # https://docs.github.com/en/actions/guides/publishing-docker-images
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# ==========================================================
 
 name: 'Publish: Beta Package to npmjs'
 run-name: 'Publish to npmjs by @${{ github.actor }} on ${{ github.event_name }}'
 
 on:
-  workflow_dispatch: # Cho phép chạy thủ công
+  workflow_dispatch: # ✅ Cho phép khởi chạy thủ công từ GitHub UI
   release:
-    types: [published] # Chỉ chạy khi release được publish
+    types: [published] # ✅ Tự động chạy khi release được publish
 
-# Remove all permissions by default
+# 🔐 Thiết lập quyền
 permissions: write-all
 
 env:
@@ -23,20 +27,20 @@ env:
   PREFIX: 0.1
   VERSION: 0.1.${{ github.run_number }}
   ORIGINAL_NAME: ''
-  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # 🔑 Token để publish lên npm
 
 jobs:
   publish-npm-github:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Định nghĩa giá trị prefix
+      # 1️⃣ Khai báo biến prefix (ví dụ 0.1)
       - name: Define Prefix
         id: prefix
         run: |
           echo "PREFIX=0.1" >> $GITHUB_ENV # Đặt giá trị prefix phiên bản
 
-      # 2. Thiết lập số version tự động
+      # 2️⃣ Tạo version mới dạng 0.1.<run_number>
       - name: Set Build Version
         id: versioning
         run: |
@@ -44,7 +48,7 @@ jobs:
           BUILD_NUMBER=${{ github.run_number }}
           echo "VERSION=${{ env.PREFIX }}.${BUILD_NUMBER}" >> $GITHUB_ENV
 
-      # 3. Checkout code từ repository
+      # 3️⃣ Checkout source code
       - name: Checkout repository
         uses: actions/checkout@v4
 
