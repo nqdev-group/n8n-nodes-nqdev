@@ -16,7 +16,9 @@ on:
     types: [published] # Chỉ chạy khi release được publish
 
 # Remove all permissions by default
-permissions: write-all
+permissions:
+  contents: write
+  packages: write
 
 env:
   SERVER: production
@@ -117,11 +119,11 @@ jobs:
       - name: Publish to GitHub Packages
         if: success()
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GHCR_TOKEN }}" >> ~/.npmrc
-          echo "@nqdev:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+          echo "@nqdev-group:registry=https://npm.pkg.github.com" >> ~/.npmrc  # Đảm bảo scope chính xác
           pnpm publish --registry=https://npm.pkg.github.com --no-git-checks
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GHCR_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # # 10. Tạo Git tag với version mới
       # - name: Create and push tag
