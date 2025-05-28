@@ -13,7 +13,7 @@ authors:
     email: quy.nh@nhquydev.net
     affiliation: 'https://blogs.nhquydev.net'
 repository-code: 'https://github.com/nqdev-group/n8n-nodes-nqdev.git'
-url: 'https://docs.quyit.id.vn/n8n-io/n8n-nodes-nqdev'
+url: 'https://docs.quyit.id.vn/n8n/n8n-nodes-nqdev/gioi-thieu-n8n-nodes-nqdev'
 keywords:
   - n8n-community-node-package
   - n8n-community-nqdev-node-package
