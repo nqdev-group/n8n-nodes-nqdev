@@ -1,9 +1,10 @@
-name: Create Release
+name: 'Release: Create GitHub Release'
+run-name: 'Create GitHub Release by @${{ github.actor }} on ${{ github.event_name }}'
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*' # Chỉ kích hoạt khi có tag dạng v*
 
 jobs:
   release:
@@ -11,8 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
-      - name: Create Release
-        id: create_release
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            🎉 Tự động tạo release cho tag ${{ github.ref_name }}.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GHCR_TOKEN }}
