@@ -73,13 +73,3 @@ jobs:
             n8n-nodes-nqdev-${{ github.ref_name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GHCR_TOKEN }}
-
-      # 10. Cleanup
-      - name: Cleanup
-        run: |
-          rm -rf release
-          rm changelog.md
-          rm -rf dist
-          rm -rf node_modules
-          pnpm store prune
-          pnpm cache clean --all
