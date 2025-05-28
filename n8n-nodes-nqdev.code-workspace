@@ -6,6 +6,9 @@
 		// {
 		// 	"path": "./../n8n-local/config/.n8n/nodes",
 		// },
+		{
+			"path": "./../docs"
+		}
 	],
 	"settings": {
 		"zencoder.enableRepoIndexing": true,

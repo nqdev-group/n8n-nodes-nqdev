@@ -6,3 +6,9 @@ https://github.com/ChickenAI/multizlogin
 
 node: https://github.com/dinhtrung1308/zalo-node n8n-nodes-zalo-tools 0.5.0
 n8n version: 1.88.0
+
+https://www.npmjs.com/package/n8n-nodes-zalo-vn
+https://www.npmjs.com/package/n8n-nodes-zalos-user
+https://drive.google.com/file/d/1BGikBKhVgjI2eew57wgVjdBnZs8HdZ2q/view
+https://drive.google.com/drive/folders/1KfQ-9c9n1-mJ5W50snnK5xXtDQV1ikil
+https://giapducthang.com/template-n8n/Template_gen_image_gemini_AI.json
