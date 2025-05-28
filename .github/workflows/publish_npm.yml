@@ -7,8 +7,8 @@
 # https://docs.github.com/en/actions/guides/publishing-docker-images
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-name: Publish node to npmjs
-run-name: Publish to npmjs by @${{ github.actor }} on ${{ github.event_name }}
+name: 'Publish: Package to npmjs'
+run-name: 'Publish to npmjs by @${{ github.actor }} on ${{ github.event_name }}'
 
 on:
   workflow_dispatch: # Cho phép chạy thủ công
@@ -22,6 +22,7 @@ env:
   SERVER: production
   PREFIX: 0.1
   VERSION: 0.1.${{ github.run_number }}
+  ORIGINAL_NAME: ''
   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 jobs:
@@ -65,9 +66,11 @@ jobs:
           # 3.1.4. Đặt giá trị VERSION mới cho môi trường
           echo "VERSION=$BASE_VERSION.${{ github.run_number }}" >> $GITHUB_ENV
 
-      # 3.1. Ghi đè giá trị version trong package.json
-      - name: Override package.json version
+      # 3.2. Ghi đè giá trị version và name (bổ sung -beta) trong package.json
+      - name: Override package.json version and name
         run: |
+          # Ghi đè giá trị name và version trong package.json
+          # jq '.version = "${{ env.VERSION }}" | .name = "${{ env.ORIGINAL_NAME }}-beta"' package.json > package.tmp.json && mv package.tmp.json package.json
           jq '.version = "${{ env.VERSION }}"' package.json > package.tmp.json && mv package.tmp.json package.json
 
       # 4. Thiết lập Node.js
