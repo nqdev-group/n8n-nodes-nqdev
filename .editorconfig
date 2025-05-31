@@ -39,6 +39,10 @@ indent_size = 2
 [*.{md,mdx}]
 trim_trailing_whitespace = false
 
+[*.{.code-workspace}]
+indent_style = space
+indent_size = 2
+
 # Tab indentation (no size specified)
 [Makefile]
 indent_style = space

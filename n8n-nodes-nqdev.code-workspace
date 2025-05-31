@@ -1,16 +1,17 @@
 {
 	"folders": [
 		{
+			"path": "./../docs",
+		},
+		{
 			"path": ".",
 		},
-		// {
-		// 	"path": "./../n8n-local/config/.n8n/nodes",
-		// },
-		{
-			"path": "./../docs"
-		}
 	],
 	"settings": {
 		"zencoder.enableRepoIndexing": true,
 	},
 }
+
+// This file is used to configure the workspace in VS Code.
+// It can be used to set settings that are specific to this workspace.
+// For more information, see https://code.visualstudio.com/docs/editor/workspaces#_advanced-workspace-settings
