@@ -12,3 +12,8 @@ https://www.npmjs.com/package/n8n-nodes-zalos-user
 https://drive.google.com/file/d/1BGikBKhVgjI2eew57wgVjdBnZs8HdZ2q/view
 https://drive.google.com/drive/folders/1KfQ-9c9n1-mJ5W50snnK5xXtDQV1ikil
 https://giapducthang.com/template-n8n/Template_gen_image_gemini_AI.json
+
+
+# Package list
+- ncnodes.com -> https://ncnodes.com/package/n8n-nodes-nqdev-beta
+- socket.dev -> https://socket.dev/npm/package/n8n-nodes-nqdev/overview/0.1.16
